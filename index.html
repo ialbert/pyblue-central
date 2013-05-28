@@ -1,0 +1,123 @@
+
+<!DOCTYPE html>
+
+<html class="progdesign">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Pygreen</title>
+    <meta name="description" content="Pygreen">
+    <meta name="author" content="Nicolas Vanhoren">
+
+    
+    <link rel="shortcut icon" href="/common/static/img/icon.ico">
+    
+    <link rel="stylesheet/less" type="text/css" href="/common/static/css/base_style.less" />
+    
+    
+    <script src="/common/static/js/less.js" type="text/javascript"></script>
+</head>
+</body>
+
+    
+    <a href="https://github.com/nicolas-van/pygreen"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+
+
+    <div class="mainHorizontalTable">
+        <div class="contentRow">
+            <div class="contentTable">
+                <div class="rightAreaCell">
+                    
+                    
+                    
+
+
+<h1>PyGreen</h1>
+<p>A micro web framework/static web site generator.</p>
+<p>PyGreen is a simple tool to generate small web sites. The concept is to put
+all files to serve in a folder and invoke the
+<a href="http://www.makotemplates.org/">Mako</a> template engine on all .html files. The
+result is quite similar to a classic PHP application, but with the good
+features of the Mako templates (like inheritance) and the cool syntax of
+Python.</p>
+<p>PyGreen uses the MIT license.</p>
+<p>To install:</p>
+<pre><code>sudo easy_install pygreen
+</code></pre>
+<p>To launch and serve files:</p>
+<pre><code>pygreen serve
+</code></pre>
+<p>The above command will serve the files located in the current folder. All
+files with the .html extension will also be processed by Mako. So if the
+current folder contains a file index.html with the following code:</p>
+<pre><code>&lt;p&gt;Hello, my age is 28.&lt;/p&gt;
+</code></pre>
+<p>When going to http://localhost:8080, you will see:</p>
+<pre><code>&lt;p&gt;Hello, my age is 28.&lt;/p&gt;
+</code></pre>
+<p>PyGreen can also export all the files of you current folder after having the
+.html files processed by Mako. To do so, type this command:</p>
+<pre><code>pygreen gen &lt;output_folder&gt;
+</code></pre>
+<p>This can be useful to post your files on Github Pages or any other free static
+files hosting services.</p>
+<p>This is a common case if you use inheritance or macros. To avoid files to be
+generated when using pygreen gen, name them with the .mako extension. They
+will not be exported.</p>
+<p>No. But you can. Easily. PyGreen can be a command line application or it can
+be a small framework to ease creation of complete Python web applications.
+PyGreen is just <a href="http://www.makotemplates.org/">Mako</a> templates served using
+the <a href="http://bottlepy.org/">Bottle</a> web framework. You can easily modify any
+of these using some python code. Example:</p>
+<pre><code>from pygreen import pygreen
+
+pygreen.app # the Bottle wsgi application, use the @route() decorator to add new routes
+pygreen.templates # the Mako TemplateLookup object, do what you want with it
+
+pygreen.cli() # call the command line interface of PyGreen, you can use it or
+# just launch a web server using the Bottle application object
+</code></pre>
+<p>It's important to understand that PyGreen is just a helper that allows to make
+simple things simple (like defining 3 html files that inherit from a common
+template without the need to type code) but doesn't restrict you. You need
+anything complex? Mako templates can contain Python code so import whatever
+you need and use the features it provides. If you need anything more complex
+hack through PyGreen and do it. Read the PyGreen code, it's 100 lines with
+some documentation, anyone can understand it. If you read this you should be a
+Python programmer, so just type the code and get the job done.</p>
+<p>PyGreen was primarily created to be a static web site generator more effective
+than existing ones. The problem of existing site generators like Jekyll or
+Hyde is that they have a fixed number of features. Even if their creators try
+to add advanced features those will not be correctly documented, so the users
+do not know how to use them.</p>
+<p>The fact that PyGreen has a small set of features <strong>is a feature</strong>. You don't
+need to spend hours to read crappy documentation before discovering it's
+impossible to do what you want. If you need to do anything which is not trivial
+you know you will have to code it, so just do it. That's what I call being
+pragmatic.</p>
+
+
+
+                </div>
+            </div>
+        </div>
+        <div class="footerRow">
+            <div class="footerCell">
+                Copyright 2013, Nicolas Vanhoren
+            </div>
+        </div>
+    </div>
+
+    
+    
+
+  <!--[if lt IE 8]>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
+    <script>
+        // You may want to place these lines inside an onload handler
+        CFInstall.check({
+        mode: "overlay"
+        });
+    </script>
+  <![endif]-->
+</body>
+</html>
