@@ -1,12 +1,9 @@
 <%!
     title = "Pygreen"
     description = "Pygreen - Static Web Site Generator for Python Programmers"
-    hideSideContent = True
 %>
 
 <%inherit file="/common/base.mako"/>
-
-<%namespace name="macros" file="/common/macros.mako"/>
 
 <%block name="beforeContent">
     <a href="https://github.com/nicolas-van/pygreen"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
@@ -14,7 +11,7 @@
 
 <%block name="mainContent">
 
-<%macros:markdown>
+<%block filter="markdown">
 <%text>
 # PyGreen
 
@@ -57,13 +54,30 @@ PyGreen can also export all the files of you current folder after having the
 This can be useful to post your files on Github Pages or any other free static
 files hosting services.
 
+## Features
+
+PyGreen was designed to *not* have a lot of features. Mako templates can contain
+Python code, so you can always code anything you need. The following features
+are still useful and are integrated in pygreen:
+
+### Non-generated files
+
+All files with the .mako extension will not be outputed by pygreen gen. This is
+useful to avoid generating macros files or templates to inherit. Hidden files
+(files beginning with '.') will not be generated either.
+
+### Markdown
+
+While it is easy to define your own macro for markdown, it's still a recurrent
+need for most sites. So there is a default Mako filter for that:
+
+    <%block filter="markdown">
+    Look at my title
+    ================
+    </%block>
+
+
 ## FAQ
-
-### How to avoid some mako templates files to be generated?
-
-This is a common case if you use inheritance or macros. To avoid files to be
-generated when using pygreen gen, name them with the .mako extension. They
-will not be exported.
 
 ### I miss feature XYZ, can you add it?
 
@@ -106,7 +120,7 @@ you know you will have to code it, so just do it. That's what I call being
 pragmatic.
 
 </%text>
-</%macros:markdown>
+</%block>
 
 </%block>
 
