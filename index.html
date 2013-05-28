@@ -30,7 +30,6 @@
                     
                     
 
-
 <h1>PyGreen</h1>
 <p>A micro web framework/static web site generator.</p>
 <p>PyGreen is a simple tool to generate small web sites. The concept is to put
@@ -61,11 +60,23 @@ current folder contains a file index.html with the following code:</p>
 </code></pre>
 <p>This can be useful to post your files on Github Pages or any other free static
 files hosting services.</p>
+<h2>Features</h2>
+<p>PyGreen was designed to <em>not</em> have a lot of features. Mako templates can contain
+Python code, so you can always code anything you need. The following features
+are still useful and are integrated in pygreen:</p>
+<h3>Non-generated files</h3>
+<p>All files with the .mako extension will not be outputed by pygreen gen. This is
+useful to avoid generating macros files or templates to inherit. Hidden files
+(files beginning with '.') will not be generated either.</p>
+<h3>Markdown</h3>
+<p>While it is easy to define your own macro for markdown, it's still a recurrent
+need for most sites. So there is a default Mako filter for that:</p>
+<pre><code>&lt;%block filter="markdown"&gt;
+Look at my title
+================
+&lt;/%block&gt;
+</code></pre>
 <h2>FAQ</h2>
-<h3>How to avoid some mako templates files to be generated?</h3>
-<p>This is a common case if you use inheritance or macros. To avoid files to be
-generated when using pygreen gen, name them with the .mako extension. They
-will not be exported.</p>
 <h3>I miss feature XYZ, can you add it?</h3>
 <p>No. But you can. Easily. PyGreen can be a command line application or it can
 be a small framework to ease creation of complete Python web applications.
@@ -99,7 +110,6 @@ need to spend hours to read crappy documentation before discovering it's
 impossible to do what you want. If you need to do anything which is not trivial
 you know you will have to code it, so just do it. That's what I call being
 pragmatic.</p>
-
 
 
                 </div>
