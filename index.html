@@ -40,6 +40,7 @@ result is quite similar to a classic PHP application, but with the good
 features of the Mako templates (like inheritance) and the cool syntax of
 Python.</p>
 <p>PyGreen uses the MIT license.</p>
+<h2>Quick Start</h2>
 <p>To install:</p>
 <pre><code>sudo easy_install pygreen
 </code></pre>
@@ -49,7 +50,7 @@ Python.</p>
 <p>The above command will serve the files located in the current folder. All
 files with the .html extension will also be processed by Mako. So if the
 current folder contains a file index.html with the following code:</p>
-<pre><code>&lt;p&gt;Hello, my age is 28.&lt;/p&gt;
+<pre><code>&lt;p&gt;Hello, my age is ${30 - 2}.&lt;/p&gt;
 </code></pre>
 <p>When going to http://localhost:8080, you will see:</p>
 <pre><code>&lt;p&gt;Hello, my age is 28.&lt;/p&gt;
@@ -60,9 +61,12 @@ current folder contains a file index.html with the following code:</p>
 </code></pre>
 <p>This can be useful to post your files on Github Pages or any other free static
 files hosting services.</p>
+<h2>FAQ</h2>
+<h3>How to avoid some mako templates files to be generated?</h3>
 <p>This is a common case if you use inheritance or macros. To avoid files to be
 generated when using pygreen gen, name them with the .mako extension. They
 will not be exported.</p>
+<h3>I miss feature XYZ, can you add it?</h3>
 <p>No. But you can. Easily. PyGreen can be a command line application or it can
 be a small framework to ease creation of complete Python web applications.
 PyGreen is just <a href="http://www.makotemplates.org/">Mako</a> templates served using
@@ -84,6 +88,7 @@ you need and use the features it provides. If you need anything more complex
 hack through PyGreen and do it. Read the PyGreen code, it's 100 lines with
 some documentation, anyone can understand it. If you read this you should be a
 Python programmer, so just type the code and get the job done.</p>
+<h3>Why is it so cool?</h3>
 <p>PyGreen was primarily created to be a static web site generator more effective
 than existing ones. The problem of existing site generators like Jekyll or
 Hyde is that they have a fixed number of features. Even if their creators try
