@@ -16,13 +16,10 @@
             font-size: (@base_size * 2.2);
         }
         h2 {
-            font-size: (@base_size * 1.5);
+            font-size: (@base_size * 1.6);
         }
         h3 {
-            font-size: (@base_size * 1.2);
-        }
-        h4 {
-            font-size: (@base_size * 1.0);
+            font-size: (@base_size * 1.05);
         }
     }
 
@@ -30,10 +27,13 @@
         @import url(normalize.less);
         @import url(pygments.less);
         font-family: @base_font;
-        h1, h2, h3, h4 {
+        h1, h2, h3 {
             font-weight: normal;
             margin: 28px 0px;
             font-family: @title_font;
+        }
+        h3 {
+            font-style: italic;
         }
         .txt_sizing(@base_text_size);
         a {
