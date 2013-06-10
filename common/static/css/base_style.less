@@ -1,7 +1,14 @@
 
 @import url(http://fonts.googleapis.com/css?family=Lora:400,700);
+@import url(http://fonts.googleapis.com/css?family=EB+Garamond);
 
 .progdesign {
+
+    @base_font: "Lora" serif;
+    @title_font: "EB Garamond" serif;
+
+    @base_text_size: 19px;
+    @highlight_color: #0063B4;
 
     .txt_sizing(@base_size) {
         font-size: @base_size;
@@ -9,29 +16,24 @@
             font-size: (@base_size * 2.2);
         }
         h2 {
-            font-size: (@base_size * 1.8);
+            font-size: (@base_size * 1.5);
         }
         h3 {
-            font-size: (@base_size * 1.6);
-        }
-        h4 {
-            font-size: (@base_size * 1.4);
-        }
-        h5 {
             font-size: (@base_size * 1.2);
         }
+        h4 {
+            font-size: (@base_size * 1.0);
+        }
     }
-
-    @base_text_size: 19px;
-    @highlight_color: #0063B4;
 
     .base_style() {
         @import url(normalize.less);
         @import url(pygments.less);
-        font-family: "Lora" serif;
+        font-family: @base_font;
         h1, h2, h3, h4 {
             font-weight: normal;
             margin: 28px 0px;
+            font-family: @title_font;
         }
         .txt_sizing(@base_text_size);
         a {
