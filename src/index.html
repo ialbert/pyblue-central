@@ -4,6 +4,7 @@
 %>
 
 <%inherit file="/common/base.mako"/>
+<%namespace name="basemacros" file="/common/macros.mako"/>
 
 <%block name="head">
     <script>
@@ -24,8 +25,7 @@
 
 <%block name="mainContent">
 
-<%block filter="markdown">
-<%text>
+<%text filter="markdown">
 # PyGreen
 
 A micro web framework/static web site generator.
@@ -127,6 +127,11 @@ You can also write articles or blog posts about PyGreen.
 For any question, [contact me](https://github.com/nicolas-van).
 
 </%text>
-</%block>
+
+<div class="horizontalMenu">
+    <a href="https://github.com/nicolas-van/pygreen/issues?state=open">Bug tracker</a>
+    <a href="https://github.com/nicolas-van/pygreen">Pygreen @ Github</a>
+    ${basemacros.links()}
+</div>
 
 </%block>

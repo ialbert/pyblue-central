@@ -742,9 +742,10 @@
 .progdesign li {
   text-align: justify;
 }
-.progdesign .highlight > pre,
+.progdesign .codehilite > pre,
 .progdesign pre > code {
   font-size: 13.299999999999999px;
+  background-color: #eeeeee;
   display: block;
   background: #eee;
   padding: 10px;
@@ -793,4 +794,27 @@
 }
 html.progdesign {
   height: 100%;
+}
+ul.filesList {
+  list-style: none;
+  display: block;
+  margin: 0 30px;
+  padding: 0;
+}
+ul.filesList li {
+  display: block;
+  background-color: #eeeeee;
+  margin: 3px;
+  padding: 3px;
+  border: 1px solid #dddddd;
+  font-family: monospace sans-serif;
+}
+.horizontalMenu {
+  text-align: center;
+  margin: 10px;
+}
+.horizontalMenu > a {
+  display: inline-block;
+  font-style: italic;
+  padding: 0 10px;
 }
