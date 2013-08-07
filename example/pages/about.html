@@ -1,0 +1,15 @@
+<%inherit file="../base.mako"/>
+
+<%namespace name="ext" file="../extensions.mako"/>
+
+${self.name}
+
+About
+=====
+
+<%
+    y = range(10)
+%>
+% for elem in y:
+* element: ${elem}
+% endfor

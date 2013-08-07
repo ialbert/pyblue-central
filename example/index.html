@@ -1,0 +1,15 @@
+<%inherit file="base.mako"/>
+
+<%namespace name="ext" file="extensions.mako"/>
+
+
+Title
+=====
+
+Main text goes here
+
+Called as <%text filter="h">${ext.hello()}</%text>: ${ext.hello()}
+
+
+Called as <%text filter="h">${self.ext.hello()}</%text>: ${self.ext.hello()}
+
