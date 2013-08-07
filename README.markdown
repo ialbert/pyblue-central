@@ -1,5 +1,3 @@
-<%inherit file="base.mako"/>
-
 PyGreen
 =======
 
