@@ -3,3 +3,5 @@ dist
 MANIFEST
 build
 *.egg-info
+.idea
+.DS*
