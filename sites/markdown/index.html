@@ -6,6 +6,16 @@
 Title
 =====
 
+${ext.toc()}
+
+  <ul>
+  % for x in dir(pygreen):
+    <li>${x}</li>
+  % endfor
+  </ul>
+
+  This: ${pygreen.settings.text}
+
 Main text goes here
 
 Called as <%text filter="h">${ext.hello()}</%text>: ${ext.hello()}

@@ -104,6 +104,8 @@ class PyGreen:
         """
         self.folder = folder
         self.templates.directories[0] = folder
+        if self.folder not in sys.path:
+            sys.path.append(self.folder)
 
     def run(self, host='0.0.0.0', port=8080):
         """
@@ -124,15 +126,30 @@ class PyGreen:
         out = b"".join(self.app(env, lambda *args: None))
         return out
 
+    @property
+    def settings(self):
+        m = __import__('settings', globals(), locals(), [], -1)
+        reload(m)
+        return m
+
+    @property
+    def files(self):
+        """
+        Collects all files that will be parsed. Will also be available in main context.
+        """
+        files = []
+        for l in self.file_listers:
+            files += l()
+        return files
+
     def gen_static(self, output_folder):
         """
         Generates a complete static version of the web site. It will stored in 
         output_folder.
         """
-        files = []
-        for l in self.file_listers:
-            files += l()
-        for f in files:
+
+        # this makes all files available in the template context
+        for f in self.files:
             _logger.info("generating %s" % f)
             content = self.get(f)
             loc = os.path.join(output_folder, f)
