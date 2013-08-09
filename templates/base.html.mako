@@ -1,4 +1,4 @@
-<%namespace name="ext" file="extensions.mako" inheritable="True"/>
+<%namespace name="x" file="ext.html.mako" inheritable="True"/>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,11 +8,7 @@
 </head>
 <body>
 
-<%block filter="markdown">
-
-    ${self.body()}
-
-</%block>
+${self.body()}
 
 </body>
 </html>
