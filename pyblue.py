@@ -40,9 +40,15 @@ import waitress
 
 _logger = logging.getLogger(__name__)
 
+# always adds the location of the default templates
+
+
 class PyGreen:
 
+    TEMPLATE_DIR = os.path.join(os.path.split(__file__)[0], "templates")
+
     def __init__(self):
+
         # the Bottle application
         self.app = bottle.Bottle()
         # a set of strings that identifies the extension of the files
@@ -52,7 +58,7 @@ class PyGreen:
         # directly, use set_folder instead
         self.folder = "."
         # the TemplateLookup of Mako
-        self.templates = TemplateLookup(directories=[self.folder],
+        self.templates = TemplateLookup(directories=[self.folder, self.TEMPLATE_DIR],
             imports=["from markdown import markdown"],
             input_encoding='iso-8859-1',
             collection_size=100,

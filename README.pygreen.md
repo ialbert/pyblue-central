@@ -1,29 +1,25 @@
-PyBlue
+PyGreen
 =======
 
 A micro web framework/static web site generator.
 
-PyBlue is a simple tool to generate small web sites.
-
-It started as a fork of PyGreen: https://github.com/nicolas-van/pygreen and incorporates
-and build on the code distributed by that project.
-
-
-It differs from PyGreen by implementing a number of helper functions
-that add bioinformatics orientied functionalty.
-
-As with PyGreen the concept is to put all files to serve in a folder and invoke the Mako template engine
-on all .html files. The result is quite similar to a classic PHP application, but with the
+PyGreen is a simple tool to generate small web sites. The concept is to put all
+files to serve in a folder and invoke the Mako template engine on all .html files.
+The result is quite similar to a classic PHP application, but with the
 good features of the Mako templates (like inheritance) and the cool syntax of Python.
 
-PyBlue uses the MIT license.
+PyGreen uses the MIT license.
 
 Quick Start
 -----------
 
+To install:
+
+    sudo easy_install pygreen
+
 To launch and serve files:
 
-    pyblue serve
+    pygreen serve
 
 The above command will serve the files located in the current folder.
 All files with the .html extension will also be processed by Mako. So if the current
@@ -37,7 +33,7 @@ When going to http://localhost:8080, you will see:
 
 PyGreen can also export all the files of you current folder after having the .html files processed by Mako. To do so, type this command:
 
-    blue gen <output_folder>
+    pygreen gen <output_folder>
 
 This can be useful to post your files on Github Pages or any other free static files hosting services.
 
@@ -74,7 +70,7 @@ I miss feature XYZ, can you add it?
 
 No. But you can. Easily. PyGreen can be a command line application or it can be a small framework to ease creation of complete Python web applications. PyGreen is just Mako templates served using the Bottle web framework. You can easily modify any of these using some python code. Example:
 
-    from pyblue import pygreen
+    from pygreen import pygreen
 
     pygreen.app # the Bottle wsgi application, use the @route() decorator to add new routes
     pygreen.templates # the Mako TemplateLookup object, do what you want with it
@@ -92,3 +88,21 @@ PyGreen was primarily created to be a static web site generator more effective t
 
 The fact that PyGreen has a small set of features is a feature. You don't need to spend hours to read crappy documentation before discovering it's impossible to do what you want. If you need to do anything which is not trivial you know you will have to code it, so just do it. That's what I call being pragmatic.
 
+Does PyGreen need contributions?
+--------------------------------
+
+Yes! Report issues, write examples in the wiki, propose improvements, everything is on Github. Just keep in mind that PyGreen is designed to be minimalist, so big features will probably not be accepted.
+
+You can also write articles or blog posts about PyGreen.
+
+[See the web site for any information.](http://pygreen.neoname.eu)
+
+Version 1.0.3
+
+Changelog:
+
+* 1.0.3:
+
+    * Added *.py to excluded files
+    * Some minor API changes
+    * Bug fixes
