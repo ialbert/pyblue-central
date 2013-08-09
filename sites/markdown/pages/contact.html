@@ -1,15 +1,7 @@
 <%inherit file="../base.mako"/>
 
-<%namespace name="ext" file="../extensions.mako"/>
+<%namespace name="x" file="../extensions.mako"/>
 
-${self.name}
+LINKS:
 
-About
-=====
-
-<%
-    y = range(10)
-%>
-% for elem in y:
-* element: ${elem}
-% endfor
+${x.links(rel='..')}

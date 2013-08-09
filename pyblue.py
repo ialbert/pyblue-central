@@ -70,6 +70,7 @@ class PyGreen:
         def base_lister():
             files = []
             for dirpath, dirnames, filenames in os.walk(self.folder):
+                filenames.sort()
                 for f in filenames:
                     absp = os.path.join(dirpath, f)
                     path = os.path.relpath(absp, self.folder)
@@ -132,6 +133,21 @@ class PyGreen:
         reload(m)
         return m
 
+    def links(self, patt=".", rel="."):
+        "Produces name, links pairs from file names"
+        def match(item):
+            return re.search(patt, item)
+
+        def split(item):
+            head, tail = os.path.split(item)
+            base, ext  = os.path.splitext(tail)
+            name = base.title().replace("-", " ").replace("_", " ")
+            return name, os.path.join(rel, item)
+
+        items = filter(match, self.files)
+        pairs = map(split, items)
+        return pairs
+
     @property
     def files(self):
         """
@@ -139,7 +155,7 @@ class PyGreen:
         """
         files = []
         for l in self.file_listers:
-            files += sorted(l())
+            files += l()
         return files
 
     def gen_static(self, output_folder):

@@ -10,7 +10,6 @@
 
 <%block filter="markdown">
 
-
     ${self.body()}
 
 </%block>

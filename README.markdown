@@ -92,5 +92,3 @@ PyGreen was primarily created to be a static web site generator more effective t
 
 The fact that PyGreen has a small set of features is a feature. You don't need to spend hours to read crappy documentation before discovering it's impossible to do what you want. If you need to do anything which is not trivial you know you will have to code it, so just do it. That's what I call being pragmatic.
 
-Does PyGreen need contributions?
---------------------------------
