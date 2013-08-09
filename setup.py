@@ -3,16 +3,16 @@
 from setuptools import setup
 import os.path
 
-setup(name='pygreen',
+setup(name='pyblue',
       version='1.0.3',
-      description='PyGreen',
-      author='Nicolas Vanhoren',
-      author_email='nicolas.vanhoren@unknown.com',
-      url='http://pygreen.neoname.eu',
-      py_modules = ['pygreen'],
+      description='PyBlue',
+      author='Nicolas Vanhoren, Istvan Albert',
+      author_email='nicolas.vanhoren@unknown.com, istvan.albert@gmail.com',
+      url='https://github.com/ialbert/pyblue',
+      py_modules = ['pyblue'],
       packages=[],
-      scripts=["pygreen"],
-      long_description="A micro web framework/static web site generator.",
+      scripts=["pyblue"],
+      long_description="A bioinformatics oriented micro web framework/static web site generator based on PyGreen.",
       keywords="",
       license="MIT",
       classifiers=[

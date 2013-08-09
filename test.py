@@ -2,7 +2,7 @@
 from __future__ import unicode_literals, print_function
 
 import unittest
-import pygreen
+import pyblue
 import shutil
 import os
 import os.path
@@ -14,7 +14,7 @@ class TestSequenceFunctions(unittest.TestCase):
 
     def setUp(self):
         os.makedirs(_output)
-        self.pygreen = pygreen.PyGreen()
+        self.pygreen = pyblue.PyGreen()
 
     def tearDown(self):
         self.pygreen = None

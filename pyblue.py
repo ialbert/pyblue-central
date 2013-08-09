@@ -139,7 +139,7 @@ class PyGreen:
         """
         files = []
         for l in self.file_listers:
-            files += l()
+            files += sorted(l())
         return files
 
     def gen_static(self, output_folder):
