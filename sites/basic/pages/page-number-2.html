@@ -5,6 +5,21 @@
 Page Number 2
 =============
 
-You can jump back to the index, but make sure to pass the correct relative path to it
+More Advanced Usage
+-------------------
 
-Let's go to ${ x.link(root="..", patt="index") }
+Including a `settings.py` file in the root folder allows the content of the file to be loaded
+into each template via the `pygreen.settings` attribute.
+
+Thus if the settings file contains
+
+    name="John Doe"
+
+You will be able to access that in the template via with `pygreen.settings.name`
+
+When rendered will become: ${pygreen.settings.name}
+
+Any other Python construct may be included in the settings file.
+
+You can now jump back to the ${ x.link(root="..", patt="index") } but make sure
+to pass the correct relative path to it with `x.link(root="..", patt="index")`

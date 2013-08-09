@@ -163,6 +163,8 @@ class PyGreen:
     def files(self):
         """
         Collects all files that will be parsed. Will also be available in main context.
+        TODO: this method crawls the entire directory tree each time it is accessed.
+        It is handy during development but very large trees may affect performance.
         """
         files = []
         for l in self.file_listers:
