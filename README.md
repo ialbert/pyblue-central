@@ -21,9 +21,15 @@ The tool is currently under development with no releases. To install:
     git clone git@github.com:ialbert/pyblue.git
     python setup.py develop
 
-To launch and serve files:
+Launch the demo server with
 
-    pyblue serve -f inputfolder
+    pyblue serve -f pyblue/sites/basic
+
+Then visit `http://localhost:8080` to see the site. In parallel with open the files in the `pyblue/sites/basic`
+and look at the content of the files.
+
+What does the tool do?
+----------------------
 
 The above command will serve the files located in the specified folder.
 Files with the .html extension will be processed by Mako. So if the folder
@@ -38,16 +44,15 @@ When going to http://localhost:8080, you will see:
 Generate Site
 --------------
 
-PyGreen can also export all the files of you current folder after having the .html files processed by
-Mako. To do so, type this command:
+PyBlue is meant to export all the files of you current folder
+after having the .html files processed by Mako. To do so perform the following:
 
-    blue gen -f inputfolder <output_folder>
+    blue gen -f input_folder output_folder
 
-This can be useful to post your files on Github Pages or any other free static files hosting services.
+Then look at the `output_folder`.
 
-Files with the .mako or .py extension will not be visited by `pyblue gen`.
+Hidden files or those with the .mako or .py, extension will not be visited by `pyblue gen`.
 This is useful to avoid generating macros files or templates to inherit.
-This also applies to hidden files.
 
 Templates
 ---------
@@ -55,8 +60,8 @@ Templates
 There are default templates included in the `templates` folder. These will be automatically included in
 the template search path. To override them create identically named templates in your site's root folder.
 
-See this template https://github.com/ialbert/pyblue/blob/master/sites/markdown/index.html
-as an example of what is included in the defaults.
+See the basic templates at https://github.com/ialbert/pyblue/blob/master/sites/
+for examples of what is included in the default extensions.
 
 Example Sites
 -------------
