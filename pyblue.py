@@ -42,10 +42,11 @@ _logger = logging.getLogger(__name__)
 
 # always adds the location of the default templates
 
+op = os.path
 
 class PyGreen:
 
-    TEMPLATE_DIR = os.path.join(os.path.split(__file__)[0], "templates")
+    TEMPLATE_DIR = op.abspath(op.join(op.split(__file__)[0], "templates"))
 
     def __init__(self):
 
@@ -139,7 +140,7 @@ class PyGreen:
         reload(m)
         return m
 
-    def links(self, patt=".", rel="."):
+    def links(self, patt=".", root=".", short=True):
         "Produces name, links pairs from file names"
         def match(item):
             return re.search(patt, item)
@@ -147,8 +148,12 @@ class PyGreen:
         def split(item):
             head, tail = os.path.split(item)
             base, ext  = os.path.splitext(tail)
-            name = base.title().replace("-", " ").replace("_", " ")
-            return name, os.path.join(rel, item)
+
+            if short:
+                name = base.title().replace("-", " ").replace("_", " ")
+            else:
+                name = item
+            return name, os.path.join(root, item)
 
         items = filter(match, self.files)
         pairs = map(split, items)

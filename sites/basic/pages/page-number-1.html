@@ -1,0 +1,28 @@
+<%inherit file="../base.md.mako"/>
+
+<%namespace name="x" file="../ext.md.mako"/>
+
+Page Number 1
+=============
+
+Note that since this file is in a different folder in the template we refer to the inherited
+templates as a relative path to the root folder.
+
+The same will apply to generating links, within the template we need to specify the
+path to the root of the site.
+
+${x.toc(root="..", short=False)}
+
+
+Note Each template has access to the entire pygreen object that has the following attributes
+For example in this page we can access the `pygreen` object to produce its attributes and
+methods like so:
+
+% for name in dir(pygreen):
+* ${name}
+% endfor
+
+Some of them will be formatted as bold because the module name starts with underscore, that in turn
+is interpreted as the bold character in Markdown.
+
+Let's go to ${ x.link(root="..", patt="pages/.+2.*") }

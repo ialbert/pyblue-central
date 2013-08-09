@@ -7,7 +7,7 @@ PyBlue is a simple tool to generate web based bioinformatics reports. It has gro
 experienced while trying share analytical reports with non technical users.
 
 It started as a fork of PyGreen: https://github.com/nicolas-van/pygreen and
-it has been expanded to support bioinformatics related functionality. See
+it has been expanded to include bioinformatics related functionality. See
 the README.pygreen.md or see the PyGreen repository https://github.com/nicolas-van/pygreen
 for more details on PyGreen
 
@@ -38,7 +38,8 @@ When going to http://localhost:8080, you will see:
 Generate Site
 --------------
 
-PyGreen can also export all the files of you current folder after having the .html files processed by Mako. To do so, type this command:
+PyGreen can also export all the files of you current folder after having the .html files processed by
+Mako. To do so, type this command:
 
     blue gen -f inputfolder <output_folder>
 
@@ -53,6 +54,9 @@ Templates
 
 There are default templates included in the `templates` folder. These will be automatically included in
 the template search path. To override them create identically named templates in your site's root folder.
+
+See this template https://github.com/ialbert/pyblue/blob/master/sites/markdown/index.html
+as an example of what is included in the defaults.
 
 Example Sites
 -------------

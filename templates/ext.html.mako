@@ -6,12 +6,6 @@
     Hello world! ${self.name}
 </%def>
 
-<%def name="toc(patt='.', rel='.')">
-% for name, fname in pygreen.links(patt, rel):
-* [${name}](${fname})
-% endfor
-</%def>
-
 <%def name="links(patt='.', rel='.')">
 <ul class="links">
 % for name, link in pygreen.links(patt, rel):
