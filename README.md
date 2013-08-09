@@ -1,15 +1,20 @@
 PyBlue
-=======
+======
 
 A micro web framework/static web site generator.
 
-PyBlue is a simple tool to generate web based bioinformatics reports. It has grown out of the frustrations
-experienced while trying share analytical reports with non technical users.
+PyBlue is a simple tool to generate **web based bioinformatics** reports. It has
+grown out of the frustrations
+experienced while trying share analytical reports with non technical users. LIMS
+systems are too difficult to manage, other static blog generators are
+too specialized for blogs and can't be easily extended.
 
-It started as a fork of PyGreen: https://github.com/nicolas-van/pygreen and
-it has been expanded to include bioinformatics related functionality. See
-the README.pygreen.md or see the PyGreen repository https://github.com/nicolas-van/pygreen
-for more details on PyGreen
+It started as a fork of PyGreen: https://github.com/nicolas-van/pygreen later
+it has been expanded to include bioinformatics related functionality that warranted
+to be split from the original base.
+
+For more information on the original PyGreen module see the `README.pygreen.md` or visit
+the PyGreen repository https://github.com/nicolas-van/pygreen.
 
 PyBlue uses the MIT license.
 
@@ -19,14 +24,15 @@ Quick Start
 The tool is currently under development with no releases. To install:
 
     git clone git@github.com:ialbert/pyblue.git
+    cd pyblue
     python setup.py develop
 
-Launch the demo server with
+This will locally install the scripts. Now launch a demo server with
 
-    pyblue serve -f pyblue/sites/basic
+    pyblue serve -f sites/basic
 
-Then visit `http://localhost:8080` to see the site. In parallel with open the files in the `pyblue/sites/basic`
-and look at the content of the files.
+Then visit `http://localhost:8080` to see the site. In visit the `pyblue/sites/basic`
+folder and look at the content of the files that are then shown in the browser.
 
 What does the tool do?
 ----------------------
