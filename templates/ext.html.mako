@@ -10,3 +10,10 @@
 % endfor
 </ul>
 </%def>
+
+<%def name="link(patt='.', root='.', short=True)">
+<%
+    links = pygreen.links(patt, root, short=short)
+    links = links or [ ("missing", "missing") ]
+    name, fname  = links[0]
+%><a href="${fname}">${name}</a> </%def>

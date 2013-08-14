@@ -38,6 +38,8 @@ import sys
 import markdown
 import waitress
 
+MAX_SIZE_KB = 500
+
 _logger = logging.getLogger(__name__)
 
 # always adds the location of the default templates
@@ -179,12 +181,18 @@ class PyGreen:
 
         # this makes all files available in the template context
         for f in self.files:
-            _logger.info("generating %s" % f)
+            statinfo = os.stat(f)
+            size = 1.0 * statinfo.st_size/1024
+            if size > MAX_SIZE_KB:
+                _logger.info("skipping large file %s of %.1fkb" % (f, size))
+                continue
+            _logger.info("generating %s of %.1fkb" % (f, size) )
             content = self.get(f)
             loc = os.path.join(output_folder, f)
             d = os.path.dirname(loc)
             if not os.path.exists(d):
                 os.makedirs(d)
+
             with open(loc, "wb") as file_:
                 file_.write(content)
 
