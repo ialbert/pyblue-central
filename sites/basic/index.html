@@ -1,67 +1,53 @@
 <%inherit file="base.md.mako"/>
 
-<%namespace name="x" file="ext.md.mako"/>
-
 ##name Home Page
 ##sortkey 1
-##tags home page, introduction
+##tags home intro
 
-Welcome to PyBlue ${f.name}
+Welcome to PyBlue
 =================
 
-${files}
 
 The template inherits from [base.md.mako](https://github.com/ialbert/pyblue/blob/master/templates/base.md.mako)
-and therefore its content
-is interpreted in [Markdown](http://en.wikipedia.org/wiki/Markdown) syntax.
+and therefore its content will be interpreted in [Markdown](http://en.wikipedia.org/wiki/Markdown) syntax.
 
-Also note that if you are using the `pyblue serve` command you may change
-the content of this file and see the changes live in your browser.
+If you are using the `pyblue serve` command you may change the content of this file and see the changes
+live in your browser.
 
-Utility Functions
------------------
+Context
+-------
 
-You will need to look at the [source of this file](https://github.com/ialbert/pyblue/blob/master/sites/basic/index.html)
-to understand how the content is generated.
+Templates have access to a default context that includes default variables. For example
 
-Links
------
+* the `f` variable that contains information
+  on the current file. For example <%text filter="h">`${f.name}`</%text> will print this page's name: ${f.name}.
+* the `p` is the class underlying the entire PyBlue instance. It has many
+  neat properties. For example the `p.files`
+  class attribute contains information on all files processed by PyBlue. Thus say
+  <%text filter="h">`${len(p.files)}`</%text> will produce ${len(p.files)}
+* the `u` variable exposes a series of utility functions that come in handy when creating pages. These
+  are defined in the `pyblue/utils.py` module. For example <%text filter="h">`${u.hello()`</%text> will produce ${u.hello()}
 
-These is the Table of Contents, all files that are contained in the project `x.toc(short=False)` :
 
-${x.toc(short=False)}
+Learn more about context on the ${p.link('context')} page.
 
-The default behavior via `x.toc()` is to shorten the file names to make them more user friendly.
-The names are auto generated from the file names:
 
-${x.toc()}
+File Listing
+------------
 
-The order of the files is alphabetic within each directory.
+You can iterate over all files in the project:
 
-You may also pass a pattern to the link generator `x.toc(patt='pages', short=False)` to select only the files that match
-that regular expression pattern.
-For example here are the links where the url path starts with the word `pages`:
+%for x in p.files:
+* ${x.url()}
+%endfor
 
-${x.toc(patt='pages', short=False)}
+These will be a sorted by the sortkey as explained in the ${p.link('context')} page.
 
-This too has long and short form `x.toc(patt='pages')` :
+Navigation
+----------
 
-${x.toc(patt='pages')}
+See examples of file navigation on the ${p.link('navigate')} page.
 
-Other Functions
----------------
-
-You may define other functionality in the templates, here we call the function `hello()` defined in the extension:
-
-Invoked as <%text filter="h">`${x.hello()}`</%text>
-
-It will produce ${x.hello()}
-
-Internal links
---------------
-
-Let's go to ${ x.link(patt=".*1") } with `x.link(patt=".*1")` This command will return the first
-link that matches the pattern.
 
 
 

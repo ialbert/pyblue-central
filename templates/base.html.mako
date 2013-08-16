@@ -1,4 +1,4 @@
-<%namespace name="x" file="ext.html.mako" inheritable="True"/>
+<%namespace name="x" file="ext.mako" inheritable="True"/>
 <!DOCTYPE html>
 <html>
 <head>

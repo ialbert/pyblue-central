@@ -1,0 +1,33 @@
+<%inherit file="../base.md.mako"/>
+
+##name Context
+##sortkey 1
+##tags home intro
+
+More on Context
+===============
+
+Each page may also contain any number of context values that will then be available to the page.
+
+For example this page has the following metadata associated with it.
+
+<%text filter="h">
+    ##name Context
+    ##sortkey 1
+    ##tags data test
+</%text>
+
+What this means is that the links generated to this page will have the word `Context` and
+iterating over the files will be returned by the sortkey.
+Finally we can access the page by name or tags
+
+`f.meta["tags"]` will produce ${f.meta['tags']}
+
+These three metafields will always be set.
+
+
+
+
+
+
+

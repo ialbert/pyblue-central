@@ -42,6 +42,71 @@ _logger = logging.getLogger(__name__)
 
 op = os.path
 
+class File(object):
+    "Represents a file object within PyBlue"
+
+    def __init__(self, fname, root=None):
+        self.root  = root
+        self.fname = fname
+        self.fpath = os.path.join(root, fname)
+        self.rpath = os.path.relpath(self.root, self.fpath)
+        self.meta  =  dict(name=self.nice_name, sortkey="2", tags=set("data"))
+        if not self.skip_file:
+            self.meta.update(utils.parse_meta(self.fpath))
+
+    @property
+    def nice_name(self):
+        "Attempts to generate a nicer name from the filename"
+        head, tail = os.path.split(self.fname)
+        base, ext = os.path.splitext(tail)
+        return base.title().replace("-", " ").replace("_", " ")
+
+    def content(self):
+        return file(self.fpath).read()
+
+    @property
+    def name(self):
+        return self.meta.get("name", "*** name not set ***")
+
+    @property
+    def sortkey(self):
+        return self.meta.get("sortkey", "2")
+
+    @property
+    def size(self):
+        "File size in KB"
+        return utils.get_size(self.fpath)
+
+    @property
+    def skip_file(self):
+        return self.size > utils.MAX_SIZE_KB
+
+    def write(self, output_folder, text):
+        loc = os.path.join(output_folder, self.fname)
+        if op.abspath(loc) == op.abspath(self.fpath):
+            raise Exception("may not overwrite the original file %s" % loc)
+
+        d = os.path.dirname(loc)
+        if not os.path.exists(d):
+            os.makedirs(d)
+        with open(loc, "wb") as fp:
+            fp.write(text)
+
+    def url(self, start=None):
+        if start:
+            start = start.fname
+        else:
+            start = self.fname
+
+        start = op.abspath(op.dirname(start))
+        curr  = op.abspath(op.dirname(self.fname))
+        rel = op.relpath(curr, start)
+        rpath = op.join(rel, self.fname)
+        url = '''<a href="%s">%s</a>''' % (rpath, self.name)
+        return url
+
+    def __repr__(self):
+        return "File: %s (%s)" % (self.name, self.fname)
 
 class PyGreen:
     TEMPLATE_DIR = op.abspath(op.join(op.split(__file__)[0], "templates"))
@@ -56,6 +121,13 @@ class PyGreen:
         # the folder where the files to serve are located. Do not set
         # directly, use set_folder instead
         self.folder = "."
+
+        # recrawls directories on each request, use in serving
+        self.refresh = True
+
+        # the collection of files
+        self.files = None
+
         # the TemplateLookup of Mako
         self.templates = TemplateLookup(directories=[self.folder, self.TEMPLATE_DIR],
                                         imports=["from markdown import markdown"],
@@ -96,9 +168,11 @@ class PyGreen:
         def file_renderer(path):
             if is_public(path):
                 if path.split(".")[-1] in self.template_exts and self.templates.has_template(path):
-                    f = utils.File(fname=path, root=self.folder)
+                    f = File(fname=path, root=self.folder)
                     t = self.templates.get_template(path)
-                    data = t.render_unicode(pygreen=self, f=f, u=utils, files=self.files)
+                    if self.refresh:
+                        self.files = self.collect_files
+                    data = t.render_unicode(p=self, f=f, u=utils)
                     return data.encode(t.module._source_encoding)
                 return bottle.static_file(path, root=self.folder)
             return bottle.HTTPError(404, 'File does not exist.')
@@ -144,59 +218,33 @@ class PyGreen:
         reload(m)
         return m
 
-    def links(self, patt=".", root=".", short=True):
+    def link(self, fname):
+
+        items = filter(lambda x: re.search(fname, x.fname, re.IGNORECASE), self.files)
+        if not items:
+            found = self.files[0]
+            _logger.error("*** name %s does not match" % fname)
+        else:
+            found = items[0]
+            if len(items) > 1:
+                _logger.warn("name %s matches more than one item" % fname)
+
+        return found.url()
+
+    def tagged(self, tag, root):
         "Produces name, links pairs from file names"
 
-        def match(item):
-            return re.search(patt, item)
+        items = filter(lambda x: tag in x.meta['tags'], self.files)
 
-        def split(item):
-            head, tail = os.path.split(item)
-            base, ext = os.path.splitext(tail)
+        if not items:
+            _logger.error("*** tag %s does not match" % tag)
+            items =  [ self.files[0] ]
 
-            if short:
-                name = base.title().replace("-", " ").replace("_", " ")
-            else:
-                name = item
-            return name, os.path.join(root, item)
-
-        items = filter(match, self.files)
-        pairs = map(split, items)
-        return pairs
-
-    def toc(self, patt=".", root=".", short=True):
-        "Produces name, links pairs from file names"
-
-        def match(item):
-            return re.search(patt, item)
-
-        def split(item):
-            head, tail = os.path.split(item)
-            base, ext = os.path.splitext(tail)
-
-            if short:
-                name = base.title().replace("-", " ").replace("_", " ")
-            else:
-                name = item
-            return name, os.path.join(root, item)
-
-        items = filter(match, self.files)
-        pairs = map(split, items)
-        return pairs
+        urls = [ f.url(root) for f in items ]
+        return urls
 
     @property
-    def files(self):
-        """
-        Collects all files that will be parsed. Will also be available in main context.
-        TODO: this method crawls the entire directory tree each time it is accessed.
-        It is handy during development but very large trees may affect performance.
-        """
-        files = []
-        for l in self.file_listers:
-            files += l()
-        return files
-
-    def collect(self):
+    def collect_files(self):
         """
         Collects all files that will be parsed. Will also be available in main context.
         TODO: this method crawls the entire directory tree each time it is accessed.
@@ -206,7 +254,12 @@ class PyGreen:
         for l in self.file_listers:
             files += l()
 
-        return map(lambda x: utils.File(x, self.folder), files)
+        files = map(lambda x: File(x, self.folder), files)
+
+        # apply sort order
+        decor = [(f.sortkey, f.name, f) for f in files]
+        decor.sort()
+        return [ f[2] for f in decor ]
 
     def gen_static(self, output_folder):
         """
@@ -215,7 +268,8 @@ class PyGreen:
         """
 
         # this makes all files available in the template context
-        for f in self.collect():
+        self.files = self.collect_files
+        for f in self.files:
             if f.skip_file:
                 _logger.info("skipping large file %s of %.1fkb" % (f.fname, f.size))
                 continue
@@ -232,7 +286,7 @@ class PyGreen:
         """
         logging.basicConfig(level=logging.INFO, format='%(message)s')
 
-        parser = argparse.ArgumentParser(description='PyGreen, micro web framework/static web site generator')
+        parser = argparse.ArgumentParser(description='PyBlue, micro web framework/static web site generator')
         subparsers = parser.add_subparsers(dest='action')
 
         parser_serve = subparsers.add_parser('serve', help='serve the web site')
@@ -253,6 +307,7 @@ class PyGreen:
         parser_gen.add_argument('-f', '--folder', default=".", help='folder containg files to serve')
 
         def gen():
+            self.refresh = False
             self.gen_static(args.output)
 
         parser_gen.set_defaults(func=gen)
