@@ -4,7 +4,7 @@
 <html>
 <head>
     <title>
-        <%block name="title" />
+        <%block name="title" >${f.name}</%block>
     </title>
 </head>
 <body>
