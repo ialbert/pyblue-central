@@ -41,18 +41,21 @@ _logger = logging.getLogger(__name__)
 # always adds the location of the default templates
 
 op = os.path
+dn = op.dirname
 
 class File(object):
     "Represents a file object within PyBlue"
 
-    def __init__(self, fname, root=None):
+    def __init__(self, fname, root):
         self.root  = root
         self.fname = fname
         self.fpath = os.path.join(root, fname)
-        self.rpath = os.path.relpath(self.root, self.fpath)
+        self.dname = dn(self.fpath)
+
         self.meta  =  dict(name=self.nice_name, sortkey="2", tags=set("data"))
         if not self.skip_file:
             self.meta.update(utils.parse_meta(self.fpath))
+
 
     @property
     def nice_name(self):
@@ -93,15 +96,12 @@ class File(object):
             fp.write(text)
 
     def url(self, start=None):
-        if start:
-            start = start.fname
-        else:
-            start = self.fname
 
-        start = op.abspath(op.dirname(start))
-        curr  = op.abspath(op.dirname(self.fname))
-        rel = op.relpath(curr, start)
-        rpath = op.join(rel, self.fname)
+        start = start or self
+
+        rpath = op.relpath(self.root, start.dname)
+        rpath = op.join(rpath, self.fname)
+
         url = '''<a href="%s">%s</a>''' % (rpath, self.name)
         return url
 
@@ -218,7 +218,7 @@ class PyGreen:
         reload(m)
         return m
 
-    def link(self, fname):
+    def link(self, fname, start=None):
 
         items = filter(lambda x: re.search(fname, x.fname, re.IGNORECASE), self.files)
         if not items:
@@ -229,9 +229,9 @@ class PyGreen:
             if len(items) > 1:
                 _logger.warn("name %s matches more than one item" % fname)
 
-        return found.url()
+        return found.url(start)
 
-    def tagged(self, tag, root):
+    def tagged(self, tag, start):
         "Produces name, links pairs from file names"
 
         items = filter(lambda x: tag in x.meta['tags'], self.files)
@@ -240,7 +240,7 @@ class PyGreen:
             _logger.error("*** tag %s does not match" % tag)
             items =  [ self.files[0] ]
 
-        urls = [ f.url(root) for f in items ]
+        urls = [ f.url(start) for f in items ]
         return urls
 
     @property

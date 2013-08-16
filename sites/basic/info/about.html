@@ -1,66 +1,10 @@
 <%inherit file="../base.md.mako"/>
 
-<%namespace name="x" file="ext.md.mako"/>
+About
+=====
 
-##tags intro
 
-Welcome to PyBlue ${f.name}
-=================
-
-${files}
-
-The template inherits from [base.md.mako](https://github.com/ialbert/pyblue/blob/master/templates/base.md.mako)
-and therefore its content
-is interpreted in [Markdown](http://en.wikipedia.org/wiki/Markdown) syntax.
-
-Also note that if you are using the `pyblue serve` command you may change
-the content of this file and see the changes live in your browser.
-
-Utility Functions
------------------
-
-You will need to look at the [source of this file](https://github.com/ialbert/pyblue/blob/master/sites/basic/index.html)
-to understand how the content is generated.
-
-Links
------
-
-These is the Table of Contents, all files that are contained in the project `x.toc(short=False)` :
-
-##${x.toc(short=False)}
-
-The default behavior via `x.toc()` is to shorten the file names to make them more user friendly.
-The names are auto generated from the file names:
-
-##${x.toc()}
-
-The order of the files is alphabetic within each directory.
-
-You may also pass a pattern to the link generator `x.toc(patt='pages', short=False)` to select only the files that match
-that regular expression pattern.
-For example here are the links where the url path starts with the word `pages`:
-
-##${x.toc(patt='pages', short=False)}
-
-This too has long and short form `x.toc(patt='pages')` :
-
-${x.toc(patt='pages')}
-
-Other Functions
----------------
-
-You may define other functionality in the templates, here we call the function `hello()` defined in the extension:
-
-Invoked as <%text filter="h">`${x.hello()}`</%text>
-
-##It will produce ${x.hello()}
-
-Internal links
---------------
-
-##Let's go to ${ x.link(patt=".*1") } with `x.link(patt=".*1")` This command will return the first
-##link that matches the pattern.
-
+Go to the ${p.link('index', f)} page.
 
 
 
