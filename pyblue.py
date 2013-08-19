@@ -307,7 +307,7 @@ class PyGreen:
 
         # this makes all files available in the template context
         self.files = self.collect_files
-        self.files = filter(self.is_public, self.files)
+        
         for f in self.files:
             if f.skip_file:
                 _logger.info("skipping large file %s of %.1fkb" % (f.fname, f.size))
