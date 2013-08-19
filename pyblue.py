@@ -51,6 +51,7 @@ class File(object):
         self.fname = fname
         self.fpath = os.path.join(root, fname)
         self.dname = dn(self.fpath)
+        self.ext   = os.path.splitext(fname)[1]
 
         self.meta  =  dict(name=self.nice_name, sortkey="2", tags=set("data"))
         if not self.skip_file:
@@ -66,6 +67,10 @@ class File(object):
 
     def content(self):
         return file(self.fpath).read()
+
+    @property
+    def is_image(self):
+        return self.ext in ("png", "jpg", "gif")
 
     @property
     def name(self):
@@ -222,26 +227,32 @@ class PyGreen:
 
         items = filter(lambda x: re.search(fname, x.fname, re.IGNORECASE), self.files)
         if not items:
-            found = self.files[0]
+            f = self.files[0]
             _logger.error("*** name %s does not match" % fname)
         else:
-            found = items[0]
+            f = items[0]
             if len(items) > 1:
                 _logger.warn("name %s matches more than one item" % fname)
 
-        return found.url(start)
+        return f.url(start)
 
-    def tagged(self, tag, start):
+    def toc(self, tag=None, start=None):
         "Produces name, links pairs from file names"
 
-        items = filter(lambda x: tag in x.meta['tags'], self.files)
+        if tag:
+            items = filter(lambda x: tag in x.meta['tags'], self.files)
+        else:
+            items = self.files
 
         if not items:
             _logger.error("*** tag %s does not match" % tag)
             items =  [ self.files[0] ]
 
         urls = [ f.url(start) for f in items ]
-        return urls
+        t = self.templates.get_template("toc.html")
+        h = t.render_unicode(urls=urls)
+        return h
+
 
     @property
     def collect_files(self):

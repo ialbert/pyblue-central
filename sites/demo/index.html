@@ -37,11 +37,20 @@ File Listing
 
 You can iterate over all files in the project:
 
-%for x in p.files:
-* ${x.url()}
-%endfor
+${p.toc()}
 
 These will be a sorted by the sortkey as explained in the ${p.link('context', f)} page.
+
+Tagged
+------
+
+Tagged as `home`:
+
+${p.toc(tag="home")}
+
+Tagged as `data`:
+
+${p.toc(tag="data")}
 
 Navigation
 ----------
