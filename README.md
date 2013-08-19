@@ -21,7 +21,6 @@ Sites running PyBlue
 --------------------
 
  * http://bcc.bx.psu.edu
-## * http://www.personal.psu.edu/iua1/
 
 PyBlue uses the MIT license.
 
