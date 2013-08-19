@@ -67,12 +67,12 @@ Any metatag may be added and later retrieved in the page.
 
 Special functions may be used to generate tables of contents.
 
-   # generate a table of contents
-   ${p.toc()}
+    # generate a table of contents
+    ${p.toc()}
 
-   # generate a table of contents for
-   # the pages tagged as 'data'
-   ${p.toc(tag='data')}
+    # generate a table of contents for
+    # the pages tagged as 'data'
+    ${p.toc(tag='data')}
 
 The `sites/demo` and `sites/docs` folders contain numerous examples on the usage.
 
