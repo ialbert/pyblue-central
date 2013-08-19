@@ -29,7 +29,7 @@ Templates have access to a default context that includes default variables. For 
   are defined in the `pyblue/utils.py` module. For example <%text filter="h">`${u.hello()`</%text> will produce ${u.hello()}
 
 
-Learn more about context on the ${p.link('context')} page.
+Learn more about context on the ${p.link(f, 'context')} page.
 
 
 File Listing
@@ -37,25 +37,25 @@ File Listing
 
 You can iterate over all files in the project:
 
-${p.toc()}
+${p.toc(f)}
 
-These will be a sorted by the sortkey as explained in the ${p.link('context', f)} page.
+These will be a sorted by the sortkey as explained in the ${p.link(f, 'context')} page.
 
 Tagged
 ------
 
 Tagged as `home`:
 
-${p.toc(tag="home")}
+${p.toc(f, tag="home")}
 
 Tagged as `data`:
 
-${p.toc(tag="data")}
+${p.toc(f, tag="data")}
 
 Navigation
 ----------
 
-See examples of file navigation on the ${p.link('navigate')} page.
+See examples of file navigation on the ${p.link(f, 'navigate')} page.
 
 
 

@@ -234,7 +234,7 @@ class PyGreen:
         reload(m)
         return m
 
-    def link(self, fname, start=None):
+    def link(self, start, fname):
 
         items = filter(lambda x: re.search(fname, x.fname, re.IGNORECASE), self.files)
         if not items:
@@ -248,9 +248,8 @@ class PyGreen:
         link, name = f.url(start)
         return '<a href="%s">%s</a>' % (link, name)
 
-    def toc(self, tag=None,  start=None, match=None,):
+    def toc(self, start,  tag=None, match=None):
         "Produces name, links pairs from file names"
-
 
         if tag:
             items = filter(lambda x: tag in x.meta['tags'], self.files)
@@ -268,7 +267,7 @@ class PyGreen:
         h = t.render_unicode(urls=urls)
         return h
 
-    def gallery(self, match=None, start=None, span=4):
+    def gallery(self, start, match=None,  span=4):
         "Produces name, links pairs from file names"
 
         items = filter(lambda x: x.is_image, self.files)
