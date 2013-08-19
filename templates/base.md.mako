@@ -1,5 +1,3 @@
-<%namespace name="x" file="ext.md.mako" inheritable="True"/>
-
 <!DOCTYPE html>
 <html>
 <head>

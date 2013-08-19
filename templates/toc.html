@@ -1,6 +1,6 @@
 
 <ul class="toc">
-%for u in urls:
-<li>${u}</li>
+%for link, name in urls:
+<li><a href="${link}">${name}</a></li>
 %endfor
 </ul>

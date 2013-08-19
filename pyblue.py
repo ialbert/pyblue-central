@@ -57,24 +57,27 @@ class File(object):
         if not self.skip_file:
             self.meta.update(utils.parse_meta(self.fpath))
 
-
     @property
     def nice_name(self):
         "Attempts to generate a nicer name from the filename"
         head, tail = os.path.split(self.fname)
         base, ext = os.path.splitext(tail)
-        return base.title().replace("-", " ").replace("_", " ")
+        name = base.title().replace("-", " ").replace("_", " ")
+        if self.is_image:
+            name = name + self.ext
+        return name
 
     def content(self):
         return file(self.fpath).read()
 
     @property
     def is_image(self):
-        return self.ext in ("png", "jpg", "gif")
+        return self.ext in (".png", ".jpg", ".gif")
 
     @property
     def name(self):
-        return self.meta.get("name", "*** name not set ***")
+        name = self.meta.get("name", "*** name not set ***")
+        return name
 
     @property
     def sortkey(self):
@@ -107,8 +110,8 @@ class File(object):
         rpath = op.relpath(self.root, start.dname)
         rpath = op.join(rpath, self.fname)
 
-        url = '''<a href="%s">%s</a>''' % (rpath, self.name)
-        return url
+        return rpath, self.name
+
 
     def __repr__(self):
         return "File: %s (%s)" % (self.name, self.fname)
@@ -198,6 +201,14 @@ class PyGreen:
         if self.folder not in sys.path:
             sys.path.append(self.folder)
 
+        # append more ignored patterns
+        ignore_file = op.join(self.folder, ".ignore")
+        if os.path.isfile(ignore_file):
+            patts = list(file(ignore_file))
+            patts = map(lambda x: x.strip(), patts)
+            patts = filter(lambda x: not x.startswith("#"), patts)
+            self.file_exclusion.extend(patts)
+
     def run(self, host='0.0.0.0', port=8080):
         """
         Launch a development web server.
@@ -234,7 +245,8 @@ class PyGreen:
             if len(items) > 1:
                 _logger.warn("name %s matches more than one item" % fname)
 
-        return f.url(start)
+        link, name = f.url(start)
+        return '<a href="%s">%s</a>' % (link, name)
 
     def toc(self, tag=None, start=None):
         "Produces name, links pairs from file names"
@@ -246,13 +258,24 @@ class PyGreen:
 
         if not items:
             _logger.error("*** tag %s does not match" % tag)
-            items =  [ self.files[0] ]
 
-        urls = [ f.url(start) for f in items ]
+        urls = [f.url(start) for f in items]
         t = self.templates.get_template("toc.html")
         h = t.render_unicode(urls=urls)
         return h
 
+    def gallery(self, match=None, start=None, span=4):
+        "Produces name, links pairs from file names"
+
+        items = filter(lambda x: x.is_image, self.files)
+
+        if match:
+            items = filter(lambda x: re.search(match, x.fname, re.IGNORECASE), self.files)
+
+        urls = [ f.url(start) for f in items ]
+        t = self.templates.get_template("gallery.html")
+        h = t.render_unicode(urls=urls, span=span)
+        return h
 
     @property
     def collect_files(self):

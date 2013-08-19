@@ -3,14 +3,16 @@ PyBlue
 
 A micro web framework/static web site generator.
 
-PyBlue is a simple tool to generate **web based bioinformatics** reports. It has
+Example sites: http://bcc.bx.psu.edu, http://
+
+PyBlue is a simple tool to generate **web based data analysis** reports. It has
 grown out of the frustrations
 experienced while trying share analytical reports with non technical users. LIMS
 systems are too difficult to manage, other static blog generators are
 too specialized for blogs and can't be easily extended.
 
 It started as a fork of PyGreen: https://github.com/nicolas-van/pygreen later
-it has been expanded to include bioinformatics related functionality that warranted
+it has being expanded to include bioinformatics related functionality that warranted
 to be split from the original base.
 
 For more information on the original PyGreen module see the `README.pygreen.md` or visit
@@ -29,7 +31,7 @@ The tool is currently under development with no releases. To install:
 
 This will locally install the scripts. Now launch a demo server with
 
-    pyblue serve -f sites/basic
+    pyblue serve -f sites/demo
 
 Then visit `http://localhost:8080` to see the site. In visit the `pyblue/sites/basic`
 folder and look at the content of the files that are then shown in the browser.
@@ -47,13 +49,29 @@ When going to http://localhost:8080, you will see:
 
     <p>Hello, my age is 28.</p>
 
+Builtin Extensions
+------------------
+
+PyBlue offers a number of builtin extensions. First of all it allows embedding
+metadata into the files.
+
+##name Home Page
+##sortkey 1
+##tags home intro
+
+   # generate a table of contents
+   ${p.toc()}
+
+   #
+
+PyBlue offers a number of convenience functions over
 Generate Site
 --------------
 
 PyBlue is meant to export all the files of you current folder
 after having the .html files processed by Mako. To do so perform the following:
 
-    blue gen -f input_folder output_folder
+    pyblue gen -f input_folder output_folder
 
 Then look at the `output_folder`.
 

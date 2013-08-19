@@ -1,5 +1,5 @@
 Templates
 ---------
 
-There are separate templates for sites that need to use Markdown and Html
+This directory is automatically added to the template import paths.
 
