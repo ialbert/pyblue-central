@@ -248,13 +248,17 @@ class PyGreen:
         link, name = f.url(start)
         return '<a href="%s">%s</a>' % (link, name)
 
-    def toc(self, tag=None, start=None):
+    def toc(self, tag=None, match=None, start=None):
         "Produces name, links pairs from file names"
+
 
         if tag:
             items = filter(lambda x: tag in x.meta['tags'], self.files)
         else:
             items = self.files
+
+        if match:
+            items = filter(lambda x: re.search(match, x.fname, re.IGNORECASE), self.files)
 
         if not items:
             _logger.error("*** tag %s does not match" % tag)
@@ -303,6 +307,7 @@ class PyGreen:
 
         # this makes all files available in the template context
         self.files = self.collect_files
+        self.files = filter(self.is_public, self.files)
         for f in self.files:
             if f.skip_file:
                 _logger.info("skipping large file %s of %.1fkb" % (f.fname, f.size))
