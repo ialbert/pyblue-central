@@ -3,27 +3,32 @@ PyBlue
 
 A micro web framework/static web site generator.
 
-Example sites: http://bcc.bx.psu.edu, http://
+PyBlue is a simple tool to generate static sites to distribute **data analysis** reports. It has
+grown out of the frustrations experienced while trying share analytical reports
+with non technical users. Laboratory information management systems are
+too difficult to install, maintain and manage. Yet at the same time the typical
+static blog generators are too specialized for blogging
+and can't be easily extended to support non-blog domains of applications.
 
-PyBlue is a simple tool to generate **web based data analysis** reports. It has
-grown out of the frustrations
-experienced while trying share analytical reports with non technical users. LIMS
-systems are too difficult to manage, other static blog generators are
-too specialized for blogs and can't be easily extended.
-
-It started as a fork of PyGreen: https://github.com/nicolas-van/pygreen later
-it has being expanded to include bioinformatics related functionality that warranted
-to be split from the original base.
+PyBlue started out as a fork of PyGreen: https://github.com/nicolas-van/pygreen
+it is being expanded to include more bioinformatics related functionality and
+that warranted to be split from the original base.
 
 For more information on the original PyGreen module see the `README.pygreen.md` or visit
 the PyGreen repository https://github.com/nicolas-van/pygreen.
+
+Sites running PyBlue
+--------------------
+
+ * http://bcc.bx.psu.edu
+## * http://www.personal.psu.edu/iua1/
 
 PyBlue uses the MIT license.
 
 Quick Start
 -----------
 
-The tool is currently under development with no releases. To install:
+The tool is currently under development and is released via GitHub. To install:
 
     git clone git@github.com:ialbert/pyblue.git
     cd pyblue
@@ -39,7 +44,7 @@ folder and look at the content of the files that are then shown in the browser.
 What does the tool do?
 ----------------------
 
-The above command will serve the files located in the specified folder.
+The above command will serve all the html files located in the specified folder.
 Files with the .html extension will be processed by Mako. So if the folder
 contains a file index.html with the following code:
 
@@ -49,22 +54,29 @@ When going to http://localhost:8080, you will see:
 
     <p>Hello, my age is 28.</p>
 
-Builtin Extensions
-------------------
+Extensions
+----------
 
-PyBlue offers a number of builtin extensions. First of all it allows embedding
-metadata into the files.
+PyBlue allows embedding metadata into the files as Mako comments. For example the listing below will
+mark the file with meta data for the name, its sort order key and tags:
 
-##name Home Page
-##sortkey 1
-##tags home intro
+    ##name Home Page
+    ##sortkey 1
+    ##tags home intro
+
+Any metatag may be added and later retrieved in the page.
+
+Special functions may be used to generate tables of contents.
 
    # generate a table of contents
    ${p.toc()}
 
-   #
+   # generate a table of contents for
+   # the pages tagged as 'data'
+   ${p.toc(tag='data')}
 
-PyBlue offers a number of convenience functions over
+The `sites/demo` and `sites/docs` folders contain numerous examples on the usage.
+
 Generate Site
 --------------
 
@@ -96,22 +108,6 @@ You may serve/generate each site independently to see what they contain.
 
 These sites demonstrate the utility functions that are included in PyBlue and the default templates. For example:
 generating tables of content, matching and displaying links with certain properties.
-
-Extensions
-----------
-
-This is where things get interesting.
-
-PyBlue can be used without installing any of these extensions. These are only needed if you happen to work in
-specific fields of bioinformatics and you need to generate reports on sequencing data, alignment files, metagenomics
-classification etc.
-
-First make sure that your version of python supports the requirments:
-
-    pip install -r requirements.txt
-
-Depending on the reporting that you choose some tools must be present in the system path so that these can
-be started directly. For example `samtools` should be launchable from the command line.
 
 
 
