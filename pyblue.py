@@ -248,7 +248,7 @@ class PyGreen:
         link, name = f.url(start)
         return '<a href="%s">%s</a>' % (link, name)
 
-    def toc(self, tag=None, match=None, start=None):
+    def toc(self, tag=None,  start=None, match=None,):
         "Produces name, links pairs from file names"
 
 
@@ -307,7 +307,7 @@ class PyGreen:
 
         # this makes all files available in the template context
         self.files = self.collect_files
-        
+
         for f in self.files:
             if f.skip_file:
                 _logger.info("skipping large file %s of %.1fkb" % (f.fname, f.size))

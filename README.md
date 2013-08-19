@@ -20,6 +20,8 @@ the PyGreen repository https://github.com/nicolas-van/pygreen.
 Sites running PyBlue
 --------------------
 
+ * http://bcc.bx.psu.edu/pyblue/demo/
+ * http://bcc.bx.psu.edu/pyblue/docs/
  * http://bcc.bx.psu.edu
 
 PyBlue uses the MIT license.
