@@ -1,10 +1,18 @@
-<%inherit file="../base.md.mako"/>
+<%inherit file="/base.boot.mako"/>
+<%namespace file="/extensions.mako" import="*"/>
 
 ##name Navigate
 ##sortkey 2
 ##tags intro home
 
-About PyBlue
-============
+Navigate
+========
 
-${p.toc(f, "intro")}
+To navigate link to files with `link(pattern)`. The `pattern` will be interpreted as
+a regular expression.:
+
+* `link('index')` will produce ${link('index')}
+* If multiple files match the first will be picked: `link('b')` will produce ${link('b')}
+* If the pattern does not match you'll get a special display `link('joe')` will produce ${link('joe')}
+
+Go to the ${link('index')} page

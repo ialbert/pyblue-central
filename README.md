@@ -1,30 +1,35 @@
-PyBlue
-======
 
-A micro web framework/static web site generator.
+Welcome to PyBlue
+=================
 
-PyBlue is a simple tool to generate static sites to distribute **data analysis** reports. It has
-grown out of the frustrations experienced while trying share analytical reports
-with non technical users. Laboratory information management systems are
-too difficult to install, maintain and manage. Yet at the same time the typical
-static blog generators are too specialized for blogging
-and can't be easily extended to support non-blog domains of applications.
+PyBlue is a simple way to easily generate static files used to present data analysis reports.
 
-PyBlue started out as a fork of PyGreen: https://github.com/nicolas-van/pygreen
-it is being expanded to include more bioinformatics related functionality and
-that warranted to be split from the original base.
+Features
+--------
 
-For more information on the original PyGreen module see the `README.pygreen.md` or visit
-the PyGreen repository https://github.com/nicolas-van/pygreen.
+* zero configuration - PyBlue requires no settings or initialization for existing sites
+* add one line to each HTML file turn on the functiontality of the extension modules
+* simple Markdown based rendering
+* painless linking to all content within site
+* create table of contents and galleries
+* mark and group files with tags or with regular expression patterns
+* uses python [Mako templates](http://www.makotemplates.org/) which means that there are no limitations to what you can do ;-)
+
+PyBlue started out as a fork of [PyGreen](https://github.com/nicolas-van/pygreen)
+and it is being expanded to include more data oriented functionality.
+
+PyBlue uses the MIT license.
 
 Sites running PyBlue
 --------------------
 
- * http://bcc.bx.psu.edu/pyblue/demo/
- * http://bcc.bx.psu.edu/pyblue/todo/
- * http://bcc.bx.psu.edu
+Main Demo site:
 
-PyBlue uses the MIT license.
+ * PyBlue Demo site: http://bcc.bx.psu.edu/pyblue/demo/
+
+Other sites:
+
+ * Bioinformatics Consulting Center at PSU: http://bcc.bx.psu.edu
 
 Quick Start
 -----------
@@ -37,16 +42,32 @@ The tool is currently under development and is released via GitHub. To install:
 
 This will locally install the scripts. Now launch a demo server with
 
-    pyblue serve -f sites/demo
+    pyblue serve -f pyblue/sites/demo
 
-Then visit `http://localhost:8080` to see the site. In visit the `pyblue/sites/basic`
-folder and look at the content of the files that are then shown in the browser.
+Then visit `http://localhost:8080` to see the site. Look in the `pyblue/sites/basic`
+folder to see the sources.
 
 What does the tool do?
 ----------------------
 
-The above command will serve all the html files located in the specified folder.
-Files with the .html extension will be processed by Mako. So if the folder
+PyBlue generates static sites. Typically there are two steps.
+
+1. Serving the file during the site development. PyBlue will serve
+   the files from a directory and presents the latest
+   version of the file. This allows the site creator to
+   write the site and check what the output looks like.
+
+2. Once the site is ready to be published the site generation
+   command can be used to create a static copy of the site in the desired folder.
+   This folder needs to be served via some other static webserver:
+   apache, nginx etc.
+
+A `pyblue serve -f <folder>` command will serve all the html files located
+in the specified folder.
+
+The `pyblue gen -f <folder> output` command will generate the static files into the output folder.
+
+Files with the .html extension will be processed via Mako templates. So if the folder
 contains a file index.html with the following code:
 
     <p>Hello, my age is ${30 - 2}.</p>
@@ -67,16 +88,17 @@ mark the file with meta data for the name, its sort order key and tags:
 
 Any metatag may be added and later retrieved in the page.
 
-Special functions may be used to generate tables of contents.
+Special functions may be used to generate tables of contents or galleries see the [Demo Site](http://bcc.bx.psu.edu/pyblue/demo/).
+for details:
 
     # generate a table of contents
-    ${p.toc()}
+    ${toc()}
 
     # generate a table of contents for
     # the pages tagged as 'data'
-    ${p.toc(tag='data')}
+    ${toc(tag='data')}
 
-The `sites/demo` and `sites/docs` folders contain numerous examples on the usage.
+The `sites/demo` folder contain numerous examples on the usage.
 
 Generate Site
 --------------

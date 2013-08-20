@@ -1,4 +1,5 @@
-<%inherit file="base.md.mako"/>
+<%inherit file="base.boot.mako"/>
+<%namespace file="extensions.mako" import="*"/>
 
 ##name Home Page
 ##sortkey 1
@@ -7,56 +8,62 @@
 Welcome to PyBlue
 =================
 
+PyBlue is a simple way to easily generate static files used to present data analysis reports.
 
-The template inherits from [base.md.mako](https://github.com/ialbert/pyblue/blob/master/templates/base.md.mako)
-and therefore its content will be interpreted in [Markdown](http://en.wikipedia.org/wiki/Markdown) syntax.
+Features
+--------
 
-If you are using the `pyblue serve` command you may change the content of this file and see the changes
-live in your browser.
+* zero configuration - PyBlue requires no settings or initialization for existing sites
+* add one line to each HTML file turn on the functiontality of the extension modules
+* simple Markdown based rendering
+* painless linking to all content within site
+* create table of contents and galleries
+* mark and group files with tags or with regular expression patterns
+* uses python [Mako templates](http://www.makotemplates.org/) which means that there are no limitations to what you can do ;-)
 
-Context
--------
+The source of this file can be seen at [https://github.com/ialbert/pyblue/blob/master/sites/demo/index.html](https://github.com/ialbert/pyblue/blob/master/sites/demo/index.html)
 
-Templates have access to a default context that includes default variables. For example
-
-* the `f` variable that contains information
-  on the current file. For example <%text filter="h">`${f.name}`</%text> will print this page's name: ${f.name}.
-* the `p` is the class underlying the entire PyBlue instance. It has many
-  neat properties. For example the `p.files`
-  class attribute contains information on all files processed by PyBlue. Thus say
-  <%text filter="h">`${len(p.files)}`</%text> will produce ${len(p.files)}
-* the `u` variable exposes a series of utility functions that come in handy when creating pages. These
-  are defined in the `pyblue/utils.py` module. For example <%text filter="h">`${u.hello()`</%text> will produce ${u.hello()}
-
-
-Learn more about context on the ${p.link(f, 'context')} page.
-
+* The template inherits from [base.md.mako](https://github.com/ialbert/pyblue/blob/master/templates/base.md.mako)
+  so its content will be interpreted in [Markdown](http://en.wikipedia.org/wiki/Markdown) syntax.
+* If you are using the `pyblue serve` command you may change the content of this file and see the changes
+  live in your browser.
+* Importing the `extensions.mako` file enables a number of useful functions
 
 File Listing
 ------------
 
-You can iterate over all files in the project:
+You can iterate over all files in the project with `toc()` (Table of Contents). Users have
+control over the order in which files are listed and the name of the links that
+are displayed for each file:
 
-${p.toc(f)}
+${toc()}
 
-These will be a sorted by the sortkey as explained in the ${p.link(f, 'context')} page.
+The `toc()` command can filter the files by regex pattern or tags .
 
-Tagged
-------
+For example you can select files that match the word `base` with `toc(match='base')`:
 
-Tagged as `home`:
+${toc(match="base")}
 
-${p.toc(f, tag="home")}
+Or you can filter by tags, to show files tagged `home` use `toc(tag='home')`
 
-Tagged as `data`:
+${toc(tag="home")}
 
-${p.toc(f, tag="data")}
 
-Navigation
-----------
+Linking
+-------
 
-See examples of file navigation on the ${p.link(f, 'navigate')} page.
+To link to an existing page match it with the `link(pattern)` command. For example `link('context')`
+will produce ${link('context')}
 
+Context
+-------
+
+Variables may be passed into each template. See the ${link('context')} page on how to add tags to files.
+
+Galleries
+---------
+
+You can easily generate galleries from images with the `gallery()` command. For details see ${link('gallery')}
 
 
 

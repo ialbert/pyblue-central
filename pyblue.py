@@ -84,6 +84,10 @@ class File(object):
         return self.meta.get("sortkey", "2")
 
     @property
+    def tags(self):
+        return self.meta.get("tags", [])
+
+    @property
     def size(self):
         "File size in KB"
         return utils.get_size(self.fpath)
@@ -234,21 +238,22 @@ class PyGreen:
         reload(m)
         return m
 
-    def link(self, start, fname):
+    def link(self, start, name):
 
-        items = filter(lambda x: re.search(fname, x.fname, re.IGNORECASE), self.files)
+        items = filter(lambda x: re.search(name, x.fname, re.IGNORECASE), self.files)
         if not items:
             f = self.files[0]
-            _logger.error("*** name %s does not match" % fname)
+            _logger.error("*** name %s does not match" % name)
+            return ("#", "Link pattern '%s' does not match!" % name)
         else:
             f = items[0]
             if len(items) > 1:
-                _logger.warn("name %s matches more than one item" % fname)
+                _logger.warn("name %s matches more than one item" % name)
 
         link, name = f.url(start)
-        return '<a href="%s">%s</a>' % (link, name)
+        return (link, name)
 
-    def toc(self, start,  tag=None, match=None):
+    def toc(self, start,  tag=None, match=None, is_image=False):
         "Produces name, links pairs from file names"
 
         if tag:
@@ -259,26 +264,14 @@ class PyGreen:
         if match:
             items = filter(lambda x: re.search(match, x.fname, re.IGNORECASE), self.files)
 
+        if is_image:
+            items = filter(lambda x: x.is_image, items)
+
         if not items:
             _logger.error("*** tag %s does not match" % tag)
 
         urls = [f.url(start) for f in items]
-        t = self.templates.get_template("toc.html")
-        h = t.render_unicode(urls=urls)
-        return h
-
-    def gallery(self, start, match=None,  span=4):
-        "Produces name, links pairs from file names"
-
-        items = filter(lambda x: x.is_image, self.files)
-
-        if match:
-            items = filter(lambda x: re.search(match, x.fname, re.IGNORECASE), self.files)
-
-        urls = [ f.url(start) for f in items ]
-        t = self.templates.get_template("gallery.html")
-        h = t.render_unicode(urls=urls, span=span)
-        return h
+        return urls
 
     @property
     def collect_files(self):

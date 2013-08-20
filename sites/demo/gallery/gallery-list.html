@@ -1,0 +1,27 @@
+<%inherit file="/base.boot.mako"/>
+<%namespace file="/extensions.mako" import="*"/>
+
+Example Galleries
+=================
+
+Example 1
+---------
+
+Gallery for the files that match the word `base`:
+
+${gallery(match="base", span=3)}
+
+Example 2
+---------
+
+Gallery for files that match `seq|kmer`:
+
+${gallery(match="seq|kmer", span=3)}
+
+Go to ${link('index')} page.
+
+
+
+
+
+

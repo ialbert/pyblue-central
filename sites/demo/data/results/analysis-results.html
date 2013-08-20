@@ -1,4 +1,5 @@
-<%inherit file="../../base.md.mako"/>
+<%inherit file="/base.boot.mako"/>
+<%namespace file="/extensions.mako" import="*"/>
 
 ##name Data Analysis
 ##sortkey 3
@@ -7,10 +8,13 @@
 Data Analysis
 =============
 
-Filename: ${f.fname}
+Filename: `${f.fname}`
+
+Not that this file is now two levels down in the directory structure. Yet all other
+internal links work the same way:
 
 Links to `intro`
 
-${p.toc(tag="intro", start=f)}
+${toc(tag="intro")}
 
-Go to the ${p.link(f, 'results')} or ${p.link(f, 'about')} or  ${p.link(f, 'index')} page.
+Go to the ${link('results')} or ${link('about')} or  ${link('index')} page.

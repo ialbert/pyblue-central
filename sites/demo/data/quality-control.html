@@ -1,4 +1,5 @@
-<%inherit file="../base.md.mako"/>
+<%inherit file="/base.boot.mako"/>
+<%namespace file="/extensions.mako" import="*"/>
 
 ##name Quality Control
 ##sortkey 4
@@ -7,6 +8,8 @@
 Quality Control
 ===============
 
-Filename: ${f.fname}
+Galleries will only return *image-like* files `gallery()`:
 
-Go to the ${p.link(f, 'about')} page.
+${gallery()}
+
+Go to the ${link('index')} page.

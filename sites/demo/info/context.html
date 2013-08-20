@@ -1,10 +1,22 @@
-<%inherit file="../base.md.mako"/>
+<%inherit file="/base.boot.mako"/>
+<%namespace file="/extensions.mako" import="*"/>
 
 ##name Context
 ##tags home intro
+##author John Doe
 
-More on Context
-===============
+Context
+=======
+
+Templates have access to a default context that includes default variables. For example
+
+* the `f` variable that contains information
+  on the current file. For example <%text filter="h">`${f.name}`</%text> will print this page's name: ${f.name}.
+* the `p` is the class underlying the entire PyBlue instance. It has many
+  neat properties. For example the `p.files`
+  class attribute contains information on all files processed by PyBlue. Thus say
+  <%text filter="h">`${len(p.files)}`</%text> will produce ${len(p.files)}
+
 
 Each page may also contain any number of context values that will then be available to the page.
 
@@ -16,17 +28,22 @@ For example this page has the following metadata associated with it.
     ##tags data test
 </%text>
 
-What this means is that the links generated to this page will have the word `Context` and
-iterating over the files will be returned by the sortkey.
-Finally we can access the page by name or tags
+These context variables that have default values when not explicitly set as above.
+One can access them directly like so `f.name`, `f.sortkey`, `f.tags` to produce ${f.name}, ${f.sortkey} and ${f.tags}
 
-`f.meta["tags"]` will produce ${f.meta['tags']}
+* `name` will be displayed in the links and title
+* `sortkey` is the key by which table of contents are sorted
+* `tags` are space separated words that can be used to select groups of pages
 
-These three metafields will always be set.
+One may add any number of context variables for example
 
+<%text filter="h">
+    ##sample 123
+    ##author John Doe
+</%text>
 
+That in turn will be assigned to the file object that renders the page.
 
+Finally we can access the custom page via `f.meta["author"]` will produce ${f.meta['author']}
 
-
-
-
+Go back to ${link("index")}
