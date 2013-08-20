@@ -42,10 +42,18 @@ The tool is currently under development and is released via GitHub. To install:
 
 This will locally install the scripts. Now launch a demo server with
 
-    pyblue serve -f pyblue/sites/demo
+    pyblue serve -f sites/demo
 
 Then visit `http://localhost:8080` to see the site. Look in the `pyblue/sites/basic`
 folder to see the sources.
+
+To generate the new static site into a folder:
+
+   pyblue gen -f sites/demo ~/tmp/www
+
+Note that the `gen` command will also create all sub-folders. Another "feature" is that only files
+under a certain size will be copied automatically (this is to avoid copying potentially
+large files back and forth).
 
 What does the tool do?
 ----------------------
