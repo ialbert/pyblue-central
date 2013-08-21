@@ -5,3 +5,5 @@ build
 *.egg-info
 .idea
 .DS*
+*.fasta
+/index.html
