@@ -33,12 +33,14 @@ Other sites:
 Installation
 ------------
 
-The tool is currently under development and is released via GitHub. To install you can
+Requirements: [setuptools](https://pypi.python.org/pypi/setuptools/1.0) needs to be installed.
+
+The software is currently under development and is released via GitHub. To install you can
 [download the archive](https://github.com/ialbert/pyblue/archive/master.zip)  or clone via `git`:
 
     git clone git@github.com:ialbert/pyblue.git
 
-Once you have the code install with:
+Once you obtained the source code install with:
 
     cd pyblue
     python setup.py install
@@ -95,7 +97,8 @@ Context
 --------
 
 **PyBlue** allows embedding metadata into the files as Mako comments. For example adding
-the text below into an html file set the name, a sort order and tags:
+the text below into an html file sets the name, a sort order (used to order listings)
+and the tags (used to group files) of the page:
 
     ##name Home Page
     ##sortkey 1

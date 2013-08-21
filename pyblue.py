@@ -25,20 +25,16 @@
 from __future__ import unicode_literals, print_function
 
 import bottle
-import os.path
 from mako.lookup import TemplateLookup
+from mako import exceptions
 import os, os.path, itertools
 import wsgiref.handlers
-import sys, logging, re
-import argparse
-import sys
-import markdown
-import waitress
+import sys, logging, re, os
+import argparse, markdown, waitress
 import utils
 
+# setting up logging
 _logger = logging.getLogger(__name__)
-
-# always adds the location of the default templates
 
 op = os.path
 dn = op.dirname
@@ -53,7 +49,7 @@ class File(object):
         self.dname = dn(self.fpath)
         self.ext   = os.path.splitext(fname)[1]
 
-        self.meta  =  dict(name=self.nice_name, sortkey="2", tags=set("data"))
+        self.meta  =  dict(name=self.nice_name, sortkey="5", tags=set("data"))
         if not self.skip_file:
             self.meta.update(utils.parse_meta(self.fpath))
 
@@ -64,28 +60,20 @@ class File(object):
         base, ext = os.path.splitext(tail)
         name = base.title().replace("-", " ").replace("_", " ")
         if self.is_image:
+            # add back extensions for images
             name = name + self.ext
         return name
-
-    def content(self):
-        return file(self.fpath).read()
 
     @property
     def is_image(self):
         return self.ext in (".png", ".jpg", ".gif")
 
-    @property
-    def name(self):
-        name = self.meta.get("name", "*** name not set ***")
-        return name
-
-    @property
-    def sortkey(self):
-        return self.meta.get("sortkey", "2")
-
-    @property
-    def tags(self):
-        return self.meta.get("tags", [])
+    def __getattr__(self, name):
+        "Fallback context attributes"
+        value = self.meta.get(name)
+        if not value:
+            raise Exception("context attribute %s not found" % name)
+        return value
 
     @property
     def size(self):
@@ -98,6 +86,7 @@ class File(object):
 
     def write(self, output_folder, text):
         loc = os.path.join(output_folder, self.fname)
+
         if op.abspath(loc) == op.abspath(self.fpath):
             raise Exception("may not overwrite the original file %s" % loc)
 
@@ -108,14 +97,11 @@ class File(object):
             fp.write(text)
 
     def url(self, start=None):
-
+        "Relative path of the file to the start folder"
         start = start or self
-
         rpath = op.relpath(self.root, start.dname)
         rpath = op.join(rpath, self.fname)
-
         return rpath, self.name
-
 
     def __repr__(self):
         return "File: %s (%s)" % (self.name, self.fname)
@@ -184,8 +170,14 @@ class PyGreen:
                     t = self.templates.get_template(path)
                     if self.refresh:
                         self.files = self.collect_files
-                    data = t.render_unicode(p=self, f=f, u=utils)
-                    return data.encode(t.module._source_encoding)
+                    try:
+                        data = t.render_unicode(p=self, f=f, u=utils)
+                        page = data.encode(t.module._source_encoding)
+                        return page
+                    except Exception, exc:
+                        _logger.error("error %s generating page %s" % (exc, path))
+                        return exceptions.html_error_template().render()
+
                 return bottle.static_file(path, root=self.folder)
             return bottle.HTTPError(404, 'File does not exist.')
 
@@ -243,12 +235,12 @@ class PyGreen:
         items = filter(lambda x: re.search(name, x.fname, re.IGNORECASE), self.files)
         if not items:
             f = self.files[0]
-            _logger.error("*** name %s does not match" % name)
+            _logger.error("link name '%s' in %s does not match" % (name, start.fname))
             return ("#", "Link pattern '%s' does not match!" % name)
         else:
             f = items[0]
             if len(items) > 1:
-                _logger.warn("name %s matches more than one item" % name)
+                _logger.warn("link name '%s' in %s matches more than one item" % (name, start.fname))
 
         link, name = f.url(start)
         return (link, name)
@@ -268,7 +260,7 @@ class PyGreen:
             items = filter(lambda x: x.is_image, items)
 
         if not items:
-            _logger.error("*** tag %s does not match" % tag)
+            _logger.error("tag %s does not match" % tag)
 
         urls = [f.url(start) for f in items]
         return urls
@@ -302,7 +294,7 @@ class PyGreen:
 
         for f in self.files:
             if f.skip_file:
-                _logger.info("skipping large file %s of %.1fkb" % (f.fname, f.size))
+                _logger.warning("skipping large file %s of %.1fkb" % (f.fname, f.size))
                 continue
             _logger.info("generating %s" % f.fname)
             content = self.get(f)
@@ -315,7 +307,7 @@ class PyGreen:
         """
         The command line interface of PyGreen.
         """
-        logging.basicConfig(level=logging.INFO, format='%(message)s')
+        logging.basicConfig(level=logging.WARNING, format='%(levelname)s\t%(message)s')
 
         parser = argparse.ArgumentParser(description='PyBlue, micro web framework/static web site generator')
         subparsers = parser.add_subparsers(dest='action')

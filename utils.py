@@ -26,9 +26,9 @@ def parse_meta(fname):
             meta[tag] = meta[tag].split()
     return meta
 
-def get_size(path):
+def get_size(path, unit=1024):
     statinfo = os.stat(path)
-    size = 1.0 * statinfo.st_size / 1024
+    size = 1.0 * statinfo.st_size / unit
     return size
 
 def hello():
