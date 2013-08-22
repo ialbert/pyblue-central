@@ -28,7 +28,8 @@ Main demonstration site:
 
 Other sites:
 
- * [Bioinformatics Consulting Center at PSU][bcc]
+* [Personal homepage of Istvan Albert](http://www.personal.psu.edu/users/i/u/iua1/)
+* [Bioinformatics Consulting Center at PSU][bcc]
 
 Installation
 ------------
