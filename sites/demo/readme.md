@@ -7,7 +7,7 @@ Development Mode
 
 Execute:
 
-   pyblue -f sites/demo
+    pyblue -f sites/demo
 
 Then visit `localhost:8080` to see the resulting website.
 Modify any page for to see a live update of that site.
