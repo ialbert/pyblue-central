@@ -1,27 +1,5 @@
 #! /usr/bin/python
 
-# PyGreen
-# Copyright (c) 2013, Nicolas Vanhoren
-# 
-# Released under the MIT license
-# 
-# Permission is hereby granted, free of charge, to any person obtaining a copy of
-# this software and associated documentation files (the "Software"), to deal in
-# the Software without restriction, including without limitation the rights to use,
-# copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-# Software, and to permit persons to whom the Software is furnished to do so,
-# subject to the following conditions:
-# 
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-# 
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-# FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-# COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN
-# AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-# WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
 from __future__ import unicode_literals, print_function
 
 import bottle
@@ -29,7 +7,7 @@ from mako.lookup import TemplateLookup
 from mako import exceptions
 import os, os.path, itertools
 import wsgiref.handlers
-import sys, logging, re, os
+import sys, logging, re, os, time
 import argparse, markdown, waitress
 import utils
 
@@ -67,6 +45,12 @@ class File(object):
     @property
     def is_image(self):
         return self.ext in (".png", ".jpg", ".gif")
+
+    @property
+    def last_modified(self):
+        t = os.path.getmtime(self.fpath)
+        t = time.gmtime(t)
+        return "%s" % time.strftime("%A, %B %d, %Y", t)
 
     def __getattr__(self, name):
         "Fallback context attributes"
@@ -240,7 +224,7 @@ class PyGreen:
         else:
             f = items[0]
             if len(items) > 1:
-                _logger.warn("link name '%s' in %s matches more than one item" % (name, start.fname))
+                _logger.warn("link name '%s' in %s matches more than one item %s" % (name, start.fname, items))
 
         link, name = f.url(start)
         return (link, name)
@@ -294,7 +278,7 @@ class PyGreen:
 
         for f in self.files:
             if f.skip_file:
-                _logger.warning("skipping large file %s of %.1fkb" % (f.fname, f.size))
+                _logger.debug("skipping large file %s of %.1fkb" % (f.fname, f.size))
                 continue
             _logger.info("generating %s" % f.fname)
             content = self.get(f)
@@ -307,9 +291,8 @@ class PyGreen:
         """
         The command line interface of PyGreen.
         """
-        logging.basicConfig(level=logging.WARNING, format='%(levelname)s\t%(message)s')
 
-        parser = argparse.ArgumentParser(description='PyBlue, micro web framework/static web site generator')
+        parser = argparse.ArgumentParser(description='PyBlue, micro static site generator')
         subparsers = parser.add_subparsers(dest='action')
 
         parser_serve = subparsers.add_parser('serve', help='serve the web site')
@@ -317,6 +300,7 @@ class PyGreen:
         parser_serve.add_argument('-f', '--folder', default=".", help='folder containg files to serve')
         parser_serve.add_argument('-d', '--disable-templates', action='store_true', default=False,
                                   help='just serve static files, do not use invoke Mako')
+        parser_serve.add_argument('-v', '--verbose', default=False, action="store_true", help='outputs debug messages')
 
         def serve():
             if args.disable_templates:
@@ -328,14 +312,21 @@ class PyGreen:
         parser_gen = subparsers.add_parser('gen', help='generate a static version of the site')
         parser_gen.add_argument('output', help='folder to store the files')
         parser_gen.add_argument('-f', '--folder', default=".", help='folder containg files to serve')
+        parser_gen.add_argument('-v', '--verbose', default=False, action="store_true", help='outputs debug messages')
 
         def gen():
+            if args.verbose:
+                logging.basicConfig(level=logging.DEBUG)
             self.refresh = False
             self.gen_static(args.output)
 
-        parser_gen.set_defaults(func=gen)
+        def set_log_level(level):
+            logging.basicConfig(level=level, format='%(levelname)s\t%(message)s')
 
+        parser_gen.set_defaults(func=gen)
         args = parser.parse_args(cmd_args)
+        level = logging.DEBUG if args.verbose else logging.WARNING
+        set_log_level(level)
         self.set_folder(args.folder)
         print(parser.description)
         print("")
