@@ -173,9 +173,9 @@ For example suppose that one wants to query sample information from a database. 
 query to the database in the `settings.py` module and then return that in the template.
 For example a `settings.py` module could contain:
 
-   def query():
-       results = "<some python code goes here>"
-       return results
+    def query():
+        results = "<some python code goes here>"
+        return results
 
 Then every single template that is created could access the results of that code via:
 
