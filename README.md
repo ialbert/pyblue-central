@@ -104,8 +104,12 @@ and the tags (used to group files) of the page:
     ##name Home Page
     ##sortkey 1
     ##tags home intro
+    ##foo bar
 
-Any meta tag may be added and later retrieved in the page. See the [PyBlue Demo][demo] site for examples.
+Any meta tag added to the page may be later retrieved in the page via the default variable `f`
+(current file) context variable: `${f.foo}`.
+This makes it really easy to add navigation bars and breadcrumbs with location specific
+rendering. See the [PyBlue Demo][demo] site for examples.
 
 Extensions
 ----------
@@ -162,7 +166,7 @@ generating tables of content, matching and displaying links with certain propert
 Advanced Functionality
 ----------------------
 
-PyBlue **minimalistic** but it is not **simplistic**. It supports an easy embedding of any
+PyBlue may be **minimalistic** but it is not **simplistic**. It supports an easy embedding of any
 template context into the template.
 
 Adding a `settings.py` python module into the root of the site will make that module accessible

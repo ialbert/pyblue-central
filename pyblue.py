@@ -90,7 +90,7 @@ class File(object):
     def __repr__(self):
         return "File: %s (%s)" % (self.name, self.fname)
 
-class PyGreen:
+class PyBlue:
     TEMPLATE_DIR = op.abspath(op.join(op.split(__file__)[0], "templates"))
 
     def __init__(self):
@@ -333,7 +333,7 @@ class PyGreen:
         args.func()
 
 
-pygreen = PyGreen()
+pyblue = PyBlue()
 
 if __name__ == "__main__":
-    pygreen.cli()
+    pyblue.cli()
