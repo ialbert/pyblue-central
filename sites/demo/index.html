@@ -52,6 +52,10 @@ is a regular expression that should match the filename.
 * If the pattern does not match you'll get an error message in the console and the link will also display the error:
    `link('joe')` will produce ${link('joe')}
 
+The url component of each link is relative. The text displayed for the link comes from the `name` context variable.
+When the `name` context is not explicitly set **PyBlue** will attempt to generate a readable name from the file name.
+
+See the ${link('context')} page on how to set the `name`.
 
 Table of Contents
 ------------------
@@ -68,12 +72,15 @@ Or you can filter by tags, to show files tagged `home` use `toc(tag='home')`
 ${toc(tag="home")}
 
 The order of the entries listed with the `toc()` command is goverened by the `sortkey` context
-variable that defaults to `5`. See the ${link('context')} for more details.
+variable that defaults to `5`.
+
+See the ${link('context')} page on how to set the `sortkey`.
 
 Context
 -------
 
-Any number of Variables may be passed into each template. See the ${link('context')} page on how to add tags to files.
+Any number of variables may be passed into each template. These will
+be available in the template body. See the ${link('context')} page on how to add tags to files.
 
 Galleries
 ---------
