@@ -4,7 +4,7 @@ from itertools import *
 
 _logger = logging.getLogger(__name__)
 
-MAX_SIZE_KB = 500
+MAX_SIZE_MB = 5
 
 # tags that should be treated as lists
 TAG_NAMES = "tags".split()
@@ -26,7 +26,7 @@ def parse_meta(fname):
             meta[tag] = meta[tag].split()
     return meta
 
-def get_size(path, unit=1024):
+def get_size(path, unit=1024*1024):
     statinfo = os.stat(path)
     size = 1.0 * statinfo.st_size / unit
     return size

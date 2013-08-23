@@ -66,7 +66,7 @@ class File(object):
 
     @property
     def skip_file(self):
-        return self.size > utils.MAX_SIZE_KB
+        return self.size > utils.MAX_SIZE_MB
 
     def write(self, output_folder, text):
         loc = os.path.join(output_folder, self.fname)
@@ -211,7 +211,6 @@ class PyBlue:
     @property
     def settings(self):
         m = __import__('settings', globals(), locals(), [], -1)
-        reload(m)
         return m
 
     def link(self, start, name):

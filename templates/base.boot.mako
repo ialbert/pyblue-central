@@ -9,7 +9,13 @@
 <body>
 
 <div class="container">
+	<div class="row">
+        <h1>${f.name}</h1>
+    <hr>
+	</div>
+
     <div class="row">
+
         <%block filter="markdown">
 
             ${self.body()}

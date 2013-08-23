@@ -1,4 +1,5 @@
 ## file unindented so that can be used for Markdown
+<% import os %>
 
 <%def name="hello()">
 Hello world!
@@ -26,4 +27,16 @@ Hello world!
 </li>
 %endfor
 </ul>
+</%def>
+
+<%def name="source(fname)">
+<%
+	import os
+	fpath = os.path.join(p.folder, fname)
+%>
+<pre>
+%for line in file(fpath):
+	${line.strip("\n")}
+%endfor
+</pre>
 </%def>

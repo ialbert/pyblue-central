@@ -5,9 +5,6 @@
 ##tags home intro
 ##author John Doe
 
-Context
-=======
-
 Templates have access to a default context that includes default variables.
 
 * the `f` variable that contains information
@@ -16,7 +13,6 @@ Templates have access to a default context that includes default variables.
   neat properties. For example the `p.files`
   class attribute contains information on all files processed by PyBlue. Thus say
   <%text filter="h">`${len(p.files)}`</%text> will produce ${len(p.files)}
-
 
 Each page may also contain any number of context values that will then be available to the page.
 
@@ -29,7 +25,7 @@ For example this page has the following metadata associated with it.
 </%text>
 
 These context variables that have default values when not explicitly set as above.
-One can access them directly like so `f.name`, `f.sortkey`, `f.tags` to produce ${f.name}, ${f.sortkey} and ${f.tags}
+One can access them directly like so `f.name`, `f.sortkey`, `f.tags` to produce `${f.name}`, `${f.sortkey}` and `${f.tags}`
 
 * `name` will be displayed in the links and title
 * `sortkey` is the key by which table of contents are sorted
@@ -42,8 +38,7 @@ One may add any number of context variables for example
     ##author John Doe
 </%text>
 
-That in turn will be assigned to the file object that renders the page.
-
-Finally we can access the custom page via `f.meta["author"]` will produce ${f.meta['author']}
+These will assigned as attributes to the file object that renders the page
+and could be accessed as say `f.author` that will produce: ${f.author}
 
 Go back to ${link("index")}

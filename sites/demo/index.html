@@ -1,45 +1,64 @@
-<%inherit file="base.boot.mako"/>
-<%namespace file="extensions.mako" import="*"/>
+<%inherit file="/base.boot.mako"/>
+<%namespace file="/extensions.mako" import="*"/>
 
-##name Home Page
+##name Welcome to Pyblue
 ##sortkey 1
 ##tags home intro
 
-Welcome to PyBlue
-=================
+**PyBlue** is a simple way to easily generate static files used to present data analysis reports.
 
-PyBlue is a simple way to easily generate static files used to present data analysis reports.
+* GitHub repository:  [https://github.com/ialbert/pyblue][pyblue]
+* The sources for the files in this demo: [https://github.com/ialbert/pyblue/tree/master/sites/demo][demo]
+* [A personal homepage][iua1] and an [organization page][bcc] rendered with **PyBlue**
 
-Features
---------
+[iua1]: http://www.personal.psu.edu/iua1/index.html
+[bcc]: http://bcc.bx.psu.edu/
+[pyblue]: https://github.com/ialbert/pyblue
+[demo]: https://github.com/ialbert/pyblue/tree/master/sites/demo
 
-* zero configuration - PyBlue requires no settings or initialization for existing sites
-* add one line to each HTML file turn on the functiontality of the extension modules
-* simple Markdown based rendering
-* painless linking to all content within site
-* create table of contents and galleries
-* mark and group files with tags or with regular expression patterns
-* uses python [Mako templates](http://www.makotemplates.org/) which means that there are no limitations to what you can do ;-)
 
-The source of this file can be seen at [https://github.com/ialbert/pyblue/blob/master/sites/demo/index.html](https://github.com/ialbert/pyblue/blob/master/sites/demo/index.html)
+Getting Started
+---------------
 
-* The template inherits from [base.boot.mako](https://github.com/ialbert/pyblue/blob/master/templates/base.boot.mako)
-  so its content will be interpreted in [Markdown](http://en.wikipedia.org/wiki/Markdown) syntax.
-* If you are using the `pyblue serve` command you may change the content of this file and see the changes
-  live in your browser.
-* Importing the `extensions.mako` file enables a number of useful functions
+*Zero configuration* - you may run **PyBlue** on any folder.
 
-File Listing
-------------
+* files that end with the extension `.html` will be passed through a [Mako template][mako] rendering.
+* files that start with dot `.`, or are Python `*.py` or Mako `*.mako` file will be ignored.
+* files that are larger than a certain size (default 5MB) see `utils.MAX_SIZE_MB` will also be ignored in the
+  site generation step. If you have large files you must set up an efficient way to synchronize them
+  across locations (like `rsync`)
+
+[mako]: http://www.makotemplates.org/
+
+There are a few default templates in the templates folder to get you started. This demo site uses
+one of the default templates [base.boot.mako](https://github.com/ialbert/pyblue/blob/master/templates/base.boot.mako).
+You can place other Mako templates into the same folder that the site serves.
+
+Extensions
+----------
+
+**PyBlue** offers a number of convenience extensions to be facilitate site generation.
+Importing `extensions.mako` file enables these functions.
+
+Linking
+-------
+
+Linking to files can be achieved with the `link(pattern)` function. The pattern
+is a regular expression that should match the filename.
+
+* `link('index')` will produce ${link('index')}
+* If multiple files match the first will be picked: `link('b')` will produce ${link('b')} but you will also get
+  warnings in the console.
+* If the pattern does not match you'll get an error message in the console and the link will also display the error:
+   `link('joe')` will produce ${link('joe')}
+
+
+Table of Contents
+------------------
 
 You can iterate over all files in the project with `toc()` (Table of Contents). Users have
 control over the order in which files are listed and the name of the links that
-are displayed for each file:
-
-${toc()}
-
-The `toc()` command can filter the files by regex pattern or tags .
-
+are displayed for each file.  The `toc()` command can filter the files by regex pattern or tags .
 For example you can select files that match the word `base` with `toc(match='base')`:
 
 ${toc(match="base")}
@@ -48,24 +67,43 @@ Or you can filter by tags, to show files tagged `home` use `toc(tag='home')`
 
 ${toc(tag="home")}
 
-
-Linking
--------
-
-To link to an existing page match it with the `link(pattern)` command. For example `link('context')`
-will produce ${link('context')}
+The order of the entries listed with the `toc()` command is goverened by the `sortkey` context
+variable that defaults to `5`. See the ${link('context')} for more details.
 
 Context
 -------
 
-Variables may be passed into each template. See the ${link('context')} page on how to add tags to files.
+Any number of Variables may be passed into each template. See the ${link('context')} page on how to add tags to files.
 
 Galleries
 ---------
 
-You can easily generate galleries from images with the `gallery()` command. For details see ${link('gallery')}
+You can easily generate galleries from images with the `gallery()` command. For details see ${link('gallery')} page.
 
+Advanced usage
+--------------
 
+You can embed the source of any file with the `source(fname)` function. For example  `source("settings.py")` command
+will produce:
+
+${source("settings.py")}
+
+As it happens this module named `settings.py` is special.
+If it is present it will be automatically imported under the
+attribute `p.settings` and can be accessed in every template.
+
+For this example one can access the `p.settings.data` to produce
+
+    ${p.settings.data}
+
+This is a very handy way to pass common data across the site.
+
+Full Table of Contents
+----------------------
+
+A listing of all files in this website:
+
+${toc()}
 
 
 

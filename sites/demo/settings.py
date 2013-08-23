@@ -1,5 +1,6 @@
+# optional module named settings.py
 
-# this module will be re-imported on each attempt of using
-# the pygreen.settings attribute
-
-name = "John Doe"
+data = [
+    dict(title="Publication Title 1", author="John Doe", url="#"),
+    dict(title="Publication Title 2", author="Jane Doe", url="#"),
+]

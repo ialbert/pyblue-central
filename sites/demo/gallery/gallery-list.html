@@ -1,30 +1,42 @@
 <%inherit file="/base.boot.mako"/>
 <%namespace file="/extensions.mako" import="*"/>
 
-Example Galleries
-=================
 
-Example 1
----------
+Selecting images
+----------------
+
+Only files that are have certain extensions will be included: `png`, `gif` and `jpg`.
+
+Similarly as `toc()` the `gallery()` function takes a `match` parameter that is
+interpreted as a regular expression.
 
 Gallery for the files that match the word `base`:
 
-    gallery(match="base", span=3)
+    gallery(match="base")
 
 will produce:
 
-${gallery(match="base", span=3)}
+${gallery(match="base")}
 
-Example 2
----------
+Smaller Thumbnails
+-------------------
+
+Pass the `span` function to make the thumbnails smaller
 
 Gallery for files that match `seq|kmer`:
 
-    gallery(match="seq|kmer", span=3)
+    gallery(match="seq|kmer", span=2)
 
 will produce:
 
-${gallery(match="seq|kmer", span=3)}
+${gallery(match="seq|kmer", span=2)}
+
+Full Gallery
+------------
+
+The list of all images in this demo site with `gallery(span=2)`
+
+${gallery(span=2)}
 
 Go to ${link('index')} page.
 
