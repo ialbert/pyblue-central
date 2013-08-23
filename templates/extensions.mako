@@ -40,3 +40,17 @@ Hello world!
 %endfor
 </pre>
 </%def>
+
+<%def name="execute(cmd)">
+<%
+	import subprocess as s
+	import os
+	saved = os.getcwd()
+	os.chdir(p.folder)
+	pop = s.Popen(cmd, shell=True, stdout=s.PIPE, stderr=s.PIPE, close_fds=True)
+	(c_out, c_err ) = (pop.stdout, pop.stderr)
+	os.chdir(saved)
+%>
+<pre>${c_err.read()}
+${c_out.read()}</pre>
+</%def>

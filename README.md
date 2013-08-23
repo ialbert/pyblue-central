@@ -185,6 +185,10 @@ Then every single template that is created could access the results of that code
 
     p.settings.query()
 
+Inserting the content of another file can be performed with `source("demo.py")`
+
+Capturing the output of running a program would be achieved via `execute("python demo.py")`
+
 Licensing
 ---------
 
