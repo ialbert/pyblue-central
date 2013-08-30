@@ -186,6 +186,9 @@ Then every single template that is created could access the results of that code
     p.settings.query()
 
 Inserting the content of another file can be performed with `source("demo.py")`
+Note that the `source` command can also take parameters such as `start` and `end`.
+When those are set only the region that is between the matching regular expressions
+will be included.
 
 Capturing the output of running a program would be achieved via `execute("python demo.py")`
 

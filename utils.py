@@ -1,5 +1,5 @@
 __author__ = 'ialbert'
-import os, logging, re
+import os, logging, re, itertools
 from itertools import *
 
 _logger = logging.getLogger(__name__)
@@ -34,3 +34,17 @@ def get_size(path, unit=1024*1024):
 def hello():
     return "Hello World!"
 
+def test():
+    text = """
+    ABCD
+    EFG
+    123
+    HIJ
+    """
+    lines = text.splitlines()
+    lines = itertools.dropwhile(lambda x: not re.search("123", x), lines)
+    lines = list(lines)
+    print lines
+
+if __name__ == '__main__':
+    test()

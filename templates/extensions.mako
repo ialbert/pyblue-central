@@ -29,15 +29,19 @@ Hello world!
 </ul>
 </%def>
 
-<%def name="source(fname)">
+<%def name="source(fname, start='', end='')">
 <%
-	import os
+	import os, string, itertools, re
 	fpath = os.path.join(p.folder, fname)
+	lines = map(lambda x: x.strip("\n"), file(fpath))
+	if start:
+		lines = itertools.dropwhile(lambda x: not re.search(start, x), lines)
+	if end:
+		lines = itertools.takewhile(lambda x: not re.search(end, x), lines)
+	code = "\n".join(lines)
 %>
-<pre>
-%for line in file(fpath):
-	${line.strip("\n")}
-%endfor
+<pre class="prettyprint">
+${code}
 </pre>
 </%def>
 
