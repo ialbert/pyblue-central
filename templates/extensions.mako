@@ -13,9 +13,9 @@ Hello world!
 </ul>
 </%def>
 
-
 <%def name="link(name)"><% link, name = p.link(f, name) %><a href="${link}">${name}</a></%def>
 
+<%def name="path(name)"><% link, name = p.link(f, name) %>${link}</%def>
 
 <%def name="gallery(tag=None, match=None, span=4)">
 <ul class="thumbnails">

@@ -34,6 +34,9 @@ There are a few default templates in the templates folder to get you started. Th
 one of the default templates [base.boot.mako](https://github.com/ialbert/pyblue/blob/master/templates/base.boot.mako).
 You can place other Mako templates into the same folder that the site serves.
 
+**Note**: Rendering this demo site will generate a few warnings and even an error on the console.
+That is ok, it was done deliberately so to demonstrate how warnings and errors work.
+
 Extensions
 ----------
 
@@ -120,6 +123,18 @@ ${source("demo.py")}
 then running it with `$execute('python demo.py')` will produce
 
 ${execute("python demo.py")}
+
+Automatic Markdown
+------------------
+
+Files with the extension `.md` will automatically be rendered as Markdown.
+
+This is the file included in the page:
+
+${source("auto-markdown.md")}
+
+And this is the result of viewing the file directly: ${link('auto-markdown.md')}
+
 
 Full Table of Contents
 ----------------------

@@ -99,7 +99,7 @@ class PyBlue:
         self.app = bottle.Bottle()
         # a set of strings that identifies the extension of the files
         # that should be processed using Mako
-        self.template_exts = set(["html"])
+        self.template_exts = set([".html", ".md"])
         # the folder where the files to serve are located. Do not set
         # directly, use set_folder instead
         self.folder = "."
@@ -134,8 +134,10 @@ class PyBlue:
                 for f in filenames:
                     absp = os.path.join(dirpath, f)
                     path = os.path.relpath(absp, self.folder)
-                    if is_public(path):
-                        files.append(path)
+                    files.append(path)
+
+            files = filter(is_public, files)
+
             return files
 
             # A list of function. Each function must return a list of paths
@@ -149,13 +151,17 @@ class PyBlue:
 
         def file_renderer(path):
             if is_public(path):
-                if path.split(".")[-1] in self.template_exts and self.templates.has_template(path):
+                _, ext = os.path.splitext(path)
+                if ext in self.template_exts and self.templates.has_template(path):
                     f = File(fname=path, root=self.folder)
                     t = self.templates.get_template(path)
                     if self.refresh:
                         self.files = self.collect_files
                     try:
                         data = t.render_unicode(p=self, f=f, u=utils)
+                        # apply markdown rendering
+                        if ext == ".md":
+                            data = markdown.markdown(data)
                         page = data.encode(t.module._source_encoding)
                         return page
                     except Exception, exc:
