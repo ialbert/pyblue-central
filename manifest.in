@@ -1,1 +1,7 @@
-include templates/*.mako
+include pyblue/bio/requirements.txt
+include pyblue/templates/*.mako
+recursive-include sites *
+recursive-include pyblue *
+recursive-include tests *
+include *.md
+include *.txt

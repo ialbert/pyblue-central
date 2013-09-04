@@ -1,0 +1,7 @@
+fabric
+pysam
+bottle >= 0.11.6
+mako >= 0.8.0
+argparse
+markdown
+waitress

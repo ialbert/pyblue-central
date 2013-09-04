@@ -298,6 +298,9 @@ class PyBlue:
         """
 
         parser = argparse.ArgumentParser(description='PyBlue, micro static site generator')
+        parser.add_argument('-v', '--verbose', default=False, action="store_true", help='outputs debug messages')
+
+
         subparsers = parser.add_subparsers(dest='action')
 
         parser_serve = subparsers.add_parser('serve', help='serve the web site')
@@ -305,7 +308,6 @@ class PyBlue:
         parser_serve.add_argument('-f', '--folder', default=".", help='folder containg files to serve')
         parser_serve.add_argument('-d', '--disable-templates', action='store_true', default=False,
                                   help='just serve static files, do not use invoke Mako')
-        parser_serve.add_argument('-v', '--verbose', default=False, action="store_true", help='outputs debug messages')
 
         def serve():
             if args.disable_templates:
@@ -317,7 +319,6 @@ class PyBlue:
         parser_gen = subparsers.add_parser('gen', help='generate a static version of the site')
         parser_gen.add_argument('output', help='folder to store the files')
         parser_gen.add_argument('-f', '--folder', default=".", help='folder containg files to serve')
-        parser_gen.add_argument('-v', '--verbose', default=False, action="store_true", help='outputs debug messages')
 
         def gen():
             if args.verbose:
@@ -338,7 +339,7 @@ class PyBlue:
         args.func()
 
 
-pyblue = PyBlue()
+server = PyBlue()
 
 if __name__ == "__main__":
-    pyblue.cli()
+    server.cli()

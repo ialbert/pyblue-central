@@ -28,32 +28,45 @@ Main demonstration site:
 
 Other sites:
 
-* [Personal homepage of Istvan Albert](http://www.personal.psu.edu/users/i/u/iua1/)
+* [A personal homepage](http://www.personal.psu.edu/users/i/u/iua1/)
 * [Bioinformatics Consulting Center at PSU][bcc]
 
 Installation
 ------------
 
-Requirements: [setuptools](https://pypi.python.org/pypi/setuptools/1.0) needs to be installed.
+Requirements: [setuptools](https://pypi.python.org/pypi/setuptools/1.0) and/or [pip][https://pypi.python.org/pypi/pip]
+needs to be installed.
 
-The software is currently under development and is released via GitHub. To install you can
-[download the archive](https://github.com/ialbert/pyblue/archive/master.zip)  or clone via `git`:
+To install use one the common istallation methods:
 
-    git clone git@github.com:ialbert/pyblue.git
+    easy_install pyblue
 
-Once you obtained the source code install with:
+or
 
-    cd pyblue
-    python setup.py install
+	pip install pyblue
 
-This will install the `pyblue` script.
+This will install the `pyblue` script that you can invoke. If you already
+have pyblue installed you can upgrade via `easy_install -U pyblue` or `pip install --upgrade pyblue`
 
 Quick Start
 -----------
 
-Launch a demo server with
+Point pyblue to a directory like so:
 
-    pyblue serve -f sites/demo
+    pyblue serve -f ~/tmp/mywebsite
+
+add an `index.html` page into that directory. Visit `http://localhost:8080` to see the site
+
+Demonstration Server
+--------------------
+
+To generate the content of the [demo server][demo] get the source (download or clone):
+
+	git clone git@github.com:ialbert/pyblue.git
+
+then launch `pyblue` with
+
+    pyblue serve -f pyblue/sites/demo
 
 Then visit `http://localhost:8080` to see the site. Look in the `sites/demo`
 folder to see the sources that create the site.
@@ -61,7 +74,6 @@ folder to see the sources that create the site.
 To generate a static version of the site into the `~/tmp/www/` folder type:
 
     pyblue gen -f sites/demo ~/tmp/www
-
 
 What does the tool do?
 ----------------------
@@ -108,6 +120,7 @@ and the tags (used to group files) of the page:
 
 Any meta tag added to the page may be later retrieved in the page via the default variable `f`
 (current file) context variable: `${f.foo}`.
+
 This makes it really easy to add navigation bars and breadcrumbs with location specific
 rendering. See the [PyBlue Demo][demo] site for examples.
 

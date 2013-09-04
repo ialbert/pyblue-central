@@ -41,7 +41,7 @@ Hello world!
 	code = "\n".join(lines)
 %>
 <pre class="prettyprint">
-${code}
+${code.decode('utf-8')}
 </pre>
 </%def>
 
