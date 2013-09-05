@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+            
+    </title>
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container">
+	<div class="row">
+        <h1>Gallery List</h1>
+    <hr>
+	</div>
+
+    <div class="row">
+
+        <h2>Selecting images</h2>
+<p>Only files that are have certain extensions will be included: <code>png</code>, <code>gif</code> and <code>jpg</code>.</p>
+<p>Similarly as <code>toc()</code> the <code>gallery()</code> function takes a <code>match</code> parameter that is
+interpreted as a regular expression.</p>
+<p>Gallery for the files that match the word <code>base</code>:</p>
+<pre><code>gallery(match="base")
+</code></pre>
+<p>will produce:</p>
+<ul class="thumbnails">
+<li class="span4">
+<a href="../images/per_base_gc_content.png" class="thumbnail">
+<img src="../images/per_base_gc_content.png" alt="Per Base Gc Content.png">
+</a>
+</li>
+<li class="span4">
+<a href="../images/per_base_n_content.png" class="thumbnail">
+<img src="../images/per_base_n_content.png" alt="Per Base N Content.png">
+</a>
+</li>
+<li class="span4">
+<a href="../images/per_base_quality.png" class="thumbnail">
+<img src="../images/per_base_quality.png" alt="Per Base Quality.png">
+</a>
+</li>
+<li class="span4">
+<a href="../images/per_base_sequence_content.png" class="thumbnail">
+<img src="../images/per_base_sequence_content.png" alt="Per Base Sequence Content.png">
+</a>
+</li>
+</ul>
+
+<h2>Smaller Thumbnails</h2>
+<p>Pass the <code>span</code> function to make the thumbnails smaller</p>
+<p>Gallery for files that match <code>seq|kmer</code>:</p>
+<pre><code>gallery(match="seq|kmer", span=2)
+</code></pre>
+<p>will produce:</p>
+<ul class="thumbnails">
+<li class="span2">
+<a href="../images/kmer_profiles.png" class="thumbnail">
+<img src="../images/kmer_profiles.png" alt="Kmer Profiles.png">
+</a>
+</li>
+<li class="span2">
+<a href="../images/per_base_sequence_content.png" class="thumbnail">
+<img src="../images/per_base_sequence_content.png" alt="Per Base Sequence Content.png">
+</a>
+</li>
+<li class="span2">
+<a href="../images/per_sequence_gc_content.png" class="thumbnail">
+<img src="../images/per_sequence_gc_content.png" alt="Per Sequence Gc Content.png">
+</a>
+</li>
+<li class="span2">
+<a href="../images/per_sequence_quality.png" class="thumbnail">
+<img src="../images/per_sequence_quality.png" alt="Per Sequence Quality.png">
+</a>
+</li>
+<li class="span2">
+<a href="../images/sequence_length_distribution.png" class="thumbnail">
+<img src="../images/sequence_length_distribution.png" alt="Sequence Length Distribution.png">
+</a>
+</li>
+</ul>
+
+<h2>Full Gallery</h2>
+<p>The list of all images in this demo site with <code>gallery(span=2)</code></p>
+<ul class="thumbnails">
+<li class="span2">
+<a href="../images/duplication_levels.png" class="thumbnail">
+<img src="../images/duplication_levels.png" alt="Duplication Levels.png">
+</a>
+</li>
+<li class="span2">
+<a href="../images/kmer_profiles.png" class="thumbnail">
+<img src="../images/kmer_profiles.png" alt="Kmer Profiles.png">
+</a>
+</li>
+<li class="span2">
+<a href="../images/per_base_gc_content.png" class="thumbnail">
+<img src="../images/per_base_gc_content.png" alt="Per Base Gc Content.png">
+</a>
+</li>
+<li class="span2">
+<a href="../images/per_base_n_content.png" class="thumbnail">
+<img src="../images/per_base_n_content.png" alt="Per Base N Content.png">
+</a>
+</li>
+<li class="span2">
+<a href="../images/per_base_quality.png" class="thumbnail">
+<img src="../images/per_base_quality.png" alt="Per Base Quality.png">
+</a>
+</li>
+<li class="span2">
+<a href="../images/per_base_sequence_content.png" class="thumbnail">
+<img src="../images/per_base_sequence_content.png" alt="Per Base Sequence Content.png">
+</a>
+</li>
+<li class="span2">
+<a href="../images/per_sequence_gc_content.png" class="thumbnail">
+<img src="../images/per_sequence_gc_content.png" alt="Per Sequence Gc Content.png">
+</a>
+</li>
+<li class="span2">
+<a href="../images/per_sequence_quality.png" class="thumbnail">
+<img src="../images/per_sequence_quality.png" alt="Per Sequence Quality.png">
+</a>
+</li>
+<li class="span2">
+<a href="../images/sequence_length_distribution.png" class="thumbnail">
+<img src="../images/sequence_length_distribution.png" alt="Sequence Length Distribution.png">
+</a>
+</li>
+</ul>
+
+<p>Go to <a href="../index.html">Welcome to Pyblue</a> page.</p>
+    </div>
+</div>
+
+
+</body>
+</html>

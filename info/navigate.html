@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+            
+    </title>
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container">
+	<div class="row">
+        <h1>Navigate</h1>
+    <hr>
+	</div>
+
+    <div class="row">
+
+        <p>To navigate link to files with <code>link(pattern)</code>. The <code>pattern</code> will be interpreted as
+a regular expression.:</p>
+<ul>
+<li><code>link('index')</code> will produce <a href="../index.html">Welcome to Pyblue</a></li>
+<li>If multiple files match the first will be picked: <code>link('b')</code> will produce <a href="../info/about.html">About</a></li>
+<li>If the pattern does not match you'll get a special display <code>link('joe')</code> will produce <a href="#">Link pattern 'joe' does not match!</a></li>
+</ul>
+<p>Go to the <a href="../index.html">Welcome to Pyblue</a> page</p>
+    </div>
+</div>
+
+
+</body>
+</html>

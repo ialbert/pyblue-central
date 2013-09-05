@@ -1,0 +1,196 @@
+
+
+
+<html>
+<head>
+    <title>Mako Runtime Error</title>
+    <style>
+        body { font-family:verdana; margin:10px 30px 10px 30px;}
+        .stacktrace { margin:5px 5px 5px 5px; }
+        .highlight { padding:0px 10px 0px 10px; background-color:#9F9FDF; }
+        .nonhighlight { padding:0px; background-color:#DFDFDF; }
+        .sample { padding:10px; margin:10px 10px 10px 10px;
+                  font-family:monospace; }
+        .sampleline { padding:0px 10px 0px 10px; }
+        .sourceline { margin:5px 5px 10px 5px; font-family:monospace;}
+        .location { font-size:80%; }
+        .highlight { white-space:pre; }
+        .sampleline { white-space:pre; }
+
+        .syntax-highlighted .hll { background-color: #ffffcc }
+.syntax-highlighted  { background: #f8f8f8; }
+.syntax-highlighted .c { color: #408080; font-style: italic } /* Comment */
+.syntax-highlighted .err { border: 1px solid #FF0000 } /* Error */
+.syntax-highlighted .k { color: #008000; font-weight: bold } /* Keyword */
+.syntax-highlighted .o { color: #666666 } /* Operator */
+.syntax-highlighted .cm { color: #408080; font-style: italic } /* Comment.Multiline */
+.syntax-highlighted .cp { color: #BC7A00 } /* Comment.Preproc */
+.syntax-highlighted .c1 { color: #408080; font-style: italic } /* Comment.Single */
+.syntax-highlighted .cs { color: #408080; font-style: italic } /* Comment.Special */
+.syntax-highlighted .gd { color: #A00000 } /* Generic.Deleted */
+.syntax-highlighted .ge { font-style: italic } /* Generic.Emph */
+.syntax-highlighted .gr { color: #FF0000 } /* Generic.Error */
+.syntax-highlighted .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.syntax-highlighted .gi { color: #00A000 } /* Generic.Inserted */
+.syntax-highlighted .go { color: #888888 } /* Generic.Output */
+.syntax-highlighted .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.syntax-highlighted .gs { font-weight: bold } /* Generic.Strong */
+.syntax-highlighted .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.syntax-highlighted .gt { color: #0044DD } /* Generic.Traceback */
+.syntax-highlighted .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.syntax-highlighted .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.syntax-highlighted .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.syntax-highlighted .kp { color: #008000 } /* Keyword.Pseudo */
+.syntax-highlighted .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.syntax-highlighted .kt { color: #B00040 } /* Keyword.Type */
+.syntax-highlighted .m { color: #666666 } /* Literal.Number */
+.syntax-highlighted .s { color: #BA2121 } /* Literal.String */
+.syntax-highlighted .na { color: #7D9029 } /* Name.Attribute */
+.syntax-highlighted .nb { color: #008000 } /* Name.Builtin */
+.syntax-highlighted .nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.syntax-highlighted .no { color: #880000 } /* Name.Constant */
+.syntax-highlighted .nd { color: #AA22FF } /* Name.Decorator */
+.syntax-highlighted .ni { color: #999999; font-weight: bold } /* Name.Entity */
+.syntax-highlighted .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+.syntax-highlighted .nf { color: #0000FF } /* Name.Function */
+.syntax-highlighted .nl { color: #A0A000 } /* Name.Label */
+.syntax-highlighted .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.syntax-highlighted .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.syntax-highlighted .nv { color: #19177C } /* Name.Variable */
+.syntax-highlighted .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.syntax-highlighted .w { color: #bbbbbb } /* Text.Whitespace */
+.syntax-highlighted .mf { color: #666666 } /* Literal.Number.Float */
+.syntax-highlighted .mh { color: #666666 } /* Literal.Number.Hex */
+.syntax-highlighted .mi { color: #666666 } /* Literal.Number.Integer */
+.syntax-highlighted .mo { color: #666666 } /* Literal.Number.Oct */
+.syntax-highlighted .sb { color: #BA2121 } /* Literal.String.Backtick */
+.syntax-highlighted .sc { color: #BA2121 } /* Literal.String.Char */
+.syntax-highlighted .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.syntax-highlighted .s2 { color: #BA2121 } /* Literal.String.Double */
+.syntax-highlighted .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+.syntax-highlighted .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.syntax-highlighted .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+.syntax-highlighted .sx { color: #008000 } /* Literal.String.Other */
+.syntax-highlighted .sr { color: #BB6688 } /* Literal.String.Regex */
+.syntax-highlighted .s1 { color: #BA2121 } /* Literal.String.Single */
+.syntax-highlighted .ss { color: #19177C } /* Literal.String.Symbol */
+.syntax-highlighted .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.syntax-highlighted .vc { color: #19177C } /* Name.Variable.Class */
+.syntax-highlighted .vg { color: #19177C } /* Name.Variable.Global */
+.syntax-highlighted .vi { color: #19177C } /* Name.Variable.Instance */
+.syntax-highlighted .il { color: #666666 } /* Literal.Number.Integer.Long */
+        .linenos { min-width: 2.5em; text-align: right; }
+        pre { margin: 0; }
+        .syntax-highlighted { padding: 0 10px; }
+        .syntax-highlightedtable { border-spacing: 1px; }
+        .nonhighlight { border-top: 1px solid #DFDFDF;
+                        border-bottom: 1px solid #DFDFDF; }
+        .stacktrace .nonhighlight { margin: 5px 15px 10px; }
+        .sourceline { margin: 0 0; font-family:monospace; }
+        .code { background-color: #F8F8F8; width: 100%; }
+        .error .code { background-color: #FFBDBD; }
+        .error .syntax-highlighted { background-color: #FFBDBD; }
+
+    </style>
+</head>
+<body>
+
+<h2>Error !</h2>
+
+<h3>NameError: Undefined</h3>
+
+    <div class="sample">
+    <div class="nonhighlight">
+    
+        <table class="syntax-highlightedtable"><tr><td class="linenos"><div class="linenodiv"><pre>6</pre></div></td><td class="code"><div class="syntax-highlighted"><pre><span class="x">Errors</span>
+</pre></div>
+</td></tr></table>
+    
+        <table class="syntax-highlightedtable"><tr><td class="linenos"><div class="linenodiv"><pre>7</pre></div></td><td class="code"><div class="syntax-highlighted"><pre><span class="x">======</span>
+</pre></div>
+</td></tr></table>
+    
+        <table class="syntax-highlightedtable"><tr><td class="linenos"><div class="linenodiv"><pre>8</pre></div></td><td class="code"><div class="syntax-highlighted"><pre>
+</pre></div>
+</td></tr></table>
+    
+    
+        <table class="error syntax-highlightedtable"><tr><td class="linenos"><div class="linenodiv"><pre>9</pre></div></td><td class="code"><div class="error syntax-highlighted"><pre><span class="x">This page has an error to show custom error rendering </span><span class="cp">${</span><span class="n">what</span><span class="cp">}</span><span class="x"></span>
+</pre></div>
+</td></tr></table>
+    
+    
+        <table class="syntax-highlightedtable"><tr><td class="linenos"><div class="linenodiv"><pre>10</pre></div></td><td class="code"><div class="syntax-highlighted"><pre>
+</pre></div>
+</td></tr></table>
+    </div>
+    </div>
+
+<div class="stacktrace">
+    <div class="location">/export/2.7/lib/python2.7/site-packages/Mako-0.8.1-py2.7.egg/mako/runtime.py, line 202:</div>
+    <div class="nonhighlight">
+    
+      <div class="sourceline"><table class="syntax-highlightedtable"><tr><td class="linenos"><div class="linenodiv"><pre>202</pre></div></td><td class="code"><div class="syntax-highlighted"><pre><span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&quot;Undefined&quot;</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+    </div>
+    <div class="location">sites/demo/info/errors.html, line 9:</div>
+    <div class="nonhighlight">
+    
+      <div class="sourceline"><table class="syntax-highlightedtable"><tr><td class="linenos"><div class="linenodiv"><pre>9</pre></div></td><td class="code"><div class="syntax-highlighted"><pre><span class="n">This</span> <span class="n">page</span> <span class="n">has</span> <span class="n">an</span> <span class="n">error</span> <span class="n">to</span> <span class="n">show</span> <span class="n">custom</span> <span class="n">error</span> <span class="n">rendering</span> <span class="err">$</span><span class="p">{</span><span class="n">what</span><span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+    </div>
+    <div class="location">/Users/ialbert/app/pyblue/pyblue/templates/base.boot.mako, line 21:</div>
+    <div class="nonhighlight">
+    
+      <div class="sourceline"><table class="syntax-highlightedtable"><tr><td class="linenos"><div class="linenodiv"><pre>21</pre></div></td><td class="code"><div class="syntax-highlighted"><pre>            <span class="err">$</span><span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="p">()}</span>
+</pre></div>
+</td></tr></table></div>
+    </div>
+    <div class="location">/Users/ialbert/app/pyblue/pyblue/templates/base.boot.mako, line 13:</div>
+    <div class="nonhighlight">
+    
+      <div class="sourceline"><table class="syntax-highlightedtable"><tr><td class="linenos"><div class="linenodiv"><pre>13</pre></div></td><td class="code"><div class="syntax-highlighted"><pre>        <span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="err">$</span><span class="p">{</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</pre></div>
+</td></tr></table></div>
+    </div>
+    <div class="location">/export/2.7/lib/python2.7/site-packages/Mako-0.8.1-py2.7.egg/mako/runtime.py, line 841:</div>
+    <div class="nonhighlight">
+    
+      <div class="sourceline"><table class="syntax-highlightedtable"><tr><td class="linenos"><div class="linenodiv"><pre>841</pre></div></td><td class="code"><div class="syntax-highlighted"><pre><span class="n">callable_</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+    </div>
+    <div class="location">/export/2.7/lib/python2.7/site-packages/Mako-0.8.1-py2.7.egg/mako/runtime.py, line 815:</div>
+    <div class="nonhighlight">
+    
+      <div class="sourceline"><table class="syntax-highlightedtable"><tr><td class="linenos"><div class="linenodiv"><pre>815</pre></div></td><td class="code"><div class="syntax-highlighted"><pre><span class="n">_exec_template</span><span class="p">(</span><span class="n">inherit</span><span class="p">,</span> <span class="n">lclcontext</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+    </div>
+    <div class="location">/export/2.7/lib/python2.7/site-packages/Mako-0.8.1-py2.7.egg/mako/runtime.py, line 783:</div>
+    <div class="nonhighlight">
+    
+      <div class="sourceline"><table class="syntax-highlightedtable"><tr><td class="linenos"><div class="linenodiv"><pre>783</pre></div></td><td class="code"><div class="syntax-highlighted"><pre><span class="o">**</span><span class="n">_kwargs_for_callable</span><span class="p">(</span><span class="n">callable_</span><span class="p">,</span> <span class="n">data</span><span class="p">))</span>
+</pre></div>
+</td></tr></table></div>
+    </div>
+    <div class="location">/export/2.7/lib/python2.7/site-packages/Mako-0.8.1-py2.7.egg/mako/template.py, line 452:</div>
+    <div class="nonhighlight">
+    
+      <div class="sourceline"><table class="syntax-highlightedtable"><tr><td class="linenos"><div class="linenodiv"><pre>452</pre></div></td><td class="code"><div class="syntax-highlighted"><pre><span class="n">as_unicode</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+    </div>
+    <div class="location">/Users/ialbert/app/pyblue/pyblue/main.py, line 161:</div>
+    <div class="nonhighlight">
+    
+      <div class="sourceline"><table class="syntax-highlightedtable"><tr><td class="linenos"><div class="linenodiv"><pre>161</pre></div></td><td class="code"><div class="syntax-highlighted"><pre><span class="n">data</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">render_unicode</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="n">utils</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+    </div>
+</div>
+
+</body>
+</html>

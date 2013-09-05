@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+            
+    </title>
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container">
+	<div class="row">
+        <h1>Welcome to Pyblue</h1>
+    <hr>
+	</div>
+
+    <div class="row">
+
+        <p><strong>PyBlue</strong> is a simple way to easily generate static files used to present data analysis reports.</p>
+<ul>
+<li>GitHub repository:  <a href="https://github.com/ialbert/pyblue">https://github.com/ialbert/pyblue</a></li>
+<li>The sources for the files in this demo: <a href="https://github.com/ialbert/pyblue/tree/master/sites/demo">https://github.com/ialbert/pyblue/tree/master/sites/demo</a></li>
+<li><a href="http://www.personal.psu.edu/iua1/index.html">A personal homepage</a> and an <a href="http://bcc.bx.psu.edu/">organization page</a> rendered with <strong>PyBlue</strong></li>
+</ul>
+<h2>Getting Started</h2>
+<p><em>Zero configuration</em> - you may run <strong>PyBlue</strong> on any folder.</p>
+<ul>
+<li>files that end with the extension <code>.html</code> will be passed through a <a href="http://www.makotemplates.org/">Mako template</a> rendering.</li>
+<li>files that start with dot <code>.</code>, or are Python <code>*.py</code> or Mako <code>*.mako</code> file will be ignored.</li>
+<li>files that are larger than a certain size (default 5MB) see <code>utils.MAX_SIZE_MB</code> will also be ignored in the
+  site generation step. If you have large files you must set up an efficient way to synchronize them
+  across locations (like <code>rsync</code>)</li>
+</ul>
+<p>There are a few default templates in the templates folder to get you started. This demo site uses
+one of the default templates <a href="https://github.com/ialbert/pyblue/blob/master/templates/base.boot.mako">base.boot.mako</a>.
+You can place other Mako templates into the same folder that the site serves.</p>
+<p><strong>Note</strong>: Rendering this demo site will generate a few warnings and even an error on the console.
+That is ok, it was done deliberately so to demonstrate how warnings and errors work.</p>
+<h2>Extensions</h2>
+<p><strong>PyBlue</strong> offers a number of convenience extensions to be facilitate site generation.
+Importing <code>extensions.mako</code> file enables these functions.</p>
+<h2>Linking</h2>
+<p>Linking to files can be achieved with the <code>link(pattern)</code> function. The pattern
+is a regular expression that should match the filename.</p>
+<ul>
+<li><code>link('index')</code> will produce <a href="./index.html">Welcome to Pyblue</a></li>
+<li>If multiple files match the first will be picked: <code>link('b')</code> will produce <a href="./info/about.html">About</a> but you will also get
+  warnings in the console.</li>
+<li>If the pattern does not match you'll get an error message in the console and the link will also display the error:
+   <code>link('joe')</code> will produce <a href="#">Link pattern 'joe' does not match!</a></li>
+</ul>
+<p>The url component of each link is relative. The text displayed for the link comes from the <code>name</code> context variable.
+When the <code>name</code> context is not explicitly set <strong>PyBlue</strong> will attempt to generate a readable name from the file name.</p>
+<p>See the <a href="./info/context.html">Context</a> page on how to set the <code>name</code>.</p>
+<h2>Table of Contents</h2>
+<p>You can iterate over all files in the project with <code>toc()</code> (Table of Contents). Users have
+control over the order in which files are listed and the name of the links that
+are displayed for each file.  The <code>toc()</code> command can filter the files by regex pattern or tags .
+For example you can select files that match the word <code>base</code> with <code>toc(match='base')</code>:</p>
+<ul class="toc">
+<li><a href="./images/per_base_gc_content.png">Per Base Gc Content.png</a></li>
+<li><a href="./images/per_base_n_content.png">Per Base N Content.png</a></li>
+<li><a href="./images/per_base_quality.png">Per Base Quality.png</a></li>
+<li><a href="./images/per_base_sequence_content.png">Per Base Sequence Content.png</a></li>
+</ul>
+
+<p>Or you can filter by tags, to show files tagged <code>home</code> use <code>toc(tag='home')</code></p>
+<ul class="toc">
+<li><a href="./index.html">Welcome to Pyblue</a></li>
+<li><a href="./info/navigate.html">Navigate</a></li>
+<li><a href="./info/context.html">Context</a></li>
+</ul>
+
+<p>The order of the entries listed with the <code>toc()</code> command is goverened by the <code>sortkey</code> context
+variable that defaults to <code>5</code>.</p>
+<p>See the <a href="./info/context.html">Context</a> page on how to set the <code>sortkey</code>.</p>
+<h2>Context</h2>
+<p>Any number of variables may be passed into each template. These will
+be available in the template body. See the <a href="./info/context.html">Context</a> page on how to add tags to files.</p>
+<h2>Galleries</h2>
+<p>You can easily generate galleries from images with the <code>gallery()</code> command. For details see <a href="./gallery/gallery-list.html">Gallery List</a> page.</p>
+<h2>Advanced Usage</h2>
+<p>You can embed the source of any file with the <code>source(fname)</code> function. For example  <code>source("settings.py")</code> command
+will produce:</p>
+<pre class="prettyprint">
+# optional module named settings.py
+
+data = [
+    dict(title="Publication Title 1", author="John Doe", url="#"),
+    dict(title="Publication Title 2", author="Jane Doe", url="#"),
+]
+</pre>
+
+<p>As it happens this module named <code>settings.py</code> is special.
+If it is present it will be automatically imported under the
+attribute <code>p.settings</code> and can be accessed in every template.</p>
+<p>For this example one can access the <code>p.settings.data</code> to produce</p>
+<pre><code>[{'url': '#', 'author': 'John Doe', 'title': 'Publication Title 1'}, {'url': '#', 'author': 'Jane Doe', 'title': 'Publication Title 2'}]
+</code></pre>
+<p>This is a very handy way to pass common data across the site.</p>
+<p>Note that the <code>source</code> command can also take parameters such as <code>start</code> and <code>end</code>.
+When those are set only the region that between the matching regular expressions
+will be included.</p>
+<h2>Capturing Output</h2>
+<p>The <code>execute(command)</code> function will insert the result of running a program into the page.
+If the source of a script stored in <code>demo.py</code> is</p>
+<pre class="prettyprint">
+# this is a demo script to test execution capture
+
+values = range(1000)
+
+print "The sum is %d" % sum(values)
+</pre>
+
+<p>then running it with <code>$execute('python demo.py')</code> will produce</p>
+<pre>
+The sum is 499500
+</pre>
+
+<h2>Automatic Markdown</h2>
+<p>Files with the extension <code>.md</code> will automatically be rendered as Markdown.</p>
+<p>This is the file included in the page:</p>
+<pre class="prettyprint">
+Rendering
+---------
+
+1. Item 1
+1. Item 2
+1. Item 3
+
+Accented characters: á é
+
+[See the Pyblue repository][pyblue]
+
+[pyblue]: https://github.com/ialbert/pyblue
+
+</pre>
+
+<p>And this is the result of viewing the file directly: <a href="./auto-markdown.md">Auto Markdown</a></p>
+<h2>Testing Encoding</h2>
+<p>Accented characters: Ã¡ Ã©</p>
+<h2>Full Table of Contents</h2>
+<p>A listing of all files in this website:</p>
+<ul class="toc">
+<li><a href="./index.html">Welcome to Pyblue</a></li>
+<li><a href="./info/navigate.html">Navigate</a></li>
+<li><a href="./data/results/analysis-results.html">Data Analysis</a></li>
+<li><a href="./data/quality-control.html">Quality Control</a></li>
+<li><a href="./info/about.html">About</a></li>
+<li><a href="./auto-markdown.md">Auto Markdown</a></li>
+<li><a href="./info/context.html">Context</a></li>
+<li><a href="./images/duplication_levels.png">Duplication Levels.png</a></li>
+<li><a href="./info/errors.html">Error Rendering</a></li>
+<li><a href="./gallery/gallery-list.html">Gallery List</a></li>
+<li><a href="./images/kmer_profiles.png">Kmer Profiles.png</a></li>
+<li><a href="./images/per_base_gc_content.png">Per Base Gc Content.png</a></li>
+<li><a href="./images/per_base_n_content.png">Per Base N Content.png</a></li>
+<li><a href="./images/per_base_quality.png">Per Base Quality.png</a></li>
+<li><a href="./images/per_base_sequence_content.png">Per Base Sequence Content.png</a></li>
+<li><a href="./images/per_sequence_gc_content.png">Per Sequence Gc Content.png</a></li>
+<li><a href="./images/per_sequence_quality.png">Per Sequence Quality.png</a></li>
+<li><a href="./readme.md">Readme</a></li>
+<li><a href="./images/sequence_length_distribution.png">Sequence Length Distribution.png</a></li>
+</ul>
+    </div>
+</div>
+
+
+</body>
+</html>
