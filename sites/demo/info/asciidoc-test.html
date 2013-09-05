@@ -1,0 +1,47 @@
+<%inherit file="../base.boot.mako"/>
+<%namespace file="../extensions.mako" import="*"/>
+
+##doctype asc
+
+The Article Title
+=================
+Author's Name <authors@email.address>
+v1.0, 2003-12
+
+
+This is the optional preamble (an untitled section body). Useful for
+writing simple sectionless documents consisting only of a preamble.
+
+NOTE: The abstract, preface, appendix, bibliography, glossary and
+index section titles are significant ('specialsections').
+
+
+:numbered!:
+[abstract]
+Example Abstract
+----------------
+The optional abstract (one or more paragraphs) goes here.
+
+This document is an AsciiDoc article skeleton containing briefly
+annotated element placeholders plus a couple of example index entries
+and footnotes.
+
+:numbered:
+
+The First Section
+-----------------
+Article sections start at level 1 and can be nested up to four levels
+deep.
+footnote:[An example footnote.]
+indexterm:[Example index entry]
+
+And now for something completely different: ((monkeys)), lions and
+tigers (Bengal and Siberian) using the alternative syntax index
+entries.
+(((Big cats,Lions)))
+(((Big cats,Tigers,Bengal Tiger)))
+(((Big cats,Tigers,Siberian Tiger)))
+Note that multi-entry terms generate separate index entries.
+
+Here are a couple of image examples: an image:images/smallnew.png[]
+example inline image followed by an example block image:

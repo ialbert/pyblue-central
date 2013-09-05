@@ -1,6 +1,14 @@
 __author__ = 'ialbert'
 import os, logging, re, itertools
+from StringIO import StringIO
 from itertools import *
+import docutils.core
+
+try:
+    from asciidocapi import AsciiDocAPI
+    asciidoc = True
+except ImportError:
+    asciidoc = False
 
 _logger = logging.getLogger(__name__)
 
@@ -8,6 +16,22 @@ MAX_SIZE_MB = 5
 
 # tags that should be treated as lists
 TAG_NAMES = "tags".split()
+
+def rst(text):
+    html = docutils.core.publish_string(text, writer_name='html')
+    return html
+
+def asc(text):
+    if not asciidoc:
+        _logger.error("Unable to import asciidocapi.py")
+        return text
+    inp = StringIO(text)
+    out = StringIO()
+    ad = AsciiDocAPI()
+    ad.execute(inp, out, backend="html4")
+    html = out.getvalue()
+    print (html)
+    return html
 
 def parse_meta(fname):
     """

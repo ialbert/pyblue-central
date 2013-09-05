@@ -11,6 +11,7 @@ import sys, logging, re, os, time
 import argparse, markdown, waitress
 import utils
 
+
 # setting up logging
 _logger = logging.getLogger(__name__)
 
@@ -27,7 +28,7 @@ class File(object):
         self.dname = dn(self.fpath)
         self.ext   = os.path.splitext(fname)[1]
 
-        self.meta  =  dict(name=self.nice_name, sortkey="5", tags=set("data"))
+        self.meta  =  dict(name=self.nice_name, sortkey="5", tags=set("data"), doctype="markdown")
         if not self.skip_file:
             self.meta.update(utils.parse_meta(self.fpath))
 
@@ -112,7 +113,7 @@ class PyBlue:
 
         # the TemplateLookup of Mako
         self.templates = TemplateLookup(directories=[self.folder, self.TEMPLATE_DIR],
-                                        imports=["from markdown import markdown"],
+                                        imports=[ "from markdown import markdown", "from pyblue.utils import rst, asc"],
                                         input_encoding='iso-8859-1',
                                         collection_size=100,
         )

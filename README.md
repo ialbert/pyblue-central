@@ -22,9 +22,9 @@ that is being expanded to include more data oriented functionality.
 Demo Sites
 ----------
 
-Main demonstration site:
+Main demo site:
 
- * [PyBlue Demo][demo]
+ * PyBlue Demo [http://www.pyblue.org][demo]
 
 Other sites:
 
@@ -34,7 +34,7 @@ Other sites:
 Installation
 ------------
 
-Requirements: [setuptools](https://pypi.python.org/pypi/setuptools/1.0) and/or [pip][https://pypi.python.org/pypi/pip]
+Requirements: [setuptools](https://pypi.python.org/pypi/setuptools/1.0) and/or [pip](https://pypi.python.org/pypi/pip)
 needs to be installed.
 
 To install use one the common installation methods (you may need to use `sudo` to install):
@@ -43,26 +43,45 @@ To install use one the common installation methods (you may need to use `sudo` t
 
 or
 
-	pip install pyblue
+    pip install pyblue
 
-This will install the `pyblue` script that you can invoke. If you already
-have pyblue installed you can upgrade via `easy_install -U pyblue` or `pip install --upgrade pyblue`
+This will install the `pyblue` script. If you already
+have `pyblue` installed you can upgrade via `easy_install -U pyblue` or `pip install --upgrade pyblue`
 
 Quick Start
 -----------
 
-Point pyblue to a directory like so:
+Point `pyblue` to a directory and serve the files from it:
 
     pyblue serve -f ~/tmp/mywebsite
 
 add an `index.html` page into that directory. Visit `http://localhost:8080` to see the site
+
+What does the tool do?
+----------------------
+
+**PyBlue** generates static sites. Typically this involves two steps.
+
+1. Serving the file during the site development. **PyBlue** will serve
+   the files from a directory and presents the latest
+   version of the file. This allows the site creator to
+   write the site and check continuously what the output will look like.
+   The site can be written in [Markdown][markdown] and the [Mako templating][mako] engine.
+
+2. Once the site is ready to be published the site generation
+   command can be used to create a static copy of the site in the desired folder.
+   The files in the output folder can be distributed and can be opened in a browser
+   if stored on the local filesystem or they can be served via a static web-server such as
+   apache, nginx etc.
+
+[markdown]: http://en.wikipedia.org/wiki/Markdown
 
 Demonstration Server
 --------------------
 
 To generate the content of the [demo server][demo] get the source (download or clone):
 
-	git clone git@github.com:ialbert/pyblue.git
+    git clone git@github.com:ialbert/pyblue.git
 
 then launch `pyblue` with
 
@@ -74,23 +93,6 @@ folder to see the sources that create the site.
 To generate a static version of the site into the `~/tmp/www/` folder type:
 
     pyblue gen -f sites/demo ~/tmp/www
-
-What does the tool do?
-----------------------
-
-**PyBlue** generates static sites. Typically this involves two steps.
-
-1. Serving the file during the site development. **PyBlue** will serve
-   the files from a directory and presents the latest
-   version of the file. This allows the site creator to
-   write the site and check continuously what the output will look like.
-
-2. Once the site is ready to be published the site generation
-   command can be used to create a static copy of the site in the desired folder.
-   The files in the output folder can be distributed and can be opened in a browser
-   if stored on the local filesystem or they can be served via a static web-server such as
-   apache, nginx etc.
-
 
 Templates
 ---------
@@ -215,7 +217,7 @@ Licensing
 **PyBlue** uses the MIT license.
 
 [mako]: http://www.makotemplates.org/
-[demo]: http://bcc.bx.psu.edu/pyblue/demo/
+[demo]: http://www.pyblue.org
 [bcc]: http://bcc.bx.psu.edu
 [iua]: http://www.personal.psu.edu/users/i/u/iua1/
 [rza]: http://www.personal.psu.edu/users/i/u/iua1/

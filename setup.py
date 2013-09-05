@@ -4,7 +4,7 @@ from setuptools import setup
 import os.path
 
 setup(name='pyblue',
-      version='1.0.5',
+      version='1.0.6',
       description='PyBlue',
       author='Nicolas Vanhoren, Istvan Albert',
       author_email='nicolas.vanhoren@unknown.com, istvan.albert@gmail.com',
@@ -44,6 +44,7 @@ setup(name='pyblue',
         "argparse",
         "markdown",
         "waitress",
+        "docutils",
         ],
      )
 
