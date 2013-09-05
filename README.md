@@ -217,7 +217,7 @@ Licensing
 **PyBlue** uses the MIT license.
 
 [mako]: http://www.makotemplates.org/
-[demo]: http://bcc.bx.psu.edu/pyblue/demo/
+[demo]: http://www.pyblue.org
 [bcc]: http://bcc.bx.psu.edu
 [iua]: http://www.personal.psu.edu/users/i/u/iua1/
 [rza]: http://www.personal.psu.edu/users/i/u/iua1/
