@@ -37,7 +37,7 @@ Installation
 Requirements: [setuptools](https://pypi.python.org/pypi/setuptools/1.0) and/or [pip][https://pypi.python.org/pypi/pip]
 needs to be installed.
 
-To install use one the common istallation methods:
+To install use one the common installation methods (you may need to use `sudo` to install):
 
     easy_install pyblue
 
