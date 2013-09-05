@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 from setuptools import setup
 import os.path
+import pyblue
 
 setup(name='pyblue',
-      version='1.0.6',
+      version=pyblue.VERSION,
       description='PyBlue',
       author='Nicolas Vanhoren, Istvan Albert',
       author_email='nicolas.vanhoren@unknown.com, istvan.albert@gmail.com',

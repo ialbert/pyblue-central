@@ -11,7 +11,6 @@ import sys, logging, re, os, time
 import argparse, markdown, waitress
 import utils
 
-
 # setting up logging
 _logger = logging.getLogger(__name__)
 
@@ -297,8 +296,9 @@ class PyBlue:
         """
         The command line interface of PyGreen.
         """
+        import pyblue
 
-        parser = argparse.ArgumentParser(description='PyBlue, micro static site generator')
+        parser = argparse.ArgumentParser(description='PyBlue %s, static site generator' % pyblue.VERSION)
         parser.add_argument('-v', '--verbose', default=False, action="store_true", help='outputs debug messages')
 
 
