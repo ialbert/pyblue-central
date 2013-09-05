@@ -1,12 +1,24 @@
 <%inherit file="../base.boot.mako"/>
 <%namespace file="../extensions.mako" import="*"/>
 
+##doctype rst
+
+This page is rendered via `reStructured Text`_
+
+This is achieved by passing the::
+
+<%text filter="h">
+    ##doctype rst
+</%text>
+
+directive to the page header.
+
+.. _reStructured Text: http://docutils.sourceforge.net/docs/user/rst/quickref.html
+
 This is a navigation test for the PyBlue demo site.
 
-Look at the [source of the files](https://github.com/ialbert/pyblue/tree/master/sites/demo)
-to understand what it takes to generate them.
 
-Go to the ${link('index')} page.
+Go to the ${rst_link('index')} page.
 
 
 

@@ -9,18 +9,32 @@
 <body>
 
 <div class="container">
-	<div class="row">
+    <div class="row">
         <h1>${f.name}</h1>
-    <hr>
-	</div>
+        <hr>
+    </div>
 
     <div class="row">
 
-        <%block filter="markdown">
+            %if f.doctype == "html":
+                ${self.body()}
+            %elif f.doctype == "markdown" :
+                <%block filter="markdown">
+                    ${self.body()}
+                </%block>
+            %elif f.doctype == "asc" :
+                <%block filter="asc">
+                    ${self.body()}
+                </%block>
+            %elif f.doctype == "rst" :
+                <%block filter="rst">
+                    ${self.body()}
+                </%block>
+            % else :
+                <pre>Unexpected doctype: ${f.doctype} </pre>
+                ${self.body()}
+            %endif
 
-            ${self.body()}
-
-        </%block>
     </div>
 </div>
 

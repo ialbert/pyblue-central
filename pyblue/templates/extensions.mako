@@ -13,7 +13,13 @@ Hello world!
 </ul>
 </%def>
 
+## Link generation macros
+
+## url directly in HTML
 <%def name="link(name)"><% link, name = p.link(f, name) %><a href="${link}">${name}</a></%def>
+
+## url with rst syntax
+<%def name="rst_link(name)"><% link, name = p.link(f, name) %>`${name} <${link}>`_</%def>
 
 <%def name="path(name)"><% link, name = p.link(f, name) %>${link}</%def>
 
