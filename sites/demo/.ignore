@@ -1,5 +1,6 @@
 #
 # more ignored patterns may be added here
 #
-# these have to be valid regular expressions not just shell patterns
+# these ust be valid regular expressions not just shell patterns
 #
+.foo

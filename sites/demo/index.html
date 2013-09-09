@@ -1,4 +1,5 @@
-<%inherit file="/base.boot.mako"/>
+## -*- coding: utf-8 -*-
+<%inherit file="/base.mako"/>
 <%namespace file="/extensions.mako" import="*"/>
 
 ##name Welcome to Pyblue
@@ -61,6 +62,12 @@ When the `name` context is not explicitly set **PyBlue** will attempt to generat
 
 See the ${link('context')} page on how to set the `name`.
 
+Context
+-------
+
+Any number of variables may be passed into each template. These will
+be available in the template body. See the ${link('context')} page on how to add tags to files.
+
 Table of Contents
 ------------------
 
@@ -80,12 +87,6 @@ variable that defaults to `5`.
 
 See the ${link('context')} page on how to set the `sortkey`.
 
-Context
--------
-
-Any number of variables may be passed into each template. These will
-be available in the template body. See the ${link('context')} page on how to add tags to files.
-
 Galleries
 ---------
 
@@ -94,10 +95,10 @@ You can easily generate galleries from images with the `gallery()` command. For 
 Advanced Usage
 --------------
 
-You can embed the source of any file with the `source(fname)` function. For example  `source("settings.py")` command
+You can embed the source of any file with the `include(fname)` function. For example  `include("settings.py")` command
 will produce:
 
-${source("settings.py")}
+${include("settings.py")}
 
 As it happens this module named `settings.py` is special.
 If it is present it will be automatically imported under the
@@ -109,7 +110,7 @@ For this example one can access the `p.settings.data` to produce
 
 This is a very handy way to pass common data across the site.
 
-Note that the `source` command can also take parameters such as `start` and `end`.
+Note that the `include` command can also take parameters such as `start` and `end`.
 When those are set only the region that between the matching regular expressions
 will be included.
 
@@ -119,27 +120,44 @@ Capturing Output
 The `execute(command)` function will insert the result of running a program into the page.
 If the source of a script stored in `demo.py` is
 
-${source("demo.py")}
+${include("demo.py")}
 
 then running it with `$execute('python demo.py')` will produce
 
 ${execute("python demo.py")}
 
-Automatic Markdown
-------------------
+Automatic Markdown/reST
+-----------------------
 
-Files with the extension `.md` will automatically be rendered as Markdown.
+It is possible to make files with the extension `.md` or 'rst' to
+be rendered as html. To do so list the '.md' or `.rst` extension
+in the `.include` file located in the root folder of your site.
 
 This is the file included in the page:
 
-${source("auto-markdown.md")}
+${include("info/auto-markdown.md")}
 
-And this is the result of viewing the file directly: ${link('auto-markdown.md')}
+And this is the result of viewing the file directly: ${link('auto-markdown.md')} and
+${link('auto-rst.rst')}
+
+Make note that for optimal results the webserver will also need to be set up
+to return the `.md` and/or `.rst` extension with the HTML mime-type.
 
 Testing Encoding
 ----------------
 
-Accented characters: á é
+Accented characters: a, e, i --> á, é, í
+
+To work with a specific character encoding make sure to encode both the file
+and the HTML base template to indicate the encoding you wish to use.
+
+This template starts with the following line:
+
+<%text filter="h">
+    ## -*- coding: utf-8 -*-
+</%text>
+
+The HTML base template also has the have `meta charset="UTF-8"` added to the header.
 
 Full Table of Contents
 ----------------------

@@ -1,0 +1,7 @@
+#
+# you can list the extension for the files to be included
+#
+# the default inclusion pattern is .html
+#
+.md
+.rst

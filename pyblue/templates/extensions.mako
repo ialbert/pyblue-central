@@ -35,6 +35,24 @@ Hello world!
 </ul>
 </%def>
 
+<%def name="include(fname, start='', end='')">
+<%
+	import os, string, itertools, re
+	fpath = os.path.join(p.folder, fname)
+	lines = map(lambda x: x.strip("\n"), file(fpath))
+	if start:
+		lines = itertools.dropwhile(lambda x: not re.search(start, x), lines)
+	if end:
+		lines = itertools.takewhile(lambda x: not re.search(end, x), lines)
+	code = "\n".join(lines)
+%>
+<pre class="prettyprint">
+${code.decode('utf-8')}
+</pre>
+</%def>
+
+## called it source initially kept it for backwards compatibility
+## will be removed later
 <%def name="source(fname, start='', end='')">
 <%
 	import os, string, itertools, re
@@ -45,6 +63,7 @@ Hello world!
 	if end:
 		lines = itertools.takewhile(lambda x: not re.search(end, x), lines)
 	code = "\n".join(lines)
+	print ("""!!! the source('%s') pyblue command has been deprecated please use include('%s') instead""" %(fname, fname))
 %>
 <pre class="prettyprint">
 ${code.decode('utf-8')}

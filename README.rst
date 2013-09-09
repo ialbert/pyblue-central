@@ -4,15 +4,16 @@ static blogs etc.
 Features
 --------
 
-* zero configuration, **PyBlue** requires no initialization, configuration or settings files, a fixed layout to function
-* just point to a directory and it works
-* minimalistic design with a tiny codebase of around 350 lines of Python
+* zero configuration, **PyBlue** just needs to be pointed to a directory and it works
+* requires no initialization or settings file, nor does it require a certain directory layout
+* minimalistic design with a tiny codebase of around 400 lines of Python
 * add one line to each HTML file turn on the functionality of the extension modules
 * supports Markdown_ and reST_ based content generation
-* simple crosslinking to all content within the site
-* supports table of contents and galleries
-* optional tagging or grouping files with regular expression patterns
-* usese python Mako_ templates which means that there are no limitations to what you can do within a template ;-)
+* simple cross-linking to all content within the site
+* supports table of contents and image galleries
+* optional tagging or grouping of files with regular expression patterns
+* uses the python Mako_ templates which means that there are no
+  limitations to what you can do within a template ;-)
 
 **PyBlue** is a modification of the PyGreen_ project
 that is being expanded to include more data oriented functionality.
@@ -24,6 +25,10 @@ Main demo site:
 
 * The PyBlue Demo site at http://www.pyblue.org
 
+.. note::
+	Rendering this demo site will generate a few warnings and even an error on the console.
+	Thia was done deliberately to demonstrate how warnings and errors work.
+
 Other sites:
 
 * `A personal homepage <http://www.personal.psu.edu/users/i/u/iua1/>`_
@@ -32,7 +37,8 @@ Other sites:
 Installation
 ------------
 
-Requirements: [setuptools](https://pypi.python.org/pypi/setuptools/1.0) and/or [pip](https://pypi.python.org/pypi/pip)
+Requirements: `setuptools <https://pypi.python.org/pypi/setuptools/1.0>`_
+and/or `pip <https://pypi.python.org/pypi/pip>`_
 needs to be installed.
 
 To install use one the common installation methods (you may need to use `sudo` to install)
@@ -235,9 +241,9 @@ Capturing the output of running a program would be achieved via ``execute("pytho
 Licensing
 ---------
 
-* **PyBlue** is built on PyGreen_ created by Nicolas Vanhoren see https://github.com/nicolas-van)
-
 * **PyBlue** is being developed by Istvan Albert see https://github.com/ialbert
+
+* **PyBlue** is built on PyGreen_ created by Nicolas Vanhoren see https://github.com/nicolas-van)
 
 * **PyBlue** uses the MIT license.
 

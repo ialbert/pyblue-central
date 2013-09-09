@@ -3,6 +3,7 @@ import os, logging, re, itertools
 from StringIO import StringIO
 from itertools import *
 import docutils.core
+import markdown as mdlib
 
 try:
     from asciidocapi import AsciiDocAPI
@@ -18,7 +19,13 @@ MAX_SIZE_MB = 5
 TAG_NAMES = "tags".split()
 
 def rst(text):
+    "reST renderer"
     html = docutils.core.publish_string(text, writer_name='html')
+    return html
+
+def markdown(text):
+    "Markdown renderer"
+    html = mdlib.markdown(text, safe_mode=False, smart_emphasis=True)
     return html
 
 def asc(text):
@@ -49,6 +56,17 @@ def parse_meta(fname):
         if tag in meta:
             meta[tag] = meta[tag].split()
     return meta
+
+def parse_opt_file(fname):
+    """
+    Parses an optional file and returns the lines ignoring comments, empty lines
+    """
+    if os.path.isfile(fname):
+        lines = map(lambda x: x.strip(), file(fname))
+        lines = filter(lambda x: not x.startswith("#"), lines)
+        return map(unicode, lines)
+    else:
+        return []
 
 def get_size(path, unit=1024*1024):
     statinfo = os.stat(path)

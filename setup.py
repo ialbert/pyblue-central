@@ -17,8 +17,7 @@ setup(name='pyblue',
       data_files=[
           ('pyblue/templates/', [
               'pyblue/templates/extensions.mako',
-              'pyblue/templates/base.boot.mako',
-              'pyblue/templates/base.md.mako',
+              'pyblue/templates/base.mako',
           ]),
         ],
       long_description=file("README.rst").read(),

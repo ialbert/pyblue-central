@@ -8,7 +8,7 @@ from mako import exceptions
 import os, os.path, itertools
 import wsgiref.handlers
 import sys, logging, re, os, time
-import argparse, markdown, waitress
+import argparse, waitress
 import utils
 
 # setting up logging
@@ -28,6 +28,8 @@ class File(object):
         self.ext   = os.path.splitext(fname)[1]
 
         self.meta  =  dict(name=self.nice_name, sortkey="5", tags=set("data"), doctype="markdown")
+
+        # large files should not be parsed
         if not self.skip_file:
             self.meta.update(utils.parse_meta(self.fpath))
 
@@ -58,6 +60,10 @@ class File(object):
         if not value:
             raise Exception("context attribute %s not found" % name)
         return value
+
+    @property
+    def get_content(self):
+        return file(self.fpath).read()
 
     @property
     def size(self):
@@ -99,20 +105,22 @@ class PyBlue:
         self.app = bottle.Bottle()
         # a set of strings that identifies the extension of the files
         # that should be processed using Mako
-        self.template_exts = set([".html", ".md"])
+        self.template_exts = set([".html"])
+
         # the folder where the files to serve are located. Do not set
-        # directly, use set_folder instead
+        # directly, use set_folder() instead
         self.folder = "."
 
-        # recrawls directories on each request, use in serving
-        self.refresh = True
+        # the list of all crawled files, initialized in set_folder()
+        self.files = []
 
-        # the collection of files
-        self.files = None
+        # should it recrawl directories on each request, used in serving
+        # can be turned off in the options
+        self.refresh = False
 
         # the TemplateLookup of Mako
         self.templates = TemplateLookup(directories=[self.folder, self.TEMPLATE_DIR],
-                                        imports=[ "from markdown import markdown", "from pyblue.utils import rst, asc"],
+                                        imports=[ "from pyblue.utils import markdown", "from pyblue.utils import rst, asc"],
                                         input_encoding='iso-8859-1',
                                         collection_size=100,
         )
@@ -156,12 +164,16 @@ class PyBlue:
                     f = File(fname=path, root=self.folder)
                     t = self.templates.get_template(path)
                     if self.refresh:
-                        self.files = self.collect_files
+                        self.files = self.collect_files()
                     try:
                         data = t.render_unicode(p=self, f=f, u=utils)
-                        # apply markdown rendering
-                        if ext == ".md":
-                            data = markdown.markdown(data)
+
+                        # if it made it this far the user wants these to be rendered as html
+                        if ext == '.md':
+                            data = utils.markdown(data)
+                        elif ext == '.rst':
+                            data = utils.rst(data)
+
                         page = data.encode(t.module._source_encoding)
                         return page
                     except Exception, exc:
@@ -189,11 +201,18 @@ class PyBlue:
 
         # append more ignored patterns
         ignore_file = op.join(self.folder, ".ignore")
-        if os.path.isfile(ignore_file):
-            patts = list(file(ignore_file))
-            patts = map(lambda x: x.strip(), patts)
-            patts = filter(lambda x: not x.startswith("#"), patts)
-            self.file_exclusion.extend(patts)
+        _logger.info("checking optional ignore file %s" % ignore_file)
+        self.file_exclusion.extend(utils.parse_opt_file(ignore_file))
+        _logger.info("excluded files: %s" % self.file_exclusion)
+
+        # add more of the included extensions
+        include_file = op.join(self.folder, ".include")
+        _logger.info("checking optional include files %s" % include_file)
+        self.template_exts.update(utils.parse_opt_file(include_file))
+        _logger.info("template extensions: %s" % self.template_exts)
+
+        # collect the files
+        self.files = self.collect_files()
 
     def run(self, host='0.0.0.0', port=8080):
         """
@@ -254,7 +273,6 @@ class PyBlue:
         urls = [f.url(start) for f in items]
         return urls
 
-    @property
     def collect_files(self):
         """
         Collects all files that will be parsed. Will also be available in main context.
@@ -266,6 +284,7 @@ class PyBlue:
             files += l()
 
         files = map(lambda x: File(x, self.folder), files)
+        _logger.info("collected %s files" % len(files))
 
         # apply sort order
         decor = [(f.sortkey, f.name, f) for f in files]
@@ -279,11 +298,10 @@ class PyBlue:
         """
 
         # this makes all files available in the template context
-        self.files = self.collect_files
 
         for f in self.files:
             if f.skip_file:
-                _logger.debug("skipping large file %s of %.1fkb" % (f.fname, f.size))
+                _logger.info("skipping large file %s of %.1fkb" % (f.fname, f.size))
                 continue
             _logger.info("generating %s" % f.fname)
             content = self.get(f)
@@ -299,8 +317,6 @@ class PyBlue:
         import pyblue
 
         parser = argparse.ArgumentParser(description='PyBlue %s, static site generator' % pyblue.VERSION)
-        parser.add_argument('-v', '--verbose', default=False, action="store_true", help='outputs debug messages')
-
 
         subparsers = parser.add_subparsers(dest='action')
 
@@ -309,10 +325,13 @@ class PyBlue:
         parser_serve.add_argument('-f', '--folder', default=".", help='folder containg files to serve')
         parser_serve.add_argument('-d', '--disable-templates', action='store_true', default=False,
                                   help='just serve static files, do not use invoke Mako')
+        parser_serve.add_argument('-v', '--verbose', default=False, action="store_true", help='outputs more messages')
+        parser_serve.add_argument('-n', '--norefresh', default=False, action="store_true", help='do not refresh files on every request')
 
         def serve():
             if args.disable_templates:
                 self.template_exts = set([])
+            self.refresh = not args.norefresh
             self.run(port=args.port)
 
         parser_serve.set_defaults(func=serve)
@@ -320,20 +339,20 @@ class PyBlue:
         parser_gen = subparsers.add_parser('gen', help='generate a static version of the site')
         parser_gen.add_argument('output', help='folder to store the files')
         parser_gen.add_argument('-f', '--folder', default=".", help='folder containg files to serve')
+        parser_gen.add_argument('-v', '--verbose', default=False, action="store_true", help='outputs more messages')
 
         def gen():
-            if args.verbose:
-                logging.basicConfig(level=logging.DEBUG)
-            self.refresh = False
             self.gen_static(args.output)
 
         def set_log_level(level):
-            logging.basicConfig(level=level, format='%(levelname)s\t%(message)s')
+            logging.basicConfig(level=level, format='%(levelname)s\t%(module)s.%(funcName)s\t%(message)s')
 
         parser_gen.set_defaults(func=gen)
         args = parser.parse_args(cmd_args)
         level = logging.DEBUG if args.verbose else logging.WARNING
         set_log_level(level)
+
+        _logger.info("starting pyblue")
         self.set_folder(args.folder)
         print(parser.description)
         print("")
