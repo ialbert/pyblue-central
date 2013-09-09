@@ -1,23 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>
-            
-    </title>
-	<meta charset="UTF-8">
-    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
-</head>
-<body>
-
-<div class="container">
-    <div class="row">
-        <h1>About</h1>
-        <hr>
-    </div>
-
-    <div class="row">
-
-                <?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
@@ -360,22 +341,21 @@ ul.auto-toc {
 <div class="document">
 
 
-<p>This page is rendered via <a class="reference external" href="http://docutils.sourceforge.net/docs/user/rst/quickref.html">reStructured Text</a></p>
-<p>This is achieved by passing the:</p>
-<pre class="literal-block">
-##doctype rst
-</pre>
-<p>directive to the page header.</p>
-<p>This is a navigation test for the PyBlue demo site.</p>
-<p>Go to the <a class="reference external" href="../index.html">Welcome to Pyblue</a> page.</p>
+<div class="section" id="chapter-1-title">
+<h1>Chapter 1 Title</h1>
+<div class="section" id="section-1-1-title">
+<h2>Section 1.1 Title</h2>
+<div class="section" id="subsection-1-1-1-title">
+<h3>Subsection 1.1.1 Title</h3>
 </div>
-</body>
-</html>
-
-
-    </div>
 </div>
-
-
+<div class="section" id="section-1-2-title">
+<h2>Section 1.2 Title</h2>
+</div>
+</div>
+<div class="section" id="chapter-2-title">
+<h1>Chapter 2 Title</h1>
+</div>
+</div>
 </body>
 </html>

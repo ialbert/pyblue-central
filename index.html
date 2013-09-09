@@ -4,19 +4,20 @@
     <title>
             
     </title>
+	<meta charset="UTF-8">
     <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
 </head>
 <body>
 
 <div class="container">
-	<div class="row">
+    <div class="row">
         <h1>Welcome to Pyblue</h1>
-    <hr>
-	</div>
+        <hr>
+    </div>
 
     <div class="row">
 
-        <p><strong>PyBlue</strong> is a simple way to easily generate static files used to present data analysis reports.</p>
+                <p><strong>PyBlue</strong> is a simple way to easily generate static files used to present data analysis reports.</p>
 <ul>
 <li>GitHub repository:  <a href="https://github.com/ialbert/pyblue">https://github.com/ialbert/pyblue</a></li>
 <li>PyBlue Demo Site: <a href="http://www.pyblue.org">http://www.pyblue.org</a></li>
@@ -53,6 +54,9 @@ is a regular expression that should match the filename.</p>
 <p>The url component of each link is relative. The text displayed for the link comes from the <code>name</code> context variable.
 When the <code>name</code> context is not explicitly set <strong>PyBlue</strong> will attempt to generate a readable name from the file name.</p>
 <p>See the <a href="./info/context.html">Context</a> page on how to set the <code>name</code>.</p>
+<h2>Context</h2>
+<p>Any number of variables may be passed into each template. These will
+be available in the template body. See the <a href="./info/context.html">Context</a> page on how to add tags to files.</p>
 <h2>Table of Contents</h2>
 <p>You can iterate over all files in the project with <code>toc()</code> (Table of Contents). Users have
 control over the order in which files are listed and the name of the links that
@@ -75,13 +79,10 @@ For example you can select files that match the word <code>base</code> with <cod
 <p>The order of the entries listed with the <code>toc()</code> command is goverened by the <code>sortkey</code> context
 variable that defaults to <code>5</code>.</p>
 <p>See the <a href="./info/context.html">Context</a> page on how to set the <code>sortkey</code>.</p>
-<h2>Context</h2>
-<p>Any number of variables may be passed into each template. These will
-be available in the template body. See the <a href="./info/context.html">Context</a> page on how to add tags to files.</p>
 <h2>Galleries</h2>
 <p>You can easily generate galleries from images with the <code>gallery()</code> command. For details see <a href="./gallery/gallery-list.html">Gallery List</a> page.</p>
 <h2>Advanced Usage</h2>
-<p>You can embed the source of any file with the <code>source(fname)</code> function. For example  <code>source("settings.py")</code> command
+<p>You can embed the source of any file with the <code>include(fname)</code> function. For example  <code>include("settings.py")</code> command
 will produce:</p>
 <pre class="prettyprint">
 # optional module named settings.py
@@ -99,7 +100,7 @@ attribute <code>p.settings</code> and can be accessed in every template.</p>
 <pre><code>[{'url': '#', 'author': 'John Doe', 'title': 'Publication Title 1'}, {'url': '#', 'author': 'Jane Doe', 'title': 'Publication Title 2'}]
 </code></pre>
 <p>This is a very handy way to pass common data across the site.</p>
-<p>Note that the <code>source</code> command can also take parameters such as <code>start</code> and <code>end</code>.
+<p>Note that the <code>include</code> command can also take parameters such as <code>start</code> and <code>end</code>.
 When those are set only the region that between the matching regular expressions
 will be included.</p>
 <h2>Capturing Output</h2>
@@ -118,8 +119,10 @@ print "The sum is %d" % sum(values)
 The sum is 499500
 </pre>
 
-<h2>Automatic Markdown</h2>
-<p>Files with the extension <code>.md</code> will automatically be rendered as Markdown.</p>
+<h2>Automatic Markdown/reST</h2>
+<p>It is possible to make files with the extension <code>.md</code> or 'rst' to
+be rendered as html. To do so list the '.md' or <code>.rst</code> extension
+in the <code>.include</code> file located in the root folder of your site.</p>
 <p>This is the file included in the page:</p>
 <pre class="prettyprint">
 Rendering
@@ -129,7 +132,7 @@ Rendering
 1. Item 2
 1. Item 3
 
-Accented characters: á é
+Accented characters: Ã¡ Ã©
 
 [See the Pyblue repository][pyblue]
 
@@ -137,9 +140,18 @@ Accented characters: á é
 
 </pre>
 
-<p>And this is the result of viewing the file directly: <a href="./auto-markdown.md">Auto Markdown</a></p>
+<p>And this is the result of viewing the file directly: <a href="./info/auto-markdown.md">Auto Markdown</a> and
+<a href="./info/auto-rst.rst">Auto Rst</a></p>
+<p>Make note that for optimal results the webserver will also need to be set up
+to return the <code>.md</code> and/or <code>.rst</code> extension with the HTML mime-type.</p>
 <h2>Testing Encoding</h2>
-<p>Accented characters: Ã¡ Ã©</p>
+<p>Accented characters: a, e, i --&gt; Ã¡, Ã©, Ã­</p>
+<p>To work with a specific character encoding make sure to encode both the file
+and the HTML base template to indicate the encoding you wish to use.</p>
+<p>This template starts with the following line:</p>
+<pre><code>## -*- coding: utf-8 -*-
+</code></pre>
+<p>The HTML base template also has the have <code>meta charset="UTF-8"</code> added to the header.</p>
 <h2>Full Table of Contents</h2>
 <p>A listing of all files in this website:</p>
 <ul class="toc">
@@ -148,11 +160,13 @@ Accented characters: á é
 <li><a href="./data/results/analysis-results.html">Data Analysis</a></li>
 <li><a href="./data/quality-control.html">Quality Control</a></li>
 <li><a href="./info/about.html">About</a></li>
-<li><a href="./auto-markdown.md">Auto Markdown</a></li>
+<li><a href="./info/auto-markdown.md">Auto Markdown</a></li>
+<li><a href="./info/auto-rst.rst">Auto Rst</a></li>
 <li><a href="./info/context.html">Context</a></li>
 <li><a href="./images/duplication_levels.png">Duplication Levels.png</a></li>
 <li><a href="./info/errors.html">Error Rendering</a></li>
 <li><a href="./gallery/gallery-list.html">Gallery List</a></li>
+<li><a href="./info/ignored-file.foo">Ignored File</a></li>
 <li><a href="./images/kmer_profiles.png">Kmer Profiles.png</a></li>
 <li><a href="./images/per_base_gc_content.png">Per Base Gc Content.png</a></li>
 <li><a href="./images/per_base_n_content.png">Per Base N Content.png</a></li>
@@ -163,6 +177,7 @@ Accented characters: á é
 <li><a href="./readme.md">Readme</a></li>
 <li><a href="./images/sequence_length_distribution.png">Sequence Length Distribution.png</a></li>
 </ul>
+
     </div>
 </div>
 

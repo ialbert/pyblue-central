@@ -4,30 +4,31 @@
     <title>
             
     </title>
+	<meta charset="UTF-8">
     <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
 </head>
 <body>
 
 <div class="container">
-	<div class="row">
+    <div class="row">
         <h1>Context</h1>
-    <hr>
-	</div>
+        <hr>
+    </div>
 
     <div class="row">
 
-        <p>Templates have access to a context that includes default variables and externally set variables.</p>
+                <p>Templates have access to a context that includes default variables and externally set variables.</p>
 <ul>
 <li>
 <p>the <code>f</code> variable that contains information
   on the current file. For example <code>f.name</code>, <code>f.fname</code>, <code>f.size</code> will produce
-  <code>Context</code>, <code>info/context.html</code> and <code>0.00171279907227</code> (size in MB)</p>
+  <code>Context</code>, <code>info/context.html</code> and <code>0.00170803070068</code> (size in MB)</p>
 </li>
 <li>
 <p>the <code>p</code> is the class underlying the entire PyBlue instance. It has many
   neat properties. For example the <code>p.files</code>
   class attribute contains information on all files processed by PyBlue. Thus say
-  <code>len(p.files)</code> will produce <code>19</code> <code>p.folder</code> will produce the path to
+  <code>len(p.files)</code> will produce <code>21</code> <code>p.folder</code> will produce the path to
  the site folder <code>sites/demo/</code></p>
 </li>
 </ul>
@@ -52,6 +53,7 @@ One can access them directly like so <code>f.name</code>, <code>f.sortkey</code>
 <p>These will assigned as attributes to the file object that renders the page
 and could be accessed as say <code>f.author</code> that will produce: <code>John Doe</code></p>
 <p>Go back to <a href="../index.html">Welcome to Pyblue</a></p>
+
     </div>
 </div>
 
