@@ -347,15 +347,18 @@ class PyBlue:
         def set_log_level(level):
             logging.basicConfig(level=level, format='%(levelname)s\t%(module)s.%(funcName)s\t%(message)s')
 
+
         parser_gen.set_defaults(func=gen)
+
+        print(parser.description)
         args = parser.parse_args(cmd_args)
+
         level = logging.DEBUG if args.verbose else logging.WARNING
         set_log_level(level)
 
         _logger.info("starting pyblue")
         self.set_folder(args.folder)
-        print(parser.description)
-        print("")
+
         args.func()
 
 
