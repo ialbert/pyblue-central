@@ -37,6 +37,7 @@ Other sites:
 Installation
 ------------
 
+
 Requirements: `setuptools <https://pypi.python.org/pypi/setuptools/1.0>`_
 and/or `pip <https://pypi.python.org/pypi/pip>`_
 needs to be installed.
@@ -56,6 +57,8 @@ or
 This will install the ``pyblue`` script.
 
 If you already have ``pyblue`` installed you can upgrade via ``easy_install -U pyblue`` or ``pip install --upgrade pyblue``
+
+You can also download the sources from the `Python Package Index <https://pypi.python.org/pypi/pyblue>`_
 
 Quick Start
 -----------
