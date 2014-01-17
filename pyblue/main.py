@@ -86,12 +86,13 @@ class File(object):
         with open(loc, "wb") as fp:
             fp.write(text)
 
-    def url(self, start=None):
+    def url(self, start=None, text=''):
         "Relative path of the file to the start folder"
         start = start or self
         rpath = op.relpath(self.root, start.dname)
         rpath = op.join(rpath, self.fname)
-        return rpath, self.name
+
+        return rpath, text or self.name
 
     def __repr__(self):
         return "File: %s (%s)" % (self.name, self.fname)
@@ -238,7 +239,7 @@ class PyBlue:
         m = __import__('settings', globals(), locals(), [], -1)
         return m
 
-    def link(self, start, name):
+    def link(self, start, name, text=''):
 
         items = filter(lambda x: re.search(name, x.fname, re.IGNORECASE), self.files)
         if not items:
@@ -250,8 +251,9 @@ class PyBlue:
             if len(items) > 1:
                 _logger.warn("link name '%s' in %s matches more than one item %s" % (name, start.fname, items))
 
-        link, name = f.url(start)
-        return (link, name)
+        link, value = f.url(start, text=text)
+
+        return (link, value)
 
     def toc(self, start,  tag=None, match=None, is_image=False):
         "Produces name, links pairs from file names"

@@ -52,6 +52,19 @@ Linking to files can be achieved with the `link(pattern)` function. The pattern
 is a regular expression that should match the filename.
 
 * `link('index')` will produce ${link('index')}
+
+The default behavior for naming links is to get the `name` context variable of the page,
+if that does not exists then the name of the file will be "humanized" with a heuristics.
+Users can override this behavior and directly set the text that underlies the link with:
+
+* `link('context', text='the context page')` will produce ${link('context', text='the context page')}
+
+More examples:
+
+* `link('context')` will produce ${link('context')}
+* `link('gc_content')` will produce ${link('gc_content')}
+* `link('gc_content', text="GC CONTENT")` will produce ${link('gc_content', text="GC CONTENT")}
+
 * If multiple files match the first will be picked: `link('b')` will produce ${link('b')} but you will also get
   warnings in the console.
 * If the pattern does not match you'll get an error message in the console and the link will also display the error:
