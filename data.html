@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+            
+    </title>
+	<meta charset="UTF-8">
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <h1>Data Embedding</h1>
+        <hr>
+    </div>
+
+    <div class="row">
+
+                <p>You can embed data into the <code>settings.py</code> file. This python file is imported automatically into
+the namespace. (If you change <code>settings.py</code> you will need to restart the pyblue server)</p>
+<p>Using the current <code>settings.py</code> file we can write the following:</p>
+<pre><code>% for author, title, url, journal in p.settings.publications():
+&lt;tr&gt;
+   &lt;td&gt;${author}&lt;/td&gt;
+   &lt;td&gt;${title}&lt;/td&gt;
+   &lt;td&gt;${journal}&lt;/td&gt;
+&lt;/tr&gt;
+% endfor
+</code></pre>
+<p>To produce the output</p>
+<table class="table table-bordered">
+    <tr>
+       <th>Author</th>
+       <th>Title</th>
+       <th>Journal</th>
+   </tr>
+   <tr>
+       <td>John Doe, Jane Doe</td>
+       <td>Chronic properties of the the doubly sublimated tio-timolin</td>
+       <td>Natural Sciences, 2, 2014</td>
+   </tr>
+   <tr>
+       <td>Mr Smith, Ms. Smith Doe</td>
+       <td>Novel insights into something</td>
+       <td>Scientific Naturals, 8, 2012</td>
+   </tr>
+   <tr>
+       <td>Senor Gonzales, Senorita Bonita</td>
+       <td>Lo no puedo anque quiero</td>
+       <td>El Gato, 89, 2014</td>
+   </tr>
+</table>
+
+<p>The contents of <code>settings.py</code> is:</p>
+<pre class="prettyprint">
+# Four lines are specified for each publication
+# Authors, Title, Url, Journal
+
+FIELD_COUNT = 4
+
+TEXT = """
+
+John Doe, Jane Doe
+Chronic properties of the the doubly sublimated tio-timolin
+http://www.psu.edu
+Natural Sciences, 2, 2014
+
+Mr Smith, Ms. Smith Doe
+Novel insights into something
+http://www.nd.edu
+Scientific Naturals, 8, 2012
+
+Senor Gonzales, Senorita Bonita
+Lo no puedo anque quiero
+http://http://www.spanishdict.com/
+El Gato, 89, 2014
+
+"""
+
+def publications():
+    lines = TEXT.splitlines()
+    lines = map(lambda x: x.strip(), lines)
+    lines = filter(None, lines)
+    group = [iter(lines)] * FIELD_COUNT
+    return zip(*group)
+</pre>
+
+    </div>
+</div>
+
+
+</body>
+</html>
