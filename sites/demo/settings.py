@@ -16,7 +16,7 @@ http://www.psu.edu
 Scientific Naturals, 8, 2012
 
 Senor Gonzales, Senorita Bonita
-Yo no puedo anque quiero
+Yo no puedo aunque quiero
 http://www.spanishdict.com/
 El Gato, 89, 2014
 
