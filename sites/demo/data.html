@@ -13,7 +13,7 @@ Using the current `settings.py` file we can write the following:
     % for author, title, url, journal in p.settings.publications():
     <tr>
        <td>${author}</td>
-       <td>${title}</td>
+       <td><a href="${url}">${title}</a></td>
        <td>${journal}</td>
     </tr>
     % endfor
@@ -23,14 +23,14 @@ To produce the output
 
 <table class="table table-bordered">
     <tr>
-       <th>Author</th>
+       <th>Authors</th>
        <th>Title</th>
        <th>Journal</th>
    </tr>
    % for author, title, url, journal in p.settings.publications():
    <tr>
        <td>${author}</td>
-       <td>${title}</td>
+       <td><a href="${url}">${title}</a></td>
        <td>${journal}</td>
    </tr>
    % endfor

@@ -7,17 +7,17 @@ TEXT = """
 
 John Doe, Jane Doe
 Chronic properties of the the doubly sublimated tio-timolin
-http://www.psu.edu
+http://www.ncbi.nlm.nih.gov/
 Natural Sciences, 2, 2014
 
 Mr Smith, Ms. Smith Doe
 Novel insights into something
-http://www.nd.edu
+http://www.psu.edu
 Scientific Naturals, 8, 2012
 
 Senor Gonzales, Senorita Bonita
 Lo no puedo anque quiero
-http://http://www.spanishdict.com/
+http://www.spanishdict.com/
 El Gato, 89, 2014
 
 """
