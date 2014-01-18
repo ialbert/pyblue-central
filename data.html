@@ -23,7 +23,7 @@ the namespace. (If you change <code>settings.py</code> you will need to restart 
 <pre><code>% for author, title, url, journal in p.settings.publications():
 &lt;tr&gt;
    &lt;td&gt;${author}&lt;/td&gt;
-   &lt;td&gt;${title}&lt;/td&gt;
+   &lt;td&gt;&lt;a href="${url}"&gt;${title}&lt;/a&gt;&lt;/td&gt;
    &lt;td&gt;${journal}&lt;/td&gt;
 &lt;/tr&gt;
 % endfor
@@ -31,23 +31,23 @@ the namespace. (If you change <code>settings.py</code> you will need to restart 
 <p>To produce the output</p>
 <table class="table table-bordered">
     <tr>
-       <th>Author</th>
+       <th>Authors</th>
        <th>Title</th>
        <th>Journal</th>
    </tr>
    <tr>
        <td>John Doe, Jane Doe</td>
-       <td>Chronic properties of the the doubly sublimated tio-timolin</td>
+       <td><a href="http://www.ncbi.nlm.nih.gov/">Chronic properties of the the doubly sublimated tio-timolin</a></td>
        <td>Natural Sciences, 2, 2014</td>
    </tr>
    <tr>
        <td>Mr Smith, Ms. Smith Doe</td>
-       <td>Novel insights into something</td>
+       <td><a href="http://www.psu.edu">Novel insights into something</a></td>
        <td>Scientific Naturals, 8, 2012</td>
    </tr>
    <tr>
        <td>Senor Gonzales, Senorita Bonita</td>
-       <td>Lo no puedo anque quiero</td>
+       <td><a href="http://www.spanishdict.com/">Lo no puedo anque quiero</a></td>
        <td>El Gato, 89, 2014</td>
    </tr>
 </table>
@@ -63,17 +63,17 @@ TEXT = """
 
 John Doe, Jane Doe
 Chronic properties of the the doubly sublimated tio-timolin
-http://www.psu.edu
+http://www.ncbi.nlm.nih.gov/
 Natural Sciences, 2, 2014
 
 Mr Smith, Ms. Smith Doe
 Novel insights into something
-http://www.nd.edu
+http://www.psu.edu
 Scientific Naturals, 8, 2012
 
 Senor Gonzales, Senorita Bonita
 Lo no puedo anque quiero
-http://http://www.spanishdict.com/
+http://www.spanishdict.com/
 El Gato, 89, 2014
 
 """
