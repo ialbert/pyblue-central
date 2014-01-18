@@ -61,7 +61,7 @@ Users can override this behavior and directly set the text that underlies the li
 <p><code>link('gc_content', text="GC CONTENT")</code> will produce <a href="./images/per_base_gc_content.png">GC CONTENT</a></p>
 </li>
 <li>
-<p>If multiple files match the first will be picked: <code>link('b')</code> will produce <a href="./images/3D-yin-yang-symbol-logos.jpg">3D Yin Yang Symbol Logos.jpg</a> but you will also get
+<p>If multiple files match the first will be picked: <code>link('b')</code> will produce <a href="./info/about.html">About</a> but you will also get
   warnings in the console.</p>
 </li>
 <li>If the pattern does not match you'll get an error message in the console and the link will also display the error:
@@ -98,27 +98,25 @@ variable that defaults to <code>5</code>.</p>
 <h2>Galleries</h2>
 <p>You can easily generate galleries from images with the <code>gallery()</code> command. For details see <a href="./gallery/gallery-list.html">Gallery List</a> page.</p>
 <h2>Advanced Usage</h2>
-<p>You can embed the source of any file with the <code>include(fname)</code> function. For example  <code>include("settings.py")</code> command
+<p>You can embed the source of any file with the <code>include(fname)</code> function. For example  <code>include("data.py")</code> command
 will produce:</p>
 <pre class="prettyprint">
-# optional module named settings.py
+import sys
 
-data = [
-    dict(title="Publication Title 1", author="John Doe", url="#"),
-    dict(title="Publication Title 2", author="Jane Doe", url="#"),
-]
+print "Hello World!"
+print "Hola Amigos!"
+print "Gesundheit!"
 </pre>
 
-<p>As it happens this module named <code>settings.py</code> is special.
-If it is present it will be automatically imported under the
-attribute <code>p.settings</code> and can be accessed in every template.</p>
-<p>For this example one can access the <code>p.settings.data</code> to produce</p>
-<pre><code>[{'url': '#', 'author': 'John Doe', 'title': 'Publication Title 1'}, {'url': '#', 'author': 'Jane Doe', 'title': 'Publication Title 2'}]
-</code></pre>
-<p>This is a very handy way to pass common data across the site.</p>
 <p>Note that the <code>include</code> command can also take parameters such as <code>start</code> and <code>end</code>.
 When those are set only the region that between the matching regular expressions
 will be included.</p>
+<p>For example writing <code>include("data.py", start="Hola", end="Ges")</code> will produce:</p>
+<pre class="prettyprint">
+print "Hola Amigos!"
+</pre>
+
+<p>See also the <a href="./data.html">Data Embedding</a> page.</p>
 <h2>Capturing Output</h2>
 <p>The <code>execute(command)</code> function will insert the result of running a program into the page.
 If the source of a script stored in <code>demo.py</code> is</p>
@@ -175,12 +173,11 @@ and the HTML base template to indicate the encoding you wish to use.</p>
 <li><a href="./info/navigate.html">Navigate</a></li>
 <li><a href="./data/results/analysis-results.html">Data Analysis</a></li>
 <li><a href="./data/quality-control.html">Quality Control</a></li>
-<li><a href="./images/3D-yin-yang-symbol-logos.jpg">3D Yin Yang Symbol Logos.jpg</a></li>
-<li><a href="./images/3D-yin-yang-symbol-logos.png">3D Yin Yang Symbol Logos.png</a></li>
 <li><a href="./info/about.html">About</a></li>
 <li><a href="./info/auto-markdown.md">Auto Markdown</a></li>
 <li><a href="./info/auto-rst.rst">Auto Rst</a></li>
 <li><a href="./info/context.html">Context</a></li>
+<li><a href="./data.html">Data Embedding</a></li>
 <li><a href="./images/duplication_levels.png">Duplication Levels.png</a></li>
 <li><a href="./info/errors.html">Error Rendering</a></li>
 <li><a href="./gallery/gallery-list.html">Gallery List</a></li>
