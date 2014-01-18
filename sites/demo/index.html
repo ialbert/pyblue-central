@@ -108,24 +108,20 @@ You can easily generate galleries from images with the `gallery()` command. For 
 Advanced Usage
 --------------
 
-You can embed the source of any file with the `include(fname)` function. For example  `include("settings.py")` command
+You can embed the source of any file with the `include(fname)` function. For example  `include("data.py")` command
 will produce:
 
-${include("settings.py")}
-
-As it happens this module named `settings.py` is special.
-If it is present it will be automatically imported under the
-attribute `p.settings` and can be accessed in every template.
-
-For this example one can access the `p.settings.data` to produce
-
-    ${p.settings.data}
-
-This is a very handy way to pass common data across the site.
+${include("data.py")}
 
 Note that the `include` command can also take parameters such as `start` and `end`.
 When those are set only the region that between the matching regular expressions
 will be included.
+
+For example writing `include("data.py", start="Hola", end="Ges")` will produce:
+
+${include("data.py", start="Hola", end="Ges")}
+
+See also the ${link('data.html')} page.
 
 Capturing Output
 ----------------
