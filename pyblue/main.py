@@ -9,7 +9,7 @@ import os, os.path, itertools
 import wsgiref.handlers
 import sys, logging, re, os, time
 import argparse, waitress
-import utils
+from . import utils
 
 # setting up logging
 _logger = logging.getLogger(__name__)
@@ -97,6 +97,9 @@ class File(object):
     def __repr__(self):
         return "File: %s (%s)" % (self.name, self.fname)
 
+    def __lt__(self, other):
+        return self.fpath < other.fpath
+
 class PyBlue:
     TEMPLATE_DIR = op.abspath(op.join(op.split(__file__)[0], "templates"))
 
@@ -177,7 +180,7 @@ class PyBlue:
 
                         page = data.encode(t.module._source_encoding)
                         return page
-                    except Exception, exc:
+                    except Exception as exc:
                         _logger.error("error %s generating page %s" % (exc, path))
                         return exceptions.html_error_template().render()
 
@@ -285,7 +288,7 @@ class PyBlue:
         for l in self.file_listers:
             files += l()
 
-        files = map(lambda x: File(x, self.folder), files)
+        files = list(map(lambda x: File(x, self.folder), files))
         _logger.info("collected %s files" % len(files))
 
         # apply sort order
@@ -295,7 +298,7 @@ class PyBlue:
 
     def gen_static(self, output_folder):
         """
-        Generates a complete static version of the web site. It will stored in 
+        Generates a complete static version of the web site. It will stored in
         output_folder.
         """
 
