@@ -46,7 +46,7 @@ class File(object):
 
     @property
     def is_image(self):
-        return self.ext in (".png", ".jpg", ".gif")
+        return self.ext in (".png", ".jpg", ".gif", ".ico")
 
     @property
     def last_modified(self):
