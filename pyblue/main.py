@@ -3,6 +3,7 @@
 from __future__ import unicode_literals, print_function
 
 import bottle
+import magic
 from mako.lookup import TemplateLookup
 from mako import exceptions
 import os, os.path, itertools
@@ -29,9 +30,14 @@ class File(object):
 
         self.meta  =  dict(name=self.nice_name, sortkey="5", tags=set("data"), doctype="markdown")
 
-        # large files should not be parsed
-        if not self.skip_file:
+        # large files and binary files should not be parsed
+        if not self.skip_file and self.mime_type.startswith('text'):
             self.meta.update(utils.parse_meta(self.fpath))
+
+    @property
+    def mime_type(self):
+        "Returns mime-type of the file as determed by magic library"
+        return magic.from_file(self.fpath, mime=True).decode('ascii')
 
     @property
     def nice_name(self):
@@ -46,7 +52,7 @@ class File(object):
 
     @property
     def is_image(self):
-        return self.ext in (".png", ".jpg", ".gif")
+        return self.ext in (".png", ".jpg", ".gif", ".ico")
 
     @property
     def last_modified(self):

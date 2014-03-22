@@ -45,6 +45,7 @@ setup(name='pyblue',
         "markdown",
         "waitress",
         "docutils",
+        "python-magic",
         ],
      )
 
