@@ -245,7 +245,7 @@ class PyBlue:
 
     @property
     def settings(self):
-        m = __import__('settings', globals(), locals(), [], -1)
+        m = __import__('settings', globals(), locals(), [])
         return m
 
     def link(self, start, name, text=''):
