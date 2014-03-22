@@ -250,7 +250,7 @@ class PyBlue:
 
     def link(self, start, name, text=''):
 
-        items = filter(lambda x: re.search(name, x.fname, re.IGNORECASE), self.files)
+        items = list(filter(lambda x: re.search(name, x.fname, re.IGNORECASE), self.files))
         if not items:
             f = self.files[0]
             _logger.error("link name '%s' in %s does not match" % (name, start.fname))
