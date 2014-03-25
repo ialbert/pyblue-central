@@ -28,7 +28,7 @@ class File(object):
         self.dname = dn(self.fpath)
         self.ext   = os.path.splitext(fname)[1]
 
-        self.meta  =  dict(name=self.nice_name, sortkey="5", tags=set("data"), doctype="markdown")
+        self.meta  =  dict(name=self.nice_name, sortkey="5", tags=set(["data"]), doctype="markdown")
 
         # large files and binary files should not be parsed
         if not self.skip_file and self.mime_type.startswith('text'):
