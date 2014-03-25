@@ -69,7 +69,7 @@ class File(object):
 
     @property
     def get_content(self):
-        return file(self.fpath).read()
+        return open(self.fpath).read()
 
     @property
     def size(self):
