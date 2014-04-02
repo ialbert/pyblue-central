@@ -28,7 +28,7 @@ class File(object):
         self.dname = dn(self.fpath)
         self.ext   = os.path.splitext(fname)[1]
 
-        self.meta  =  dict(name=self.nice_name, sortkey="5", tags=set("data"), doctype="markdown")
+        self.meta  =  dict(name=self.nice_name, sortkey="5", tags=set(["data"]), doctype="markdown")
 
         # large files and binary files should not be parsed
         if not self.skip_file and self.mime_type.startswith('text'):
@@ -69,7 +69,7 @@ class File(object):
 
     @property
     def get_content(self):
-        return file(self.fpath).read()
+        return open(self.fpath).read()
 
     @property
     def size(self):
@@ -245,12 +245,12 @@ class PyBlue:
 
     @property
     def settings(self):
-        m = __import__('settings', globals(), locals(), [], -1)
+        m = __import__('settings', globals(), locals(), [])
         return m
 
     def link(self, start, name, text=''):
 
-        items = filter(lambda x: re.search(name, x.fname, re.IGNORECASE), self.files)
+        items = list(filter(lambda x: re.search(name, x.fname, re.IGNORECASE), self.files))
         if not items:
             f = self.files[0]
             _logger.error("link name '%s' in %s does not match" % (name, start.fname))

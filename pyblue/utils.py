@@ -5,6 +5,7 @@ try:
     from io import StringIO
 except ImportError:
     from StringIO import StringIO
+import io
 from itertools import *
 import docutils.core
 import markdown as mdlib
@@ -66,9 +67,10 @@ def parse_opt_file(fname):
     Parses an optional file and returns the lines ignoring comments, empty lines
     """
     if os.path.isfile(fname):
-        lines = map(lambda x: x.strip(), file(fname))
-        lines = filter(lambda x: not x.startswith("#"), lines)
-        return map(unicode, lines)
+        with io.open(fname) as fhandle:
+            lines = map(lambda x: x.strip(), fhandle)
+            lines = filter(lambda x: not x.startswith("#"), lines)
+            return list(lines)
     else:
         return []
 
