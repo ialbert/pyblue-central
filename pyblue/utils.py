@@ -7,6 +7,7 @@ import markdown as mdlib
 
 try:
     from asciidocapi import AsciiDocAPI
+
     asciidoc = True
 except ImportError:
     asciidoc = False
@@ -18,15 +19,18 @@ MAX_SIZE_MB = 5
 # tags that should be treated as lists
 TAG_NAMES = "tags".split()
 
+
 def rst(text):
     "reST renderer"
     html = docutils.core.publish_string(text, writer_name='html')
     return html
 
+
 def markdown(text):
     "Markdown renderer"
     html = mdlib.markdown(text, safe_mode=False, smart_emphasis=True)
     return html
+
 
 def asc(text):
     if not asciidoc:
@@ -39,6 +43,7 @@ def asc(text):
     html = out.getvalue()
     print (html)
     return html
+
 
 def parse_meta(fname):
     """
@@ -57,6 +62,7 @@ def parse_meta(fname):
             meta[tag] = meta[tag].split()
     return meta
 
+
 def parse_opt_file(fname):
     """
     Parses an optional file and returns the lines ignoring comments, empty lines
@@ -68,13 +74,16 @@ def parse_opt_file(fname):
     else:
         return []
 
-def get_size(path, unit=1024*1024):
+
+def get_size(path, unit=1024 * 1024):
     statinfo = os.stat(path)
     size = 1.0 * statinfo.st_size / unit
     return size
 
+
 def hello():
     return "Hello World!"
+
 
 def test():
     text = """
@@ -87,6 +96,7 @@ def test():
     lines = itertools.dropwhile(lambda x: not re.search("123", x), lines)
     lines = list(lines)
     print lines
+
 
 if __name__ == '__main__':
     test()

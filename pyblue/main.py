@@ -17,17 +17,18 @@ _logger = logging.getLogger(__name__)
 op = os.path
 dn = op.dirname
 
+
 class File(object):
     "Represents a file object within PyBlue"
 
     def __init__(self, fname, root):
-        self.root  = root
+        self.root = root
         self.fname = fname
         self.fpath = os.path.join(root, fname)
         self.dname = dn(self.fpath)
-        self.ext   = os.path.splitext(fname)[1]
+        self.ext = os.path.splitext(fname)[1]
 
-        self.meta  =  dict(name=self.nice_name, sortkey="5", tags=set("data"), doctype="markdown")
+        self.meta = dict(name=self.nice_name, sortkey="5", tags=set("data"), doctype="markdown")
 
         # large files should not be parsed
         if not self.skip_file:
@@ -97,6 +98,7 @@ class File(object):
     def __repr__(self):
         return "File: %s (%s)" % (self.name, self.fname)
 
+
 class PyBlue:
     TEMPLATE_DIR = op.abspath(op.join(op.split(__file__)[0], "templates"))
 
@@ -121,7 +123,8 @@ class PyBlue:
 
         # the TemplateLookup of Mako
         self.templates = TemplateLookup(directories=[self.folder, self.TEMPLATE_DIR],
-                                        imports=[ "from pyblue.utils import markdown", "from pyblue.utils import rst, asc"],
+                                        imports=["from pyblue.utils import markdown",
+                                                 "from pyblue.utils import rst, asc"],
                                         input_encoding='iso-8859-1',
                                         collection_size=100,
         )
@@ -255,7 +258,7 @@ class PyBlue:
 
         return (link, value)
 
-    def toc(self, start,  tag=None, match=None, is_image=False):
+    def toc(self, start, tag=None, match=None, is_image=False):
         "Produces name, links pairs from file names"
 
         if tag:
@@ -291,7 +294,7 @@ class PyBlue:
         # apply sort order
         decor = [(f.sortkey, f.name, f) for f in files]
         decor.sort()
-        return [ f[2] for f in decor ]
+        return [f[2] for f in decor]
 
     def gen_static(self, output_folder):
         """
@@ -328,7 +331,8 @@ class PyBlue:
         parser_serve.add_argument('-d', '--disable-templates', action='store_true', default=False,
                                   help='just serve static files, do not use invoke Mako')
         parser_serve.add_argument('-v', '--verbose', default=False, action="store_true", help='outputs more messages')
-        parser_serve.add_argument('-n', '--norefresh', default=False, action="store_true", help='do not refresh files on every request')
+        parser_serve.add_argument('-n', '--norefresh', default=False, action="store_true",
+                                  help='do not refresh files on every request')
 
         def serve():
             if args.disable_templates:
