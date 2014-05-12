@@ -1,11 +1,6 @@
-from __future__ import unicode_literals, print_function
 __author__ = 'ialbert'
 import os, logging, re, itertools
-try:
-    from io import StringIO
-except ImportError:
-    from StringIO import StringIO
-import io
+from StringIO import StringIO
 from itertools import *
 import docutils.core
 import markdown as mdlib
@@ -50,27 +45,26 @@ def parse_meta(fname):
     Parses meta information from a file
     """
     meta = dict()
-    with open(fname) as stream:
-        stream = filter(lambda x: x.startswith('##'), stream)
-        stream = map(lambda x: x.strip("#").split(), stream)
-        stream = filter(lambda x: len(x) > 1, stream)
-        for r in stream:
-            meta[r[0]] = " ".join(r[1:]).strip()
+    stream = file(fname)
+    stream = filter(lambda x: x.startswith('##'), stream)
+    stream = map(lambda x: x.strip("#").split(), stream)
+    stream = filter(lambda x: len(x) > 1, stream)
+    for r in stream:
+        meta[r[0]] = " ".join(r[1:]).strip()
 
-        for tag in TAG_NAMES:
-            if tag in meta:
-                meta[tag] = meta[tag].split()
-        return meta
+    for tag in TAG_NAMES:
+        if tag in meta:
+            meta[tag] = meta[tag].split()
+    return meta
 
 def parse_opt_file(fname):
     """
     Parses an optional file and returns the lines ignoring comments, empty lines
     """
     if os.path.isfile(fname):
-        with io.open(fname) as fhandle:
-            lines = map(lambda x: x.strip(), fhandle)
-            lines = filter(lambda x: not x.startswith("#"), lines)
-            return list(lines)
+        lines = map(lambda x: x.strip(), file(fname))
+        lines = filter(lambda x: not x.startswith("#"), lines)
+        return map(unicode, lines)
     else:
         return []
 
@@ -92,7 +86,7 @@ def test():
     lines = text.splitlines()
     lines = itertools.dropwhile(lambda x: not re.search("123", x), lines)
     lines = list(lines)
-    print(lines)
+    print lines
 
 if __name__ == '__main__':
     test()

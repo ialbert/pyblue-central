@@ -20,7 +20,7 @@ setup(name='pyblue',
               'pyblue/templates/base.mako',
           ]),
         ],
-      long_description=open("README.rst").read(),
+      long_description=file("README.rst").read(),
       keywords="",
       license="MIT",
       classifiers=[
@@ -45,7 +45,6 @@ setup(name='pyblue',
         "markdown",
         "waitress",
         "docutils",
-        "python-magic",
         ],
      )
 

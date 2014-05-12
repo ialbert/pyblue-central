@@ -45,9 +45,5 @@ class TestSequenceFunctions(unittest.TestCase):
         value = self.pyblue.get(File("test.html", root=self.pyblue.folder))
         self.assertEqual(value.strip(), b"<h1>Test</h1>")
 
-    def test_image(self):
-        self.pyblue.set_folder(os.path.join(_folder, "input_image"))
-        self.pyblue.get(File("test.png", root=self.pyblue.folder))
-
 if __name__ == '__main__':
     unittest.main()

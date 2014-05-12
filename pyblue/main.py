@@ -3,14 +3,13 @@
 from __future__ import unicode_literals, print_function
 
 import bottle
-import magic
 from mako.lookup import TemplateLookup
 from mako import exceptions
 import os, os.path, itertools
 import wsgiref.handlers
 import sys, logging, re, os, time
 import argparse, waitress
-from . import utils
+import utils
 
 # setting up logging
 _logger = logging.getLogger(__name__)
@@ -28,16 +27,11 @@ class File(object):
         self.dname = dn(self.fpath)
         self.ext   = os.path.splitext(fname)[1]
 
-        self.meta  =  dict(name=self.nice_name, sortkey="5", tags=set(["data"]), doctype="markdown")
+        self.meta  =  dict(name=self.nice_name, sortkey="5", tags=set("data"), doctype="markdown")
 
-        # large files and binary files should not be parsed
-        if not self.skip_file and self.mime_type.startswith('text'):
+        # large files should not be parsed
+        if not self.skip_file:
             self.meta.update(utils.parse_meta(self.fpath))
-
-    @property
-    def mime_type(self):
-        "Returns mime-type of the file as determed by magic library"
-        return magic.from_file(self.fpath, mime=True).decode('ascii')
 
     @property
     def nice_name(self):
@@ -52,7 +46,7 @@ class File(object):
 
     @property
     def is_image(self):
-        return self.ext in (".png", ".jpg", ".gif", ".ico")
+        return self.ext in (".png", ".jpg", ".gif")
 
     @property
     def last_modified(self):
@@ -69,7 +63,7 @@ class File(object):
 
     @property
     def get_content(self):
-        return open(self.fpath).read()
+        return file(self.fpath).read()
 
     @property
     def size(self):
@@ -102,9 +96,6 @@ class File(object):
 
     def __repr__(self):
         return "File: %s (%s)" % (self.name, self.fname)
-
-    def __lt__(self, other):
-        return self.fpath < other.fpath
 
 class PyBlue:
     TEMPLATE_DIR = op.abspath(op.join(op.split(__file__)[0], "templates"))
@@ -186,7 +177,7 @@ class PyBlue:
 
                         page = data.encode(t.module._source_encoding)
                         return page
-                    except Exception as exc:
+                    except Exception, exc:
                         _logger.error("error %s generating page %s" % (exc, path))
                         return exceptions.html_error_template().render()
 
@@ -245,12 +236,12 @@ class PyBlue:
 
     @property
     def settings(self):
-        m = __import__('settings', globals(), locals(), [])
+        m = __import__('settings', globals(), locals(), [], -1)
         return m
 
     def link(self, start, name, text=''):
 
-        items = list(filter(lambda x: re.search(name, x.fname, re.IGNORECASE), self.files))
+        items = filter(lambda x: re.search(name, x.fname, re.IGNORECASE), self.files)
         if not items:
             f = self.files[0]
             _logger.error("link name '%s' in %s does not match" % (name, start.fname))
@@ -294,7 +285,7 @@ class PyBlue:
         for l in self.file_listers:
             files += l()
 
-        files = list(map(lambda x: File(x, self.folder), files))
+        files = map(lambda x: File(x, self.folder), files)
         _logger.info("collected %s files" % len(files))
 
         # apply sort order
@@ -304,7 +295,7 @@ class PyBlue:
 
     def gen_static(self, output_folder):
         """
-        Generates a complete static version of the web site. It will stored in
+        Generates a complete static version of the web site. It will stored in 
         output_folder.
         """
 

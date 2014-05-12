@@ -37,18 +37,17 @@ Hello world!
 
 <%def name="include(fname, start='', end='')">
 <%
-    import os, string, itertools, re, io
-    fpath = os.path.join(p.folder, fname)
-    with io.open(fpath) as fhandle:
-        lines = map(lambda x: x.strip(u"\n"), fhandle)
-        if start:
-            lines = itertools.dropwhile(lambda x: not re.search(start, x), lines)
-        if end:
-            lines = itertools.takewhile(lambda x: not re.search(end, x), lines)
-        code = u"\n".join(lines)
+	import os, string, itertools, re
+	fpath = os.path.join(p.folder, fname)
+	lines = map(lambda x: x.strip("\n"), file(fpath))
+	if start:
+		lines = itertools.dropwhile(lambda x: not re.search(start, x), lines)
+	if end:
+		lines = itertools.takewhile(lambda x: not re.search(end, x), lines)
+	code = "\n".join(lines)
 %>
 <pre class="prettyprint">
-${code}
+${code.decode('utf-8')}
 </pre>
 </%def>
 
