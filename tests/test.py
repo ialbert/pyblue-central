@@ -2,7 +2,7 @@
 from __future__ import unicode_literals, print_function
 
 import unittest
-from pyblue.main import PyBlue, File
+from pyblue_old.main import PyBlue, File
 import shutil
 import os
 import os.path

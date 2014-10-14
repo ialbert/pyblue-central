@@ -63,7 +63,7 @@ ${code.decode('utf-8')}
 	if end:
 		lines = itertools.takewhile(lambda x: not re.search(end, x), lines)
 	code = "\n".join(lines)
-	print ("""!!! the source('%s') pyblue command has been deprecated please use include('%s') instead""" %(fname, fname))
+	print ("""!!! the source('%s') pyblue_old command has been deprecated please use include('%s') instead""" %(fname, fname))
 %>
 <pre class="prettyprint">
 ${code.decode('utf-8')}

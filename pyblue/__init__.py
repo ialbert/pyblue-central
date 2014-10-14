@@ -1,3 +1,2 @@
-
-VERSION = "1.1.2"
+from server import VERSION
 

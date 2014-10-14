@@ -123,8 +123,8 @@ class PyBlue:
 
         # the TemplateLookup of Mako
         self.templates = TemplateLookup(directories=[self.folder, self.TEMPLATE_DIR],
-                                        imports=["from pyblue.utils import markdown",
-                                                 "from pyblue.utils import rst, asc"],
+                                        imports=["from pyblue_old.utils import markdown",
+                                                 "from pyblue_old.utils import rst, asc"],
                                         input_encoding='iso-8859-1',
                                         collection_size=100,
         )
@@ -319,9 +319,9 @@ class PyBlue:
         """
         The command line interface of PyGreen.
         """
-        import pyblue
+        import pyblue_old
 
-        parser = argparse.ArgumentParser(description='PyBlue %s, static site generator' % pyblue.VERSION)
+        parser = argparse.ArgumentParser(description='PyBlue %s, static site generator' % pyblue_old.VERSION)
 
         subparsers = parser.add_subparsers(dest='action')
 
@@ -362,7 +362,7 @@ class PyBlue:
         level = logging.DEBUG if args.verbose else logging.WARNING
         set_log_level(level)
 
-        _logger.info("starting pyblue")
+        _logger.info("starting pyblue_old")
         self.set_folder(args.folder)
 
         args.func()
