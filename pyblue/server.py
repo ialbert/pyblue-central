@@ -1,6 +1,7 @@
 __author__ = 'iabert'
 import argparse, bottle, waitress
-import sys, os, os.path, itertools
+import sys, os, os.path, itertools, imp
+
 from pyblue import VERSION, PYBLUE_DIR
 DESCR = "PyBlue %s, static site generator" % VERSION
 from django.conf import settings
@@ -64,7 +65,7 @@ class PyBlue(object):
             TEMPLATE_LOADERS = (
                 'django.template.loaders.filesystem.Loader',
             ),
-            INSTALLED_APPS= [ "pyblue" ],
+            INSTALLED_APPS= ["pyblue", "django.contrib.humanize"],
             TEMPLATE_STRING_IF_INVALID=" ??? ",
         )
         django.setup()
@@ -85,15 +86,21 @@ class PyBlue(object):
         # Initialize the djagno template engine.
         self.django_init()
 
+        try:
+            data = imp.load_source('data', join(self.root, 'data.py'))
+        except Exception, exc:
+            data = None
+            print "*** ignoring data.py import"
+
         def render(path):
-            full = join(self.root, path)
-
-            p = dict(f=File(fname=full, root=self.root))
-
-            t = get_template(full)
-            c = Context(p)
-            return t.render(c)
-            #return bottle.static_file(path, root=self.root)
+            fobj = File(fname=path, root=self.root)
+            if fobj.is_template:
+                params = dict(f=fobj, root=self.root, data=data, files=self.files)
+                templ = get_template(fobj.fname)
+                cont = Context(params)
+                return templ.render(cont)
+            else:
+                return bottle.static_file(path, root=self.root)
 
         # Make a shortcut to the renderer.
         self.render = render
@@ -106,7 +113,9 @@ class PyBlue(object):
     def set_root(self, path):
         "Sets the folder where the files to serve are located."
         self.root = os.path.abspath(path)
-        self.files = collect_files(self.root)
+
+        # Reads all files in the root.
+        self.files = [File(fname=path, root=self.root) for path in collect_files(self.root)]
 
     def serve(self, host='0.0.0.0', port=8080):
         "Launch the WSGI app development web server"

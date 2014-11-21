@@ -2,12 +2,10 @@ __author__ = 'ialbert'
 import os, logging, re, itertools, string, time
 from itertools import *
 
-
 logger = logging.getLogger(__name__)
 
 # Meta labels that should be treated as lists
 LIST_TAGS = set("tags".split())
-
 
 class File(object):
     """
@@ -16,20 +14,32 @@ class File(object):
     """
     MAX_SIZE_MB = 5
 
+    @property
+    def is_template(self):
+        return self.fname.endswith(".html")
+
     def __init__(self, fname, root):
         self.root = root
         self.fname = fname
+
+        # Full path to the file.
         self.fpath = os.path.join(root, fname)
+        statinfo = os.stat(self.fpath)
+        self.size = statinfo.st_size
+
+        t = time.gmtime(statinfo.st_mtime)
+        self.last_modified = time.strftime("%A, %B %d, %Y", t)
+
+        # Directory that contains the file.
         self.dname = os.path.dirname(self.fpath)
         self.ext = os.path.splitext(fname)[1]
 
         name = self.nice_name(fname)
-
         # This object stores the metadata.
         self.meta = dict(fname=fname, name=name, sortkey="5")
 
-        # Large files should not be parsed
-        if not self.skip_file:
+        # Only parse the html files for metadata
+        if self.is_template:
             self.meta.update(parse_meta(self.fpath))
 
     def nice_name(self, fname):
@@ -41,16 +51,6 @@ class File(object):
             # add back extensions for images
             name = name + self.ext
         return name
-
-    @property
-    def skip_file(self):
-        "Skips larger files"
-        return self.size > self.MAX_SIZE_MB
-
-    @property
-    def size(self):
-        "File size in MB"
-        return get_size(self.fpath)
 
     @property
     def is_image(self):
@@ -78,24 +78,16 @@ class File(object):
         start = start or self
         rpath = os.path.relpath(self.root, start.dname)
         rpath = os.path.join(rpath, self.fname)
-
-        return rpath, text or self.name
-
-    @property
-    def last_modified(self):
-        t = os.path.getmtime(self.fpath)
-        t = time.gmtime(t)
-        return "%s" % time.strftime("%A, %B %d, %Y", t)
+        return rpath, text
 
     def __getattr__(self, name):
         "Fallback context attributes"
         value = self.meta.get(name)
         if not value:
             print self.meta
-            print ("context attribute '%s' not found" % name)
+            print " *** context attribute '%s' not found" % name
             value = '?'
         return value
-
 
     def __repr__(self):
         return "File: %s (%s)" % (self.name, self.fname)
@@ -143,12 +135,6 @@ def parse_meta(fname):
             meta[name] = values
 
     return meta
-
-
-def get_size(path, unit=1024 * 1024):
-    statinfo = os.stat(path)
-    size = 1.0 * statinfo.st_size / unit
-    return size
 
 def collect_files(root):
     files = []

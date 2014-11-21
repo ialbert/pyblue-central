@@ -1,23 +1,47 @@
 from django import template
 from markdown import markdown
+import re, logging
+
+logger = logging.getLogger(__name__)
 
 register = template.Library()
+
 
 @register.filter
 def lower(value):
     return value.lower()
 
+
+@register.simple_tag(takes_context=True)
+def link(context, word):
+    files = context['files']
+    items = filter(lambda x: re.search(word, x.fname, re.IGNORECASE), files)
+    print items
+    if not items:
+        f = files[0]
+        logger.error("link '%s' does not match" % word)
+        return "Link pattern '%s' does not match!" % word
+    else:
+        f = items[0]
+        if len(items) > 1:
+            logger.warn("link '%s' matches more than one item: %s" % (word, items))
+
+        #link, value = f.url(start, text=text)
+
+    return '<a href="#">%s</a>' % f.fname
+
+
 #
 # Based on http://jamie.curle.io/blog/minimal-markdown-template-tag-django/
 #
 class MarkDownNode(template.Node):
-
     def __init__(self, nodelist):
         self.nodelist = nodelist
 
     def render(self, context):
         text = self.nodelist.render(context)
         return markdown(text, safe_mode=False, smart_emphasis=True)
+
 
 @register.tag('markdown')
 def markdown_tag(parser, token):

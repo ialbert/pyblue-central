@@ -1,7 +1,7 @@
-{# name=some name goes here; value=123; #}
+{# name=Page name; title=Page Title; value=123; #}
 
 {% extends "base.html" %}
-{% load extras %}
+{% load pytags %}
 
 {% block body %}
 {% markdown %}
@@ -9,9 +9,13 @@
 OK This seems to work well!
 
 1. one
-2. two
+1. {{ p.title }}
+1. Size={{ f.size|filesizeformat }}
+1. Modified on {{ f.last_modified }}
 
-Value={{ f.name }}
+{{ data.NUMBERS }}
+
+{% link "index" %}
 
 {% endmarkdown %}
 {% endblock %}
