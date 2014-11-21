@@ -1,66 +1,135 @@
 __author__ = 'iabert'
-import argparse, bottle
-from mako import exceptions
-import os, os.path, itertools
+import argparse, bottle, waitress
+import sys, os, os.path, itertools
+from pyblue import VERSION, PYBLUE_DIR
+DESCR = "PyBlue %s, static site generator" % VERSION
+from django.conf import settings
+from django.template import Context, Template
+from django.template.loader import get_template
+from .utils import collect_files, File
+import django
 
-VERSION = '2.0.0'
 
+def join (*args):
+    return os.path.abspath(os.path.join(*args))
 
-def get_parser(cmd):
-    parser = argparse.ArgumentParser(description='PyBlue %s, static site generator' % VERSION)
+def get_parser():
+
+    parser = argparse.ArgumentParser(description=DESCR)
+
 
     # Subcommands to the parser.
-    subpar = parser.add_subparsers(dest='action')
+    subpar = parser.add_subparsers(dest="action",
+            help=" action: serve, deploy")
+
 
     # The serve subcommand.
-    serve = subpar.add_parser('serve', help='serve the web site')
+    serve = subpar.add_parser('serve',
+                              help='serve the web site',
+                              epilog="And that's how pyblue serves a directory during development.")
 
-    serve.add_argument('-p', '--port', type=int, default=8080, help='folder containg files to serve')
-    serve.add_argument('-f', '--folder', default=".", help='folder containg files to serve')
-    serve.add_argument('-d', '--disable-templates', action='store_true', default=False,
-                       help='just serve static files, do not use invoke Mako')
-    serve.add_argument('-v', '--verbose', default=False, action="store_true",
-                       help='outputs more messages')
-    serve.add_argument('-n', '--norefresh', default=False, action="store_true",
-                       help='do not refresh files on every request')
+    serve.add_argument('-f', dest='root', metavar="DIR", default=".", required=False,
+                       help='root directory to serve from (%(default)s)')
+
+    serve.add_argument('-p', metavar="NUMBER", type=int, default=8080,
+                       help='server port to bind to (%(default)s)')
+
+    serve.add_argument('-v', dest="value", default=False, action="store_true",
+                       help='increase message verbosity')
 
 
-    # Print the command line
-    print (parser.description)
-    args = parser.parse_args(cmd)
+    # The gen subcommand.
+    generate = subpar.add_parser('gen',
+                                 help='generate the static website',
+                                 epilog="And that's how pyblue generates static output.")
 
-    return args
+    generate.add_argument('-f', dest='root', metavar="DIR", default=".",
+                       help='root directory to process (%(default)s)')
+
+    generate.add_argument('-o', dest="output", metavar="DIR", type=str, required=True,
+                       help='the target directory to generate output into')
+
+    return parser
+
 
 class PyBlue(object):
     TEMPLATE_EXTS = ".html .md .rst".split()
-    def __init__(self):
-        # The Bottle application that will serve the pages.
-        self.app = bottle.Bottle()
 
-        # a set of strings that identifies the extension of the files
-        # that should be processed using Mako
+    def django_init(self):
+        "Initializes the django engine. The root must have been set already!"
+        tmpl_dir = join(PYBLUE_DIR, "templates")
+        settings.configure(
+            DEBUG=True, TEMPLATE_DEBUG=True,
+            TEMPLATE_DIRS=(self.root, tmpl_dir),
+            TEMPLATE_LOADERS = (
+                'django.template.loaders.filesystem.Loader',
+            ),
+            INSTALLED_APPS= [ "pyblue" ],
+            TEMPLATE_STRING_IF_INVALID=" ??? ",
+        )
+        django.setup()
+
+    def __init__(self, root):
+
+        # A set of strings that identifies the extension of the files
+        # that should be processed using the Django templates.
         self.template_exts = set(self.TEMPLATE_EXTS)
 
         # The folder where the files to serve are located.
-        # Do not set this attribute directly, use set_folder() instead.
-        self.folder = "."
+        # Do not set this attribute directly, use set_root() method instead.
+        self.root, self.files = None, []
 
-        # The list of all files that can be crawled. Initialized via set_folder().
-        self.files = []
+        # This is a method because it needs refresh the files on each request.
+        self.set_root(root)
 
+        # Initialize the djagno template engine.
+        self.django_init()
 
+        def render(path):
+            full = join(self.root, path)
+
+            p = dict(f=File(fname=full, root=self.root))
+
+            t = get_template(full)
+            c = Context(p)
+            return t.render(c)
+            #return bottle.static_file(path, root=self.root)
+
+        # Make a shortcut to the renderer.
+        self.render = render
+
+        # The Bottle application will serve the pages.
+        self.app = bottle.Bottle()
+        self.app.route('/', method=['GET', 'POST', 'PUT', 'DELETE'])(lambda: self.render('index.html'))
+        self.app.route('/<path:path>', method=['GET', 'POST', 'PUT', 'DELETE'])(lambda path: self.render(path))
+
+    def set_root(self, path):
+        "Sets the folder where the files to serve are located."
+        self.root = os.path.abspath(path)
+        self.files = collect_files(self.root)
+
+    def serve(self, host='0.0.0.0', port=8080):
+        "Launch the WSGI app development web server"
+        waitress.serve(self.app, host=host, port=port)
 
 def run():
-    pass
+    # Process command line arguments.
+    parser = get_parser()
 
-def test():
-    def serve():
-        if args.disable_templates:
-            self.template_exts = set([])
-        self.refresh = not args.norefresh
-        self.run(port=args.port)
+    # Trigger help on plain invocation.
+    if len(sys.argv) < 2:
+        sys.argv.append("--help")
 
-    parser_serve.set_defaults(func=serve)
+    # Parse the command line.
+    args = parser.parse_args(sys.argv[1:])
+
+    if args.action == "serve":
+        pb = PyBlue(root=args.root)
+        pb.serve()
+
+    elif args.action == "gen":
+        pass
+
 
 if __name__ == '__main__':
     run()
