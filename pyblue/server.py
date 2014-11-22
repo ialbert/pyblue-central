@@ -1,5 +1,5 @@
 __author__ = 'iabert'
-import argparse, bottle, waitress
+import argparse, bottle, waitress, logging
 import sys, os, os.path, itertools, imp
 
 from pyblue import VERSION, PYBLUE_DIR
@@ -10,6 +10,7 @@ from django.template.loader import get_template
 from .utils import collect_files, File
 import django
 
+logger = logging.getLogger(__name__)
 
 def join (*args):
     return os.path.abspath(os.path.join(*args))
@@ -56,7 +57,7 @@ def get_parser():
 class PyBlue(object):
     TEMPLATE_EXTS = ".html .md .rst".split()
 
-    def django_init(self):
+    def django_init(self, config="config.py"):
         "Initializes the django engine. The root must have been set already!"
         tmpl_dir = join(PYBLUE_DIR, "templates")
         settings.configure(
@@ -69,6 +70,7 @@ class PyBlue(object):
             TEMPLATE_STRING_IF_INVALID=" ??? ",
         )
         django.setup()
+        self.config = config
 
     def __init__(self, root):
 
@@ -87,10 +89,12 @@ class PyBlue(object):
         self.django_init()
 
         try:
-            data = imp.load_source('data', join(self.root, 'data.py'))
+            # Attempts to import a python configuration script that
+            # could contain more context related data.
+            data = imp.load_source('data', join(self.root, self.config))
         except Exception, exc:
             data = None
-            print "*** ignoring data.py import"
+            logger.info("config.py not found")
 
         def render(path):
             fobj = File(fname=path, root=self.root)

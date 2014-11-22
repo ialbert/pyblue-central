@@ -13,7 +13,9 @@ def lower(value):
 
 
 @register.simple_tag(takes_context=True)
-def link(context, word):
+def link(context, word, text=None):
+
+    start = context['f']
     files = context['files']
     items = filter(lambda x: re.search(word, x.fname, re.IGNORECASE), files)
     print items
@@ -28,7 +30,9 @@ def link(context, word):
 
         #link, value = f.url(start, text=text)
 
-    return '<a href="#">%s</a>' % f.fname
+    rpath = f.relpath(start=start)
+    text = text or f.fname
+    return '<a href="%s">%s</a>' % (rpath, text)
 
 
 #

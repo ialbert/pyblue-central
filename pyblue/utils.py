@@ -7,16 +7,15 @@ logger = logging.getLogger(__name__)
 # Meta labels that should be treated as lists
 LIST_TAGS = set("tags".split())
 
+
 class File(object):
     """
     Represents a file object within PyBlue.
     Each file object is visible in the template context.
     """
     MAX_SIZE_MB = 5
-
-    @property
-    def is_template(self):
-        return self.fname.endswith(".html")
+    IMAGE_EXTENSIONS = set(".png .jpg .gif .svg".split())
+    TEMPLATE_EXTENSIONS = set(".html .htm".split())
 
     def __init__(self, fname, root):
         self.root = root
@@ -24,21 +23,38 @@ class File(object):
 
         # Full path to the file.
         self.fpath = os.path.join(root, fname)
+
+        if not os.path.isfile(self.fpath):
+            logger.warning("file does not exist: %s" % fname)
+            return
+
+        # Fill in various file related stats.
         statinfo = os.stat(self.fpath)
         self.size = statinfo.st_size
 
-        t = time.gmtime(statinfo.st_mtime)
-        self.last_modified = time.strftime("%A, %B %d, %Y", t)
+        mt = time.gmtime(statinfo.st_mtime)
+        self.last_modified = time.strftime("%A, %B %d, %Y", mt)
+
+        ct = time.gmtime(statinfo.st_ctime)
+        self.created_date = time.strftime("%A, %B %d, %Y", ct)
 
         # Directory that contains the file.
         self.dname = os.path.dirname(self.fpath)
         self.ext = os.path.splitext(fname)[1]
 
-        name = self.nice_name(fname)
-        # This object stores the metadata.
-        self.meta = dict(fname=fname, name=name, sortkey="5")
+        # Treated specially when rendering galleries.
+        self.is_image = self.ext in self.IMAGE_EXTENSIONS
 
-        # Only parse the html files for metadata
+        # Only templates will be handled via Django.
+        self.is_template = self.ext in self.TEMPLATE_EXTENSIONS
+
+        # The nice name is used by default for name and title.
+        nice = self.nice_name(fname)
+
+        # This object stores the metadata.
+        self.meta = dict(fname=fname, name=nice, title=nice, sortkey="5")
+
+        # Only parse html files for metadata
         if self.is_template:
             self.meta.update(parse_meta(self.fpath))
 
@@ -51,10 +67,6 @@ class File(object):
             # add back extensions for images
             name = name + self.ext
         return name
-
-    @property
-    def is_image(self):
-        return self.ext in (".png", ".jpg", ".gif")
 
     def write(self, output, text):
         """
@@ -71,27 +83,26 @@ class File(object):
         with open(loc, "wb") as fp:
             fp.write(text)
 
-    def url(self, start=None, text=''):
+    def relpath(self, start=None):
         """
-        Relative path of the file from the start location
+        Relative path of this file from the start location
         """
         start = start or self
         rpath = os.path.relpath(self.root, start.dname)
         rpath = os.path.join(rpath, self.fname)
-        return rpath, text
+        return rpath
 
     def __getattr__(self, name):
         "Fallback context attributes"
-        value = self.meta.get(name)
+        value = self.meta.get(name, None)
         if not value:
-            print self.meta
-            print " *** context attribute '%s' not found" % name
+            logger.error(self.meta)
+            logger.error(" *** attribute '%s' for '%s' not found" % (name, fname))
             value = '?'
         return value
 
     def __repr__(self):
         return "File: %s (%s)" % (self.name, self.fname)
-
 
 def parse_meta(fname):
     """
@@ -136,6 +147,7 @@ def parse_meta(fname):
 
     return meta
 
+
 def collect_files(root):
     files = []
     for dirpath, dirnames, filenames in os.walk(root):
@@ -145,8 +157,10 @@ def collect_files(root):
             files.append(path)
     return files
 
+
 def test():
     pass
+
 
 if __name__ == '__main__':
     test()
