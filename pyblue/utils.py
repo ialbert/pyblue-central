@@ -1,6 +1,7 @@
 __author__ = 'ialbert'
 import os, logging, re, itertools, string, time
 from itertools import *
+import parser
 
 logger = logging.getLogger(__name__)
 
@@ -56,7 +57,11 @@ class File(object):
 
         # Only parse html files for metadata
         if self.is_template:
-            self.meta.update(parse_meta(self.fpath))
+            try:
+                lines = open(self.fpath).read().splitlines()[:100]
+                self.meta.update(parser.process(lines))
+            except Exception, exc:
+                logger.error(exc)
 
     def nice_name(self, fname):
         "Attempts to generate a nicer name from the filename"
@@ -104,49 +109,6 @@ class File(object):
     def __repr__(self):
         return "File: %s (%s)" % (self.name, self.fname)
 
-def parse_meta(fname):
-    """
-    Parses meta information from a file. Returns a dictionary.
-    """
-
-    # This will store the metadata.
-    meta = dict()
-
-    # Take just the first lines.
-    stream = islice(file(fname), 100)
-
-    # Strip the lines.
-    stream = map(string.strip, stream)
-
-    # Find lines that are Django comments.
-    stream = filter(lambda x: x.startswith('{#'), stream)
-
-    # Remove comment characters.
-    stream = map(lambda x: x.strip("{#"), stream)
-
-    stream = map(lambda x: x.strip("#}"), stream)
-
-    # Split each line by the semicolons.
-    stream = map(lambda x: x.split(';'), stream)
-
-    # Flatten nested lists
-    flat = [item for s in stream for item in s]
-
-    # Generate the metavalues into the dictionary.
-    for elems in flat:
-
-        # Split each element by the = sign.
-        parts = elems.split('=')
-        if len(parts) != 2:
-            continue
-        name, values = parts[0].strip(), parts[1].strip()
-        if name in LIST_TAGS:
-            meta[name] = " ".join(values).strip()
-        else:
-            meta[name] = values
-
-    return meta
-
 
 def collect_files(root):
     files = []
@@ -155,6 +117,7 @@ def collect_files(root):
             absp = os.path.join(dirpath, f)
             path = os.path.relpath(absp, root)
             files.append(path)
+    logger.info("%d files" % len(files))
     return files
 
 
