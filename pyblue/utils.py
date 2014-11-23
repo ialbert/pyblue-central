@@ -1,5 +1,5 @@
 __author__ = 'ialbert'
-import os, logging, re, itertools, string, time
+import os, logging, re, itertools, string, time, string, re
 from itertools import *
 import parser
 
@@ -59,7 +59,7 @@ class File(object):
         if self.is_template:
             try:
                 lines = open(self.fpath).read().splitlines()[:20]
-                self.meta.update(parser.process(lines, fname=self.fname))
+                self.meta.update(parse_lines(lines))
             except Exception, exc:
                 logger.error(exc)
 
@@ -110,6 +110,46 @@ class File(object):
         return "File: %s (%s)" % (self.name, self.fname)
 
 
+int_patt = re.compile("\d+")
+flt_patt = re.compile("\d+\.\d+")
+lst_patt = re.compile("\[(?P<body>[\S\s]+?)\]")
+
+
+def convert(text):
+    text = text.strip()
+    try:
+        if flt_patt.match(text):
+            return float(text)
+
+        if int_patt.match(text):
+            return int(text)
+
+        m = lst_patt.search(text)
+        if m:
+            vals = m.group('body').split(",")
+            vals = map(convert, vals)
+            return vals
+
+    except Exception, exc:
+        logger.error("conversion error of %s -> %s " % (text, exc))
+        return text
+    return text
+
+
+def parse_lines(lines):
+    "Attempts to parse out metadata from django comments"
+    meta = dict()
+    lines = map(string.strip, lines)
+    lines = filter(lambda x: x.startswith("{#"), lines)
+    p = re.compile(r'{# (?P<name>\w+)\s?=\s?(?P<value>[\S\s]+)#}')
+    for line in lines:
+        m = p.search(line)
+        if m:
+            name, value = m.group('name'), m.group('value')
+            meta[name] = convert(value)
+    return meta
+
+
 def collect_files(root):
     files = []
     for dirpath, dirnames, filenames in os.walk(root):
@@ -122,7 +162,36 @@ def collect_files(root):
 
 
 def test():
-    pass
+    # Initialize logging.
+    logging.basicConfig()
+
+    text = """
+    This is a test document. Only tags in comments will be parsed.
+
+    {# title = Page Title #}
+
+    {#  name = !@#$%^&* #}
+
+    {# x = AAA BBB CCC + some other 34 stuff #}
+
+    {# y = zum123 + 234 #}
+
+    {# ggg = 3.1 #}
+
+    This should raise a sytax error
+
+    {# abc = 100 #}
+
+    {# stuff = [ 100, 200, Hello World ] #}
+
+    {# value = [ 10, 20, hello world ] #}
+
+    <body>Done!</body>
+    """
+    lines = text.splitlines()
+    meta = parse_lines(lines)
+
+    print meta
 
 
 if __name__ == '__main__':
