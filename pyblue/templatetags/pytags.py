@@ -14,11 +14,9 @@ def lower(value):
 
 @register.simple_tag(takes_context=True)
 def link(context, word, text=None):
-
     start = context['f']
     files = context['files']
     items = filter(lambda x: re.search(word, x.fname, re.IGNORECASE), files)
-    print items
     if not items:
         f = files[0]
         logger.error("link '%s' does not match" % word)
@@ -27,8 +25,6 @@ def link(context, word, text=None):
         f = items[0]
         if len(items) > 1:
             logger.warn("link '%s' matches more than one item: %s" % (word, items))
-
-        #link, value = f.url(start, text=text)
 
     rpath = f.relpath(start=start)
     text = text or f.fname

@@ -58,8 +58,8 @@ class File(object):
         # Only parse html files for metadata
         if self.is_template:
             try:
-                lines = open(self.fpath).read().splitlines()[:100]
-                self.meta.update(parser.process(lines))
+                lines = open(self.fpath).read().splitlines()[:20]
+                self.meta.update(parser.process(lines, fname=self.fname))
             except Exception, exc:
                 logger.error(exc)
 
@@ -102,7 +102,7 @@ class File(object):
         value = self.meta.get(name, None)
         if not value:
             logger.error(self.meta)
-            logger.error(" *** attribute '%s' for '%s' not found" % (name, fname))
+            logger.error(" *** attribute '%s' for '%s' not found" % (name, self.fname))
             value = '?'
         return value
 

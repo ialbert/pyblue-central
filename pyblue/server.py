@@ -74,6 +74,9 @@ class PyBlue(object):
 
     def __init__(self, root):
 
+        # Initialize logging.
+        logging.basicConfig()
+
         # A set of strings that identifies the extension of the files
         # that should be processed using the Django templates.
         self.template_exts = set(self.TEMPLATE_EXTS)
@@ -97,6 +100,7 @@ class PyBlue(object):
             logger.info("config.py not found")
 
         def render(path):
+            logger.info(path)
             fobj = File(fname=path, root=self.root)
             if fobj.is_template:
                 params = dict(f=fobj, root=self.root, data=data, files=self.files)

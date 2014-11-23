@@ -7,3 +7,5 @@ build
 .DS*
 *.fasta
 /index.html
+parser.out
+parsetab.py
