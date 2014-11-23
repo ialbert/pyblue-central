@@ -46,7 +46,7 @@ def DjagnoCommentLexer():
         return t
 
     def t_NAME(t):
-        r'[\w!?+()$@*^#%&-/\`~\<>{}]+'
+        r'[\w!?+()$@*^#%&`~<>{}\.\-\/]+'
         return t
 
     def t_error(t):
@@ -85,6 +85,10 @@ def p_factor_factor(p):
     'factor : factor factor'
     p[0] = str(p[1]) + ' ' + str(p[2])
 
+def p_list_def(p):
+    'list : LPAREN elem RPAREN'
+    p[0] = p[2]
+
 def p_elem_one(p):
     'elem : factor'
     p[0] = [p[1]]
@@ -92,10 +96,6 @@ def p_elem_one(p):
 def p_elem_two(p):
     'elem : elem COMMA elem'
     p[0] = p[1] + p[3]
-
-def p_list_def(p):
-    'list : LPAREN elem RPAREN'
-    p[0] = p[2]
 
 def p_error(p):
     logger.error("syntax error in %s while parsing: %s" % (p.lexer.fname, p.lexer.lexdata))
@@ -107,7 +107,7 @@ def process(lines, fname="text"):
     lexer = DjagnoCommentLexer()
     lexer.fname=fname
     lexer.meta = {}
-    parser = yacc.yacc(write_tables=1, debug=1)
+    parser = yacc.yacc(write_tables=0, debug=0)
     for line in lines:
         parser.parse(line, lexer=lexer)
     return lexer.meta
@@ -118,7 +118,7 @@ def test():
 
     {# title = Page Title #}
 
-    {#  name = !@#$%^&*()-_+/,.~`{},<> #}
+    {#  name = !@#$%^&* #}
 
     {# x = AAA BBB CCC + some other 34 stuff #}
 
@@ -136,6 +136,8 @@ def test():
 
     <body>Done!</body>
     """
+
+    #text = "{# value = [ 10, 20, hello world ] #}"
 
     lines = text.splitlines()
     meta = process(lines)

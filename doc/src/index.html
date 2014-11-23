@@ -1,0 +1,67 @@
+<html>
+<body>
+
+<h2>Welcome to Pyblue!</h2>
+
+<p>
+
+    Start with a plain <code>index.html</code> file in a directory.
+
+<ol>
+    <li>
+        Launch <code>pyblue serve -f doc/src</code>
+    </li>
+    <li>
+        View your site by visiting <code>http:://localhost:8080</code>.
+    </li>
+</ol>
+
+The pages are rendered through the Django Template engine.
+Users get additional context for each of the pages.
+
+    <ul>
+        <li>
+            Writing: {% verbatim %}
+            <code>{{ p.last_modified }}</code>
+            {% endverbatim %}
+            will produce {{ p.last_modified }}
+        </li>
+    </ul>
+
+There are many other additional context variables, some can be specified in the file itself..
+</p>
+
+
+<p> To access more advanced features add the pyblue tag loader to the page.
+
+    {% verbatim %}
+    <code>{% load pytags %}</code>
+    {% endverbatim %}
+
+<p>
+
+<p>
+    {% load pytags %}
+
+    You can now make use of specific tags for example:
+
+    {% verbatim %}
+    <code>{% link "context" %}</code>
+    {% endverbatim %}
+
+    will produce the following: {% link "context" %}.
+</p>
+
+<p>
+    Why? The
+    {% verbatim %}
+    <code>{% link "context" %}</code>
+    {% endverbatim %}
+    command performs a regular expression search on all files in the directory and
+    once it finds a match it produces a link to it with the proper path.
+    This keeps links correct even after moving files!
+</p>
+
+</body>
+</html>
+

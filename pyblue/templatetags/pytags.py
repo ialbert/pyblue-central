@@ -14,21 +14,46 @@ def lower(value):
 
 @register.simple_tag(takes_context=True)
 def link(context, word, text=None):
-    start = context['f']
+    start = context['p']
     files = context['files']
     items = filter(lambda x: re.search(word, x.fname, re.IGNORECASE), files)
     if not items:
         f = files[0]
         logger.error("link '%s' does not match" % word)
-        return "Link pattern '%s' does not match!" % word
+        rpath, text = "#", "Link pattern '%s' does not match!" % word
     else:
         f = items[0]
         if len(items) > 1:
             logger.warn("link '%s' matches more than one item: %s" % (word, items))
-
-    rpath = f.relpath(start=start)
-    text = text or f.fname
+        rpath = f.relpath(start=start)
+    text = text or f.name
     return '<a href="%s">%s</a>' % (rpath, text)
+
+@register.simple_tag(takes_context=True)
+def load(context, word):
+    start = context['p']
+    files = context['files']
+    items = filter(lambda x: re.search(word, x.fname, re.IGNORECASE), files)
+    if not items:
+        f = files[0]
+        logger.error("pattern '%s' does not match" % word)
+        text = "include pattern '%s' does not match!" % word
+    else:
+        f = items[0]
+        if len(items) > 1:
+            logger.warn("link '%s' matches more than one item: %s" % (word, items))
+        text = open(f.fpath).read()
+    return text
+
+@register.simple_tag(takes_context=True)
+def code(context, word):
+    text = load(context=context, word=word)
+    patt = '''
+<pre>
+<code>
+%s
+</code></pre>'''
+    return patt % text
 
 
 #

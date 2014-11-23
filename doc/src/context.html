@@ -1,0 +1,83 @@
+{# title = More About Context #}
+{# value = 1234.5 #}
+{# stuff = [ 100, 200, Hello World ] #}
+{% load pytags %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{{ p.title }}</title>
+</head>
+<body>
+
+<h2>{{ p.title }}</h2>
+
+<p>
+    There are two ways to get context into each page. The first is via template comments.
+</p>
+
+<p>
+    Writing
+    {% verbatim %}
+    <code>{# title = More About Context #}</code>
+    {% endverbatim %}
+    at the top of the HTML page makes Django ignore it.
+
+<p>
+    PyBlue will extract
+    this content and will make it available in the page under the name
+    {% verbatim %}
+    <code>{{ p.title }}</code>
+    {% endverbatim %}
+</p>
+
+<p>
+    More data may be added, one on each line:
+    {% verbatim %}
+    <pre>
+    {# title = More About Context #}
+    {# value = 1234.5 #}
+    {# stuff = [ 100, 200, Hello World ] #}
+    </pre>
+    {% endverbatim %}
+
+    Within the page his turns into python list: {% verbatim %}
+    <code>{{ p.stuff }}</code>
+    {% endverbatim %} that would list {{p.stuff}}. This object can also be looped over with Django :
+
+    {% verbatim %}
+    <pre>
+    &lt;ol&gt;
+    {% for elem in p.stuff %}
+        &lt;li&gt;{{ elem }}&lt;/li&gt;
+    {% endfor %}
+    &lt;/ol&gt;
+    </pre>
+    {% endverbatim %}
+</p>
+
+<p>
+    To produce
+    <ol>
+    {% for elem in p.stuff %}
+        <li>{{ elem }}</li>
+    {% endfor %}
+</ol>
+</p>
+
+<p>
+    The second method of getting context into a page is a python module named <code>context.py</code>
+    placed in the directory root. This may contain
+    any python construct. The content of this module will be visible under
+    {% verbatim %}<code>{{ p.context }}</code>{% endverbatim %} variable name.
+
+</p>
+<p>
+    Remember to {% verbatim %}
+    <code>{% load pytags %}</code>
+    {% endverbatim %}
+</p>
+{% code "context.py" %}
+
+</body>
+</html>

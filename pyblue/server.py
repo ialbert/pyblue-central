@@ -93,17 +93,17 @@ class PyBlue(object):
 
         try:
             # Attempts to import a python module as a context
-            data = imp.load_source('data', join(self.root, context))
+            ctx = imp.load_source('data', join(self.root, context))
         except Exception, exc:
-            data = None
+            ctx = None
             logger.info("unable to import context module: %s" % context)
 
         def render(path):
             logger.info(path)
-            fobj = File(fname=path, root=self.root)
-            if fobj.is_template:
-                params = dict(f=fobj, root=self.root, data=data, files=self.files)
-                templ = get_template(fobj.fname)
+            pobj = File(fname=path, root=self.root)
+            if pobj.is_template:
+                params = dict(p=pobj, root=self.root, context=ctx, files=self.files)
+                templ = get_template(pobj.fname)
                 cont = Context(params)
                 return templ.render(cont)
             else:
