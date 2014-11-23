@@ -2,10 +2,13 @@
 <body>
 
 <h2>Welcome to Pyblue!</h2>
-
+<p>
+    A simple static site generator. No configuration required. It just works on any existing site as well.
+</p>
 <p>
 
-    Start with a plain <code>index.html</code> file in a directory.
+   This file is located in <code><a href="https://github.com/ialbert/pyblue/blob/2.0/doc/src/index.html">doc/src/index.html</a></code>
+    of the <a href="https://github.com/ialbert/pyblue">PyBlue distribution</a>.
 
 <ol>
     <li>
@@ -17,22 +20,32 @@
 </ol>
 
 The pages are rendered through the Django Template engine.
-Users get additional context for each of the pages.
+Users automatically get additional context for each of the pages. Examples:
 
     <ul>
         <li>
-            Writing: {% verbatim %}
-            <code>{{ p.last_modified }}</code>
-            {% endverbatim %}
-            will produce {{ p.last_modified }}
+            Writing: {% verbatim %}<code>{{ p.name }}</code>{% endverbatim %} will produce: {{ p.name }}
+        </li>
+        <li>
+            Writing: {% verbatim %} <code>{{ p.created_date }}</code> {% endverbatim %} will produce: {{ p.created_date }}
+        </li>
+        <li>
+            Writing: {% verbatim %} <code>{{ p.last_modified }}</code> {% endverbatim %} will produce: {{ p.last_modified }}
+        </li>
+        <li>
+            Writing: {% verbatim %} <code>{{ p.size|filesizeformat }}</code> {% endverbatim %} will produce: {{ p.size|filesizeformat }}
         </li>
     </ul>
-
-There are many other additional context variables, some can be specified in the file itself..
+<p>
+    Note how in this last case we also made use of the <code>filesizeformat</code> builtin filter from Django.
+</p>
+<p>
+There are many other additional context variables. In addition even more
+data can be specified in the file itself or in an external python module.
 </p>
 
 
-<p> To access more advanced features add the pyblue tag loader to the page.
+<p> To access more advanced features users must add the pyblue tag loader into each page:
 
     {% verbatim %}
     <code>{% load pytags %}</code>
@@ -46,20 +59,26 @@ There are many other additional context variables, some can be specified in the 
     You can now make use of specific tags for example:
 
     {% verbatim %}
-    <code>{% link "context" %}</code>
+    <code>{% link "context.html" %}</code>
     {% endverbatim %}
 
-    will produce the following: {% link "context" %}.
+    will produce the following: {% link "context.html" %}.
 </p>
 
 <p>
     Why? The
     {% verbatim %}
-    <code>{% link "context" %}</code>
+    <code>{% link "context.html" %}</code>
     {% endverbatim %}
     command performs a regular expression search on all files in the directory and
     once it finds a match it produces a link to it with the proper path.
-    This keeps links correct even after moving files!
+    This keeps links correct even after moving files! Note how in this
+    case the file is located in <code>info/context.html</code>
+</p>
+
+<p>
+    In PyBlue just about every string is used as a regular expression. All a user needs
+    to specify is the shortest unambiguous part of the file.
 </p>
 
 </body>
