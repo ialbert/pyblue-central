@@ -1,6 +1,9 @@
 from django import template
 from markdown import markdown
 import re, logging
+from pygments import highlight
+from pygments.lexers import guess_lexer, PythonLexer
+from pygments.formatters import HtmlFormatter
 
 logger = logging.getLogger(__name__)
 
@@ -14,7 +17,7 @@ def lower(value):
 
 @register.simple_tag(takes_context=True)
 def link(context, word, text=None):
-    start = context['p']
+    start = context['page']
     files = context['files']
     items = filter(lambda x: re.search(word, x.fname, re.IGNORECASE), files)
     if not items:
@@ -31,7 +34,7 @@ def link(context, word, text=None):
 
 @register.simple_tag(takes_context=True)
 def load(context, word):
-    start = context['p']
+    start = context['page']
     files = context['files']
     items = filter(lambda x: re.search(word, x.fname, re.IGNORECASE), files)
     if not items:
@@ -48,13 +51,17 @@ def load(context, word):
 @register.simple_tag(takes_context=True)
 def code(context, word):
     text = load(context=context, word=word)
-    patt = '''
-<pre>
-<code>
-%s
-</code></pre>'''
-    return patt % text
+    try:
+        lexer = guess_lexer(text)
+    except Exception, exc:
+        lexer = PythonLexer()
+    html = highlight(text, lexer, HtmlFormatter())
+    return html
 
+
+@register.simple_tag()
+def pygments_css():
+    return HtmlFormatter().get_style_defs('.highlight')
 
 #
 # Based on http://jamie.curle.io/blog/minimal-markdown-template-tag-django/

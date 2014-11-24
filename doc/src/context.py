@@ -4,3 +4,10 @@
 #
 
 NUMBERS = range(5)
+
+# It may contain any valid python construct.
+
+def say_hello(name):
+    return "Hello %s" % name
+
+greeting = say_hello("World!")

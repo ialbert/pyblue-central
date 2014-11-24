@@ -1,13 +1,17 @@
 <html>
 <body>
 
+{% load pytags %}
+
 <h2>Welcome to Pyblue!</h2>
+
 <p>
     A simple static site generator. No configuration required. It just works on any existing site as well.
 </p>
+
 <p>
 
-   This file is located in <code><a href="https://github.com/ialbert/pyblue/blob/2.0/doc/src/index.html">doc/src/index.html</a></code>
+    This file is located in <code><a href="https://github.com/ialbert/pyblue/blob/2.0/doc/src/index.html">doc/src/index.html</a></code>
     of the <a href="https://github.com/ialbert/pyblue">PyBlue distribution</a>.
 
 <ol>
@@ -19,33 +23,46 @@
     </li>
 </ol>
 
-The pages are rendered through the Django Template engine.
-Users automatically get additional context for each of the pages. Examples:
-
-    <ul>
-        <li>
-            Writing: {% verbatim %}<code>{{ p.name }}</code>{% endverbatim %} will produce: {{ p.name }}
-        </li>
-        <li>
-            Writing: {% verbatim %} <code>{{ p.created_date }}</code> {% endverbatim %} will produce: {{ p.created_date }}
-        </li>
-        <li>
-            Writing: {% verbatim %} <code>{{ p.last_modified }}</code> {% endverbatim %} will produce: {{ p.last_modified }}
-        </li>
-        <li>
-            Writing: {% verbatim %} <code>{{ p.size|filesizeformat }}</code> {% endverbatim %} will produce: {{ p.size|filesizeformat }}
-        </li>
-    </ul>
 <p>
-    Note how in this last case we also made use of the <code>filesizeformat</code> builtin filter from Django.
-</p>
-<p>
-There are many other additional context variables. In addition even more
-data can be specified in the file itself or in an external python module.
+    The pages are rendered through the Django Template engine.
+    Users automatically get additional context for each of the pages as
+    variables that exists.
 </p>
 
+<p>
+    For example the {% verbatim %}<code>{{ page }}</code>{% endverbatim %} variable is present:
+</p>
 
-<p> To access more advanced features users must add the pyblue tag loader into each page:
+<ul>
+    <li>
+        Writing: {% verbatim %}<code>{{ page.name }}</code>{% endverbatim %} will produce: {{ page.name }}
+    </li>
+    <li>
+        Writing: {% verbatim %} <code>{{ page.created_date }}</code> {% endverbatim %} will produce:
+        {{ page.created_date }}
+    </li>
+    <li>
+        Writing: {% verbatim %} <code>{{ page.last_modified }}</code> {% endverbatim %} will produce:
+        {{ page.last_modified }}
+    </li>
+    <li>
+        Writing: {% verbatim %} <code>{{ page.size|filesizeformat }}</code> {% endverbatim %}
+        will produce: {{ page.size|filesizeformat }}
+    </li>
+</ul>
+<p>
+    Note how in this last case we also made use of the
+    <code>filesizeformat</code> builtin filter from Django.
+</p>
+
+<p>
+    Users may add additional context variables. See the {% link "context.html" "More About Context" %} page.
+</p>
+
+
+<p>
+
+    To access more advanced features users must add the pyblue tag loader into each page:
 
     {% verbatim %}
     <code>{% load pytags %}</code>
@@ -54,7 +71,7 @@ data can be specified in the file itself or in an external python module.
 <p>
 
 <p>
-    {% load pytags %}
+
 
     You can now make use of specific tags for example:
 

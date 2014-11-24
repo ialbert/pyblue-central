@@ -72,10 +72,13 @@ class PyBlue(object):
         django.setup()
 
 
-    def __init__(self, root, context="context.py"):
+    def __init__(self, root, context="context.py", auto_refresh=True):
 
         # Initialize logging.
         logging.basicConfig()
+
+        # Rescan all subdirectories for changes on each request.
+        self.auto_refresh = auto_refresh
 
         # A set of strings that identifies the extension of the files
         # that should be processed using the Django templates.
@@ -93,17 +96,26 @@ class PyBlue(object):
 
         try:
             # Attempts to import a python module as a context
-            ctx = imp.load_source('data', join(self.root, context))
+            ctx = imp.load_source('ctx', join(self.root, context))
         except Exception, exc:
             ctx = None
             logger.info("unable to import context module: %s" % context)
 
+        print ctx.greeting
+
         def render(path):
+
+            # This needs to rerun to pick up
+            # new files that migh have been added in the meantime.
+            # On the other hand might slow down large sites.
+            if self.auto_refresh:
+                self.set_root(self.root)
+
             logger.info(path)
-            pobj = File(fname=path, root=self.root)
-            if pobj.is_template:
-                params = dict(p=pobj, root=self.root, context=ctx, files=self.files)
-                templ = get_template(pobj.fname)
+            page = File(fname=path, root=self.root)
+            if page.is_template:
+                params = dict(page=page, root=self.root, context=ctx, files=self.files)
+                templ = get_template(page.fname)
                 cont = Context(params)
                 return templ.render(cont)
             else:

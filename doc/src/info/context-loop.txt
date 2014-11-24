@@ -1,0 +1,5 @@
+<ol>
+    {% for elem in p.stuff %}
+        <li>{{ elem }}</li>
+    {% endfor %}
+</ol>

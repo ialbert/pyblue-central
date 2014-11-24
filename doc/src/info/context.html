@@ -7,11 +7,14 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>{{ p.title }}</title>
+    <title>{{ page.title }}</title>
+    <style media="screen" type="text/css">
+        {% pygments_css %}
+    </style>
 </head>
 <body>
 
-<h2>{{ p.title }}</h2>
+<h2>{{ page.title }}</h2>
 
 <p>
     There are two ways to get context into each page. The first is via template comments.
@@ -28,39 +31,27 @@
     PyBlue will extract
     this content and will make it available in the page under the name
     {% verbatim %}
-    <code>{{ p.title }}</code>
+    <code>{{ page.title }}</code>
     {% endverbatim %}
 </p>
 
 <p>
     More data may be added, one on each line:
-    {% verbatim %}
-    <pre>
-    {# title = More About Context #}
-    {# value = 1234.5 #}
-    {# stuff = [ 100, 200, Hello World ] #}
-    </pre>
-    {% endverbatim %}
+
+    {% code "django-comments" %}
 
     Within the page his turns into python list: {% verbatim %}
-    <code>{{ p.stuff }}</code>
-    {% endverbatim %} that would list {{p.stuff}}. This object can also be looped over with Django :
+    <code>{{ page.stuff }}</code>
+    {% endverbatim %} that would list {{page.stuff}}. This object can also be looped over with Django :
 
-    {% verbatim %}
-    <pre>
-    &lt;ol&gt;
-    {% for elem in p.stuff %}
-        &lt;li&gt;{{ elem }}&lt;/li&gt;
-    {% endfor %}
-    &lt;/ol&gt;
-    </pre>
-    {% endverbatim %}
+    {% code "context-loop" %}
+
 </p>
 
 <p>
     To produce
     <ol>
-    {% for elem in p.stuff %}
+    {% for elem in page.stuff %}
         <li>{{ elem }}</li>
     {% endfor %}
 </ol>
@@ -69,8 +60,8 @@
 <p>
     The second method of getting context into a page is a python module named <code>context.py</code>
     placed in the directory root. This may contain
-    any python construct. The content of this module will be visible under
-    {% verbatim %}<code>{{ p.context }}</code>{% endverbatim %} variable name.
+    any python construct. The content of this module will be visible under the parameter data
+    {% verbatim %}<code>{{ context }}</code>{% endverbatim %} variable name.
 
 </p>
 <p>
@@ -80,6 +71,10 @@
 </p>
 {% code "context.py" %}
 
+<p>
+    We can now access the contenxt of contex.py like
+    so {% verbatim %}<code>{{ context.greeting }}</code>{% endverbatim %} to produce: {{ context.greeting }}
+</p>
 <p>Go back to: {% link "index.html" "Home Page" %}.</p>
 </body>
 </html>

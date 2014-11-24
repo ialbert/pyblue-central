@@ -22,6 +22,7 @@ setup(name='pyblue',
       long_description=file("README.md").read(),
       keywords="",
       license="MIT",
+
       classifiers=[
           'Development Status :: 4 - Beta',
           'Environment :: Console',
@@ -36,6 +37,14 @@ setup(name='pyblue',
           'Programming Language :: Python :: 2.6',
           'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
           'Topic :: Scientific/Engineering :: Bio-Informatics',
+      ],
+
+      install_requires=[
+          "django >= 1.7",
+          "argparse",
+          "markdown",
+          "waitress",
+          "pygments",
       ],
 )
 
