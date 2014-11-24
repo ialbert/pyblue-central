@@ -150,17 +150,6 @@ def parse_lines(lines):
     return meta
 
 
-def collect_files(root):
-    files = []
-    for dirpath, dirnames, filenames in os.walk(root):
-        for f in sorted(filenames):
-            absp = os.path.join(dirpath, f)
-            path = os.path.relpath(absp, root)
-            files.append(path)
-    logger.info("%d files" % len(files))
-    return files
-
-
 def test():
     # Initialize logging.
     logging.basicConfig()

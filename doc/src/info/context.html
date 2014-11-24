@@ -1,16 +1,15 @@
 {# title = More About Context #}
-{# value = 1234.5 #}
-{# stuff = [ 100, 200, Hello World ] #}
+{# foo = 1234.5 #}
+{# bar = [ 100, 200, Hello World ] #}
 
 {% load pytags %}
+
 <!DOCTYPE html>
 <html>
 <head lang="en">
     <meta charset="UTF-8">
     <title>{{ page.title }}</title>
-    <style media="screen" type="text/css">
-        {% pygments_css %}
-    </style>
+    {% pygments_css %}
 </head>
 <body>
 
@@ -25,24 +24,22 @@
     {% verbatim %}
     <code>{# title = More About Context #}</code>
     {% endverbatim %}
-    at the top of the HTML page makes Django ignore it.
+    at the top of the HTML page will create the variable <code>title</code> that
+    can be used in the page as
+    {% verbatim %}<code>{{ page.title }}</code>{% endverbatim %} to produce: {{page.title}}
 
 <p>
-    PyBlue will extract
-    this content and will make it available in the page under the name
-    {% verbatim %}
-    <code>{{ page.title }}</code>
-    {% endverbatim %}
-</p>
-
-<p>
-    More data may be added, one on each line:
+    To add more variables list them one on each line:
 
     {% code "django-comments" %}
 
-    Within the page his turns into python list: {% verbatim %}
-    <code>{{ page.stuff }}</code>
-    {% endverbatim %} that would list {{page.stuff}}. This object can also be looped over with Django :
+    Note that in the last example for <code>bar</code> gets turned into python list accessible as
+    {% verbatim %}<code>{{ page.bar }}</code> {% endverbatim %}
+    to produce {{page.bar}}.
+</p>
+
+<p>
+    The {% verbatim %}<code>{{ page.bar }}</code> {% endverbatim %} object can also be looped over with Django :
 
     {% code "context-loop" %}
 
@@ -51,7 +48,7 @@
 <p>
     To produce
     <ol>
-    {% for elem in page.stuff %}
+    {% for elem in page.bar %}
         <li>{{ elem }}</li>
     {% endfor %}
 </ol>
@@ -60,15 +57,18 @@
 <p>
     The second method of getting context into a page is a python module named <code>context.py</code>
     placed in the directory root. This may contain
-    any python construct. The content of this module will be visible under the parameter data
+    any python construct.
+</p>
+<p>
+
+    The content of this module will be visible under the parameter data
     {% verbatim %}<code>{{ context }}</code>{% endverbatim %} variable name.
 
 </p>
 <p>
-    Remember to {% verbatim %}
-    <code>{% load pytags %}</code>
-    {% endverbatim %}
+    Remember to {% verbatim %}<code>{% load pytags %}</code>{% endverbatim %} as well!
 </p>
+
 {% code "context.py" %}
 
 <p>

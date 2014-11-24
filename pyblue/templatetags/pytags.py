@@ -34,11 +34,9 @@ def link(context, word, text=None):
 
 @register.simple_tag(takes_context=True)
 def load(context, word):
-    start = context['page']
     files = context['files']
     items = filter(lambda x: re.search(word, x.fname, re.IGNORECASE), files)
     if not items:
-        f = files[0]
         logger.error("pattern '%s' does not match" % word)
         text = "include pattern '%s' does not match!" % word
     else:
@@ -61,7 +59,12 @@ def code(context, word):
 
 @register.simple_tag()
 def pygments_css():
-    return HtmlFormatter().get_style_defs('.highlight')
+    css= """
+    <style media="screen" type="text/css">
+        %s
+    </style>
+    """ % HtmlFormatter().get_style_defs('.highlight')
+    return css
 
 #
 # Based on http://jamie.curle.io/blog/minimal-markdown-template-tag-django/

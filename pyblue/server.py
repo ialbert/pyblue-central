@@ -7,7 +7,7 @@ DESCR = "PyBlue %s, static site generator" % VERSION
 from django.conf import settings
 from django.template import Context, Template
 from django.template.loader import get_template
-from .utils import collect_files, File
+from .utils import File
 import django
 
 logger = logging.getLogger(__name__)
@@ -56,6 +56,7 @@ def get_parser():
 
 class PyBlue(object):
     TEMPLATE_EXTS = ".html .md .rst".split()
+    IGNORE_EXTS = ".pyc".split()
 
     def django_init(self, context="context.py"):
         "Initializes the django engine. The root must have been set already!"
@@ -83,6 +84,7 @@ class PyBlue(object):
         # A set of strings that identifies the extension of the files
         # that should be processed using the Django templates.
         self.template_exts = set(self.TEMPLATE_EXTS)
+        self.ignore_exts = set(self.IGNORE_EXTS)
 
         # The folder where the files to serve are located.
         # Do not set this attribute directly, use set_root() method instead.
@@ -100,8 +102,6 @@ class PyBlue(object):
         except Exception, exc:
             ctx = None
             logger.info("unable to import context module: %s" % context)
-
-        print ctx.greeting
 
         def render(path):
 
@@ -134,7 +134,21 @@ class PyBlue(object):
         self.root = os.path.abspath(path)
 
         # Reads all files in the root.
-        self.files = [File(fname=path, root=self.root) for path in collect_files(self.root)]
+        self.files = [File(fname=path, root=self.root) for path in self.collect_files()]
+
+    def collect_files(self):
+        files = []
+        for dirpath, dirnames, filenames in os.walk(self.root):
+            for name in sorted(filenames):
+                start, ext = os.path.splitext(name)
+                if ext in self.ignore_exts:
+                    continue
+                absp = os.path.join(dirpath, name)
+                path = os.path.relpath(absp, self.root)
+                files.append(path)
+        logger.info("%d files" % len(files))
+        return files
+
 
     def serve(self, host='0.0.0.0', port=8080):
         "Launch the WSGI app development web server"

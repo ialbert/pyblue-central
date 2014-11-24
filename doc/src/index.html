@@ -1,7 +1,10 @@
-<html>
-<body>
-
 {% load pytags %}
+
+<html>
+<head>
+    {% pygments_css %}
+</head>
+<body>
 
 <h2>Welcome to Pyblue!</h2>
 
@@ -10,10 +13,8 @@
 </p>
 
 <p>
-
     This file is located in <code><a href="https://github.com/ialbert/pyblue/blob/2.0/doc/src/index.html">doc/src/index.html</a></code>
     of the <a href="https://github.com/ialbert/pyblue">PyBlue distribution</a>.
-
 <ol>
     <li>
         Launch <code>pyblue serve -f doc/src</code>
@@ -22,6 +23,8 @@
         View your site by visiting <code>http:://localhost:8080</code>.
     </li>
 </ol>
+
+<h3>Context</h3>
 
 <p>
     The pages are rendered through the Django Template engine.
@@ -38,10 +41,6 @@
         Writing: {% verbatim %}<code>{{ page.name }}</code>{% endverbatim %} will produce: {{ page.name }}
     </li>
     <li>
-        Writing: {% verbatim %} <code>{{ page.created_date }}</code> {% endverbatim %} will produce:
-        {{ page.created_date }}
-    </li>
-    <li>
         Writing: {% verbatim %} <code>{{ page.last_modified }}</code> {% endverbatim %} will produce:
         {{ page.last_modified }}
     </li>
@@ -56,9 +55,10 @@
 </p>
 
 <p>
-    Users may add additional context variables. See the {% link "context.html" "More About Context" %} page.
+    Users may add more information even load a python module into the page. See the {% link "context.html" "More About Context" %}.
 </p>
 
+<h3>Links</h3>
 
 <p>
 
@@ -71,22 +71,16 @@
 <p>
 
 <p>
-
-
     You can now make use of specific tags for example:
 
-    {% verbatim %}
-    <code>{% link "context.html" %}</code>
-    {% endverbatim %}
+    {% verbatim %}<code>{% link "context.html" %}</code>{% endverbatim %}
 
     will produce the following: {% link "context.html" %}.
 </p>
 
 <p>
     Why? The
-    {% verbatim %}
-    <code>{% link "context.html" %}</code>
-    {% endverbatim %}
+    {% verbatim %}<code>{% link "context.html" %}</code>{% endverbatim %}
     command performs a regular expression search on all files in the directory and
     once it finds a match it produces a link to it with the proper path.
     This keeps links correct even after moving files! Note how in this
@@ -98,6 +92,11 @@
     to specify is the shortest unambiguous part of the file.
 </p>
 
+<h3>Include</h3>
+
+To include a file list it as {% verbatim %}<code>{% code "context.py" %}</code>{% endverbatim %}
+
+{% code "context.py" %}
 </body>
 </html>
 
