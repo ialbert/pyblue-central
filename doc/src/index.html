@@ -9,7 +9,13 @@
 <h2>Welcome to Pyblue!</h2>
 
 <p>
-    A simple static site generator. No configuration required. It just works on any existing site as well.
+    A simple static site generator. Zero configuration.
+    Point it to any existing site and it will just work.
+</p>
+
+<p>
+    PyBlue allows the reuse of data and visuals (header/footer) across many pages and
+    generates static sites from dynamic templates.
 </p>
 
 <p>
@@ -17,10 +23,16 @@
     of the <a href="https://github.com/ialbert/pyblue">PyBlue distribution</a>.
 <ol>
     <li>
-        Launch <code>pyblue serve -f doc/src</code>
+        Launch pyblue to serve a directory <code>pyblue serve -f doc/src</code>
     </li>
     <li>
         View your site by visiting <code>http:://localhost:8080</code>.
+    </li>
+     <li>
+        Edit your pages and make changes. Reload to page to see the effect.
+    </li>
+    <li>
+        Finally, generate static output: <code>pyblue gen -f doc/src -o doc/html</code>
     </li>
 </ol>
 
