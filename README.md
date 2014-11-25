@@ -25,8 +25,9 @@ the [PyBlue at PyPI](https://pypi.python.org/pypi/pyblue/) site.
 Documentation
 -------------
 
-* PyBlue ready [source format][docs-src]
-* PyBlue generated [html format][docs-html]
+The [PyBlue documentation][docs-html] was generated with PyBlue itself.
+
+You can also browse the [help in source format][docs-src] for examples.
 
 Licensing
 ---------
@@ -36,7 +37,7 @@ Licensing
 * PyBlue uses the [MIT license][license].
 
 [docs-src]: https://github.com/ialbert/pyblue/tree/master/docs/src/
-[docs-html]: https://github.com/ialbert/pyblue/tree/master/docs/html/index.html
+[docs-html]: http://ialbert.github.io/pyblue/
 [django]: https://www.djangoproject.com/
 [markdown]: http://en.wikipedia.org/wiki/Markdown
 [pygreen]: https://github.com/nicolas-van/pygreen
