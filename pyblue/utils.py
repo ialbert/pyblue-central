@@ -5,10 +5,6 @@ import parser
 
 logger = logging.getLogger(__name__)
 
-# Meta labels that should be treated as lists
-LIST_TAGS = set("tags".split())
-
-
 class File(object):
     """
     Represents a file object within PyBlue.
