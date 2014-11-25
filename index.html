@@ -2,6 +2,10 @@
 <html>
 <head>
     
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    
+    
     <style media="screen" type="text/css">
         .highlight .hll { background-color: #ffffcc }
 .highlight  { background: #f8f8f8; }
@@ -70,7 +74,7 @@
     
 </head>
 <body>
-
+<div class="container">
 <h1>Welcome to Pyblue</h1>
 
 <p>A simple static site generator. Zero configuration. Works with any existing site.</p>
@@ -108,7 +112,7 @@ variables that exists.</p>
 <li>Writing:  <code>{{ page.last_modified }}</code> 
 will produce: Tuesday, November 25, 2014</li>
 <li>Writing:  <code>{{ page.size|filesizeformat }}</code> 
-will produce: 3.6 KB</li>
+will produce: 3.8 KB</li>
 </ul>
 
 <p>Note how in this last case we also made use of the code>filesizeformat</code> builtin filter from Django.</p>
@@ -183,7 +187,10 @@ to specify is the shortest unambiguous part of the file.</p>
 
 <h2>Bootstrap</h2>
 
-<p>There are helper methods for bootstrap</p>
+<p>There are helper methods for [Bootstrap][boostrap].</p>
+
+<p>For example <code>{% boostrap_cdn %}</code> will include
+the CSS and Javascript files used with Boostrap.</p>
 
 <h2>Licensing</h2>
 
@@ -193,7 +200,7 @@ to specify is the shortest unambiguous part of the file.</p>
 <li>PyBlue uses the <a href="https://github.com/ialbert/pyblue/blob/master/LICENSE.txt">MIT license</a>.</li>
 </ul>
 
-
+</div>
 </body>
 </html>
 
