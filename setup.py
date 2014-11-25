@@ -43,9 +43,10 @@ setup(name='pyblue',
       install_requires=[
           "django >= 1.7",
           "bottle",
-          "markdown",
+          "markdown2",
           "waitress",
           "pygments",
+          "bleach",
       ],
 )
 

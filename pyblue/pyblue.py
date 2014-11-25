@@ -232,7 +232,7 @@ def convert_text(text):
         if m:
             vals = m.group('body').split(",")
             vals = map(convert_text, vals)
-            return vals
+            return list(vals)
     except Exception as exc:
         logger.error("conversion error of %s -> %s " % (text, exc))
         return text

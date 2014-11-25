@@ -1,7 +1,7 @@
 from __future__ import print_function, unicode_literals, absolute_import, division
 from django import template
-from markdown import markdown
-import re, logging
+from markdown2 import markdown
+import re, logging, bleach
 from pygments import highlight
 from pygments.lexers import guess_lexer, PythonLexer
 from pygments.formatters import HtmlFormatter
@@ -30,7 +30,7 @@ def link(context, word, text=None):
         if len(items) > 1:
             logger.warn("link '%s' matches more than one item: %s" % (word, items))
         rpath = f.relpath(start=start)
-    text = text or f.name
+    text = text or f.title
     return '<a href="%s">%s</a>' % (rpath, text)
 
 @register.simple_tag(takes_context=True)
@@ -77,8 +77,9 @@ class MarkDownNode(template.Node):
 
     def render(self, context):
         text = self.nodelist.render(context)
-        return markdown(text, safe_mode=False, smart_emphasis=True)
-
+        text = markdown(text, safe_mode=False, extras=["code-friendly", "tables"])
+        text = bleach.linkify(text, skip_pre=True)
+        return text
 
 @register.tag('markdown')
 def markdown_tag(parser, token):

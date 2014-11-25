@@ -1,0 +1,16 @@
+{% load pytags %}
+<html>
+<head>
+    {% pygments_css %}
+</head>
+<body>
+
+{% markdown %}
+
+{% include "README.md" %}
+
+{% endmarkdown %}
+
+</body>
+</html>
+
