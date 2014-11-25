@@ -1,10 +1,11 @@
 {% load pytags %}
 <html>
 <head>
+    {% bootstrap_cdn %}
     {% pygments_css %}
 </head>
 <body>
-
+<div class="container">
 {% markdown %}
 
 Welcome to Pyblue
@@ -93,7 +94,10 @@ To include syntax highlighted code write {% verbatim %}<code>{% code "context.py
 Bootstrap
 ---------
 
-There are helper methods for bootstrap
+There are helper methods for [Bootstrap][boostrap].
+
+For example {% verbatim %}<code>{% boostrap_cdn %}</code>{% endverbatim %} will include
+the CSS and Javascript files used with Boostrap.
 
 Licensing
 ---------
@@ -106,9 +110,10 @@ Licensing
 [markdown]: http://en.wikipedia.org/wiki/Markdown
 [pygreen]: https://github.com/nicolas-van/pygreen
 [license]: https://github.com/ialbert/pyblue/blob/master/LICENSE.txt
+[bootstrap]: http://getbootstrap.com/
 
 {% endmarkdown %}
-
+</div>
 </body>
 </html>
 

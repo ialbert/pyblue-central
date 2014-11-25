@@ -69,6 +69,14 @@ def pygments_css():
     """ % HtmlFormatter().get_style_defs('.highlight')
     return css
 
+@register.simple_tag()
+def bootstrap_cdn():
+    text = """
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    """
+    return text
+
 #
 # Based on http://jamie.curle.io/blog/minimal-markdown-template-tag-django/
 #

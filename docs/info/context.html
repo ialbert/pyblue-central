@@ -10,9 +10,12 @@
     <meta charset="UTF-8">
     <title>{{ page.title }}</title>
     {% pygments_css %}
+       {% bootstrap_cdn %}
 </head>
-<body>
 
+
+<body>
+<div class="container">
 {% markdown %}
 
 # {{ page.title }}
@@ -58,6 +61,6 @@ so {% verbatim %}<code>{{ context.greeting }}</code>{% endverbatim %} to produce
 Go back to: {% link "index.html" "Home Page" %}.
 
 {% endmarkdown %}
-
+</div>
 </body>
 </html>
