@@ -20,7 +20,7 @@ the [PyBlue at PyPI](https://pypi.python.org/pypi/pyblue/) site.
 * Launch pyblue to serve a directory <code>pyblue serve -r docs/src</code>.
 * View your site by visiting <code>http:://localhost:8080</code>.
 * Edit your pages and make changes. Reload to page to see the effect.
-* Finally, generate static output: <code>pyblue make -r docs/src -o docs/html</code>
+* Finally, generate static output: <code>pyblue gen -r doc/src -o doc/html</code>
 
 Documentation
 -------------

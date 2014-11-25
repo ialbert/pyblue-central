@@ -1,10 +1,11 @@
 from __future__ import print_function, unicode_literals, absolute_import, division
 from django import template
 from markdown2 import markdown
-import re, logging, bleach
+import re, logging
 from pygments import highlight
 from pygments.lexers import guess_lexer, PythonLexer
 from pygments.formatters import HtmlFormatter
+# import bleach
 
 logger = logging.getLogger(__name__)
 
@@ -78,7 +79,7 @@ class MarkDownNode(template.Node):
     def render(self, context):
         text = self.nodelist.render(context)
         text = markdown(text, safe_mode=False, extras=["code-friendly", "tables"])
-        text = bleach.linkify(text, skip_pre=True)
+        #text = bleach.linkify(text, skip_pre=True)
         return text
 
 @register.tag('markdown')
