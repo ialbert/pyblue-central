@@ -58,12 +58,9 @@ Links
 -----
 
 To access more advanced features users must add the pyblue tag loader into each page:
+{% verbatim %}<code>{% load pytags %}</code>{% endverbatim %}. You can now make use of specific tags.
 
-{% verbatim %}<code>{% load pytags %}</code>{% endverbatim %}
-
-You can now make use of specific tags for example:
-
-{% verbatim %}<code>{% link "context.html" %}</code>{% endverbatim %} will
+For example {% verbatim %}<code>{% link "context.html" %}</code>{% endverbatim %} will
 produce the following: {% link "context.html" %}.
 
 Why? The {% verbatim %}<code>{% link "context.html" %}</code>{% endverbatim %}
@@ -72,8 +69,9 @@ once it finds a match it produces a link to it with the proper path.
 This keeps links correct even after moving files! Note how in this
 case the file is located in <code>info/context.html</code>
 
-In PyBlue just about every string is used as a regular expression. All a user needs
-to specify is the shortest unambiguous part of the file.
+Note that the search string is used as a regular expression! All a user needs
+to specify is the shortest unambiguous part of the file and PyBlue will find
+it and link it.
 
 Markdown
 --------
@@ -82,7 +80,7 @@ To include markdown content place it between <code>markdown</code> template tags
 
 {% code "markdown-example.html" %}
 
-Visit the {% link "markdown-example" %} page.
+Here is the result of processing the file above: {% link "markdown-example" %}
 
 Include
 -------
@@ -90,6 +88,9 @@ Include
 To include syntax highlighted code write {% verbatim %}<code>{% code "context.py" %}</code>{% endverbatim %}
 
 {% code "context.py" %}
+
+Now this file is also special because of its name. The contents of it are available in the page. For example
+writing {% verbatim %}<code>{{ context.greeting }}</code>{% endverbatim %} produces: {{ context.greeting }}
 
 Bootstrap
 ---------
