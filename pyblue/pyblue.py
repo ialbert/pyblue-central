@@ -8,7 +8,7 @@ from django.conf import settings
 from django.template import Context, Template
 from django.template.loader import get_template
 import bottle, waitress
-import sys, os, imp, argparse, logging, re, time, shutil
+import sys, os, io, imp, argparse, logging, re, time, shutil
 
 from pyblue import VERSION
 
@@ -43,7 +43,7 @@ def get_parser():
                               help='serve the web site',
                               epilog="And that's how pyblue serves a directory during development.")
 
-    serve.add_argument('-r', dest='root', metavar="DIR", default=".", required=False,
+    serve.add_argument('-r', dest='root', metavar="DIR", default=".", required=True,
                        help='root directory to serve from (%(default)s)')
 
     serve.add_argument('-p', metavar="NUMBER", type=int, default=8080,
@@ -52,13 +52,21 @@ def get_parser():
     serve.add_argument('-v', dest="verbose", default=False, action="store_true",
                        help='increase message verbosity')
 
+    serve.add_argument('--no-scan', dest="no_scan", default=False, action="store_true",
+                       help='turn off file scan on each request (%(default)s)')
+
+    serve.add_argument('--no-time', dest="no_time", default=False, action="store_true",
+                       help='bypass timestamp check (%(default)s)')
+
+    serve.add_argument('--context', dest="context", metavar="FILE", type=str, required=False,
+                      default="context.py", help='the python module to load as context (%(default)s)')
 
     # The make subcommand.
     make = subpar.add_parser('make',
                                  help='generates the static website',
                                  epilog="And that's how pyblue makes static output.")
 
-    make.add_argument('-r', dest='root', metavar="DIR", default=".",
+    make.add_argument('-r', dest='root', metavar="DIR", default=".", required=True,
                           help='root directory to process (%(default)s)')
 
     make.add_argument('-o', dest="output", metavar="DIR", type=str, required=True,
@@ -66,6 +74,15 @@ def get_parser():
 
     make.add_argument('-v', dest="verbose", default=False, action="store_true",
                        help='increase message verbosity')
+
+    make.add_argument('--no-scan', dest="no_scan", default=False, action="store_true",
+                       help='turn off file scan on each request (%(default)s)')
+
+    make.add_argument('--no-time', dest="no_time", default=False, action="store_true",
+                       help='bypass timestamp check (%(default)s)')
+
+    make.add_argument('--context', dest="context", metavar="FILE", type=str, required=False,
+                      default="context.py", help='the python module to load as context (%(default)s)')
 
     return parser
 
@@ -119,7 +136,7 @@ class File(object):
         # Parse templates files only for metadata.
         if self.is_template:
             try:
-                lines = open(self.fpath).read().splitlines()[:20]
+                lines = io.open(self.fpath).read().splitlines()[:20]
                 self.meta.update(parse_lines(lines))
             except Exception as exc:
                 logger.error(exc)
@@ -136,7 +153,7 @@ class File(object):
             name += self.ext
         return name
 
-    def write(self, output, content='', update=True):
+    def write(self, output, content='', check=True):
         """
         Writes the text into an output folder
         """
@@ -147,8 +164,8 @@ class File(object):
             raise Exception("may not overwrite the original file: %s" % dest)
 
         # Only write newer files.
-        if update and (mtime(dest) > mtime(self.fpath)):
-            logger.info("destination file is more recent: %s" % dest)
+        if check and (mtime(dest) > mtime(self.fpath)):
+            logger.info("pass: %s" % dest)
             return
 
         # Make the directory if needed.
@@ -157,9 +174,11 @@ class File(object):
             os.makedirs(dpath)
 
         if self.is_template and content:
-            with open(dest, "wt") as fp:
+            logger.info("save: %s" % dest)
+            with io.open(dest, "wt") as fp:
                 fp.write(content)
         else:
+            logger.info("copy: %s" % dest)
             shutil.copyfile(self.fpath, dest)
 
 
@@ -254,10 +273,16 @@ class PyBlue(object):
         django.setup()
 
 
-    def __init__(self, root, context="context.py", auto_refresh=True):
+    def __init__(self, root, args):
 
         # Rescan all subdirectories for changes on each request.
-        self.auto_refresh = auto_refresh
+        self.auto_refresh = not args.no_scan
+
+        # The name of the context variable.
+        self.context = args.context
+
+        # Check timestamps when generating files.
+        self.time_check = not args.no_time
 
         # A set of strings that identifies the extension of the files
         # that should be processed using the Django templates.
@@ -276,10 +301,10 @@ class PyBlue(object):
 
         try:
             # Attempts to import a python module as a context
-            ctx = imp.load_source('ctx', join(self.root, context))
+            ctx = imp.load_source('ctx', join(self.root, self.context))
         except Exception as exc:
             ctx = None
-            logger.info("unable to import context module: %s" % context)
+            logger.warning("unable to import context module: %s" % self.context)
 
         def render(path):
 
@@ -289,7 +314,7 @@ class PyBlue(object):
             if self.auto_refresh:
                 self.set_root(self.root)
 
-            logger.info(path)
+            logger.info("render: %s" % path)
             page = File(fname=path, root=self.root)
             if page.is_template:
                 params = dict(page=page, root=self.root, context=ctx, files=self.files)
@@ -312,9 +337,9 @@ class PyBlue(object):
         self.root = os.path.abspath(path)
 
         # Reads all files in the root.
-        self.files = [File(fname=path, root=self.root) for path in self.collect_files()]
+        self.files = [File(fname=path, root=self.root) for path in self.collect()]
 
-    def collect_files(self):
+    def collect(self):
         files = []
         for dirpath, dirnames, filenames in os.walk(self.root):
             for name in sorted(filenames):
@@ -324,7 +349,7 @@ class PyBlue(object):
                 absp = os.path.join(dirpath, name)
                 path = os.path.relpath(absp, self.root)
                 files.append(path)
-        logger.info("%d files" % len(files))
+        logger.info("found: %d files" % len(files))
         return files
 
 
@@ -339,30 +364,28 @@ class PyBlue(object):
         self.auto_refresh = False
         for f in self.files:
             if f.is_template:
-                logger.info("generating %s" % f.fname)
                 content = self.render(f.fname)
-                f.write(output, content)
+                f.write(output, content=content, check=self.time_check)
             else:
-                logger.info("copying %s" % f.fname)
-                f.write(output)
+                f.write(output, check=self.time_check)
 
 def run():
     # Process command line arguments.
     parser = get_parser()
 
     # Trigger help on plain invocation.
-    if len(sys.argv) < 2:
+    if len(sys.argv) < 3:
         sys.argv.append("--help")
 
     # Parse the command line.
     args = parser.parse_args(sys.argv[1:])
 
-    if args.verbose:
-        logging.basicConfig(level=logging.DEBUG)
-    else:
-        logging.basicConfig(level=logging.ERROR)
+    # Loggins setup.
+    level = level=logging.DEBUG if args.verbose else logging.WARNING
+    format = '%(levelname)s\t%(module)s.%(funcName)s\t%(message)s'
+    logging.basicConfig(format=format, level=level)
 
-    pb = PyBlue(root=args.root)
+    pb = PyBlue(root=args.root, args=args)
     if args.action == "serve":
         pb.serve()
 
