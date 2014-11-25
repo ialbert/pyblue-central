@@ -1,0 +1,199 @@
+
+<html>
+<head>
+    
+    <style media="screen" type="text/css">
+        .highlight .hll { background-color: #ffffcc }
+.highlight  { background: #f8f8f8; }
+.highlight .c { color: #408080; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #FF0000 } /* Error */
+.highlight .k { color: #008000; font-weight: bold } /* Keyword */
+.highlight .o { color: #666666 } /* Operator */
+.highlight .cm { color: #408080; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #BC7A00 } /* Comment.Preproc */
+.highlight .c1 { color: #408080; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #408080; font-style: italic } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #FF0000 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #00A000 } /* Generic.Inserted */
+.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #0044DD } /* Generic.Traceback */
+.highlight .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008000 } /* Keyword.Pseudo */
+.highlight .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #B00040 } /* Keyword.Type */
+.highlight .m { color: #666666 } /* Literal.Number */
+.highlight .s { color: #BA2121 } /* Literal.String */
+.highlight .na { color: #7D9029 } /* Name.Attribute */
+.highlight .nb { color: #008000 } /* Name.Builtin */
+.highlight .nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.highlight .no { color: #880000 } /* Name.Constant */
+.highlight .nd { color: #AA22FF } /* Name.Decorator */
+.highlight .ni { color: #999999; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #0000FF } /* Name.Function */
+.highlight .nl { color: #A0A000 } /* Name.Label */
+.highlight .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #19177C } /* Name.Variable */
+.highlight .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mb { color: #666666 } /* Literal.Number.Bin */
+.highlight .mf { color: #666666 } /* Literal.Number.Float */
+.highlight .mh { color: #666666 } /* Literal.Number.Hex */
+.highlight .mi { color: #666666 } /* Literal.Number.Integer */
+.highlight .mo { color: #666666 } /* Literal.Number.Oct */
+.highlight .sb { color: #BA2121 } /* Literal.String.Backtick */
+.highlight .sc { color: #BA2121 } /* Literal.String.Char */
+.highlight .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #BA2121 } /* Literal.String.Double */
+.highlight .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.highlight .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+.highlight .sx { color: #008000 } /* Literal.String.Other */
+.highlight .sr { color: #BB6688 } /* Literal.String.Regex */
+.highlight .s1 { color: #BA2121 } /* Literal.String.Single */
+.highlight .ss { color: #19177C } /* Literal.String.Symbol */
+.highlight .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.highlight .vc { color: #19177C } /* Name.Variable.Class */
+.highlight .vg { color: #19177C } /* Name.Variable.Global */
+.highlight .vi { color: #19177C } /* Name.Variable.Instance */
+.highlight .il { color: #666666 } /* Literal.Number.Integer.Long */
+    </style>
+    
+</head>
+<body>
+
+<h1>Welcome to Pyblue</h1>
+
+<p>A simple static site generator. Zero configuration. Works with any existing site.</p>
+
+<p>PyBlue allows the reuse of data and visuals (header/footer) across many pages
+and it can generate static sites from dynamic templates.</p>
+
+<p>PyBlue also makes it easy to use <a href="http://en.wikipedia.org/wiki/Markdown">Markdown</a> inside of  webpages.</p>
+
+<p>This file is located in <code><a href="https://github.com/ialbert/pyblue/tree/master/docs/src/index.html">docs/src/index.html</a></code>
+of the <a href="https://github.com/ialbert/pyblue">PyBlue distribution</a>.</p>
+
+<h2>Install</h2>
+
+<p>Install it with <code>easy_install pyblue</code> or <code>pip install pyblue --upgrade</code>, or download it from
+the <a href="https://pypi.python.org/pypi/pyblue/">PyBlue at PyPI</a> site.</p>
+
+<ul>
+<li>Launch pyblue to serve a directory <code>pyblue serve -r docs/src</code>.</li>
+<li>View your site by visiting <code>http:://localhost:8080</code>.</li>
+<li>Edit your pages and make changes. Reload to page to see the effect.</li>
+<li>Finally, generate static output: <code>pyblue make -r docs/src -o docs/html</code></li>
+</ul>
+
+<h2>Context</h2>
+
+<p>The pages are rendered through the Django Template engine.
+Users automatically get additional context for each of the pages as
+variables that exists.</p>
+
+<p>For example the <code>{{ page }}</code> variable is present:</p>
+
+<ul>
+<li>Writing: <code>{{ page.name }}</code> will produce: Index</li>
+<li>Writing:  <code>{{ page.last_modified }}</code> 
+will produce: Tuesday, November 25, 2014</li>
+<li>Writing:  <code>{{ page.size|filesizeformat }}</code> 
+will produce: 3.6 KB</li>
+</ul>
+
+<p>Note how in this last case we also made use of the code>filesizeformat</code> builtin filter from Django.</p>
+
+<p>Users may add more information even load a python module into the page.</p>
+
+<p>Learn <a href="./info/context.html">More About Contexts</a>.</p>
+
+<h2>Links</h2>
+
+<p>To access more advanced features users must add the pyblue tag loader into each page:</p>
+
+<p><code>{% load pytags %}</code></p>
+
+<p>You can now make use of specific tags for example:</p>
+
+<p><code>{% link "context.html" %}</code> will
+produce the following: <a href="./info/context.html">More About Contexts</a>.</p>
+
+<p>Why? The <code>{% link "context.html" %}</code>
+command performs a regular expression search on all files in the directory and
+once it finds a match it produces a link to it with the proper path.
+This keeps links correct even after moving files! Note how in this
+case the file is located in <code>info/context.html</code></p>
+
+<p>In PyBlue just about every string is used as a regular expression. All a user needs
+to specify is the shortest unambiguous part of the file.</p>
+
+<h2>Markdown</h2>
+
+<p>To include markdown content place it between <code>markdown</code> template tags.</p>
+
+<div class="highlight"><pre><span class="cp">{%</span> <span class="k">load</span> <span class="nv">pytags</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="cp">{%</span> <span class="k">markdown</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">Hello World!</span>
+<span class="x">============</span>
+
+<span class="x">Now you can write markdown in your templates. This is good because:</span>
+
+<span class="x">* Markdown is awesome</span>
+<span class="x">* Markdown is less verbose than writing html by hand</span>
+<span class="x">* The page title is: </span><span class="cp">{{</span> <span class="nv">page.title</span> <span class="cp">}}</span><span class="x"></span>
+
+<span class="x">Note how you can use other template constructs inside the markdown section.</span>
+
+<span class="x">Back to home: </span><span class="cp">{%</span> <span class="k">link</span> <span class="s2">&quot;index.html&quot;</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="cp">{%</span> <span class="k">endmarkdown</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+
+<p>Visit the <a href="./info/markdown-example.html">Markdown Example</a> page.</p>
+
+<h2>Include</h2>
+
+<p>To include syntax highlighted code write <code>{% code "context.py" %}</code></p>
+
+<div class="highlight"><pre><span class="c">#</span>
+<span class="c"># The data file name context.py in the root folder</span>
+<span class="c"># will be loaded automatically into the page.</span>
+<span class="c">#</span>
+
+<span class="n">NUMBERS</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="c"># It may contain any valid python construct.</span>
+
+<span class="k">def</span> <span class="nf">say_hello</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s">&quot;Hello </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">name</span>
+
+<span class="n">greeting</span> <span class="o">=</span> <span class="n">say_hello</span><span class="p">(</span><span class="s">&quot;World!&quot;</span><span class="p">)</span>
+</pre></div>
+
+<h2>Bootstrap</h2>
+
+<p>There are helper methods for bootstrap</p>
+
+<h2>Licensing</h2>
+
+<ul>
+<li>PyBlue is being developed by Istvan Albert see https://github.com/ialbert</li>
+<li>PyBlue has been inspired by <a href="https://github.com/nicolas-van/pygreen">PyGreen</a> created by Nicolas Vanhoren see https://github.com/nicolas-van</li>
+<li>PyBlue uses the <a href="https://github.com/ialbert/pyblue/blob/master/LICENSE.txt">MIT license</a>.</li>
+</ul>
+
+
+</body>
+</html>
+
