@@ -1,3 +1,4 @@
+from __future__ import print_function, unicode_literals, absolute_import, division
 from django import template
 from markdown import markdown
 import re, logging
@@ -9,7 +10,6 @@ logger = logging.getLogger(__name__)
 
 register = template.Library()
 
-
 @register.filter
 def lower(value):
     return value.lower()
@@ -20,6 +20,7 @@ def link(context, word, text=None):
     start = context['page']
     files = context['files']
     items = filter(lambda x: re.search(word, x.fname, re.IGNORECASE), files)
+    items = list(items)
     if not items:
         f = files[0]
         logger.error("link '%s' does not match" % word)
@@ -36,6 +37,7 @@ def link(context, word, text=None):
 def load(context, word):
     files = context['files']
     items = filter(lambda x: re.search(word, x.fname, re.IGNORECASE), files)
+    items = list(items)
     if not items:
         logger.error("pattern '%s' does not match" % word)
         text = "include pattern '%s' does not match!" % word
@@ -51,7 +53,7 @@ def code(context, word):
     text = load(context=context, word=word)
     try:
         lexer = guess_lexer(text)
-    except Exception, exc:
+    except Exception as exc:
         lexer = PythonLexer()
     html = highlight(text, lexer, HtmlFormatter())
     return html

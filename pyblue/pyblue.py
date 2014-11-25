@@ -3,57 +3,72 @@ from __future__ import print_function, unicode_literals, absolute_import, divisi
 
 __author__ = 'ialbert'
 
-import sys, os, imp, argparse, bottle, waitress, logging, re, time, string
-
-from pyblue import VERSION, PYBLUE_DIR
-DESCR = "PyBlue %s, static site generator" % VERSION
+import django
 from django.conf import settings
 from django.template import Context, Template
 from django.template.loader import get_template
-import django
+import bottle, waitress
+import sys, os, imp, argparse, logging, re, time, shutil
+
+from pyblue import VERSION
+
+DESCRIPTION = "PyBlue %s, static site generator" % VERSION
 
 logger = logging.getLogger(__name__)
 
-def join (*args):
+def join(*args):
+    # Shorcut to building full paths.
     return os.path.abspath(os.path.join(*args))
 
+def strip(text):
+    # Why was this removed from Python 3?
+    return text.strip()
+
+def mtime(fname):
+    # File modification time.
+    t = os.stat(fname).st_mtime if os.path.isfile(fname) else 0
+    return t
+
+TEMPLATE_DIR = join(os.path.dirname(__file__), "templates")
+
 def get_parser():
-
-    parser = argparse.ArgumentParser(description=DESCR)
-
+    parser = argparse.ArgumentParser(description=DESCRIPTION)
 
     # Subcommands to the parser.
     subpar = parser.add_subparsers(dest="action",
-            help=" action: serve, deploy")
-
+                                   help=" action: serve, deploy")
 
     # The serve subcommand.
     serve = subpar.add_parser('serve',
                               help='serve the web site',
                               epilog="And that's how pyblue serves a directory during development.")
 
-    serve.add_argument('-f', dest='root', metavar="DIR", default=".", required=False,
+    serve.add_argument('-r', dest='root', metavar="DIR", default=".", required=False,
                        help='root directory to serve from (%(default)s)')
 
     serve.add_argument('-p', metavar="NUMBER", type=int, default=8080,
                        help='server port to bind to (%(default)s)')
 
-    serve.add_argument('-v', dest="value", default=False, action="store_true",
+    serve.add_argument('-v', dest="verbose", default=False, action="store_true",
                        help='increase message verbosity')
 
 
-    # The gen subcommand.
-    generate = subpar.add_parser('gen',
-                                 help='generate the static website',
-                                 epilog="And that's how pyblue generates static output.")
+    # The make subcommand.
+    make = subpar.add_parser('make',
+                                 help='generates the static website',
+                                 epilog="And that's how pyblue makes static output.")
 
-    generate.add_argument('-f', dest='root', metavar="DIR", default=".",
-                       help='root directory to process (%(default)s)')
+    make.add_argument('-r', dest='root', metavar="DIR", default=".",
+                          help='root directory to process (%(default)s)')
 
-    generate.add_argument('-o', dest="output", metavar="DIR", type=str, required=True,
-                       help='the target directory to generate output into')
+    make.add_argument('-o', dest="output", metavar="DIR", type=str, required=True,
+                          help='the target directory to store the generated site in')
+
+    make.add_argument('-v', dest="verbose", default=False, action="store_true",
+                       help='increase message verbosity')
 
     return parser
+
 
 class File(object):
     """
@@ -75,64 +90,78 @@ class File(object):
             logger.warning("file does not exist: %s" % fname)
             return
 
-        # Fill in various file related stats.
+        # File size.
         statinfo = os.stat(self.fpath)
         self.size = statinfo.st_size
 
+        # Last modification date.
         mt = time.gmtime(statinfo.st_mtime)
         self.last_modified = time.strftime("%A, %B %d, %Y", mt)
 
-        ct = time.gmtime(statinfo.st_ctime)
-        self.created_date = time.strftime("%A, %B %d, %Y", ct)
-
         # Directory that contains the file.
         self.dname = os.path.dirname(self.fpath)
+
+        # File extension.
         self.ext = os.path.splitext(fname)[1]
 
-        # Treated specially when rendering galleries.
+        # Used when rendering galleries and building names.
         self.is_image = self.ext in self.IMAGE_EXTENSIONS
 
-        # Only templates will be handled via Django.
+        # Only templates will be handled through Django.
         self.is_template = self.ext in self.TEMPLATE_EXTENSIONS
 
         # The nice name is used by default for name and title.
-        nice = self.nice_name(fname)
+        name = self.nicer_name(fname)
 
         # This object stores the metadata.
-        self.meta = dict(fname=fname, name=nice, title=nice, sortkey="5")
+        self.meta = dict(fname=fname, name=name, title=name, sortkey="5")
 
-        # Only parse html files for metadata
+        # Parse templates files only for metadata.
         if self.is_template:
             try:
                 lines = open(self.fpath).read().splitlines()[:20]
                 self.meta.update(parse_lines(lines))
-            except Exception, exc:
+            except Exception as exc:
                 logger.error(exc)
 
-    def nice_name(self, fname):
-        "Attempts to generate a nicer name from the filename"
+    def nicer_name(self, fname):
+        """
+        Attempts to generate a nicer name from the filename
+        """
         head, tail = os.path.split(fname)
         base, ext = os.path.splitext(tail)
         name = base.title().replace("-", " ").replace("_", " ")
         if self.is_image:
-            # add back extensions for images
-            name = name + self.ext
+            # Add back extensions for images.
+            name += self.ext
         return name
 
-    def write(self, output, text):
+    def write(self, output, content='', update=True):
         """
         Writes the text into an output folder
         """
-        loc = os.path.join(output, self.fname)
+        dest = os.path.join(output, self.fname)
 
-        if os.path.abspath(loc) == os.path.abspath(self.fpath):
-            raise Exception("may not overwrite the original file %s" % loc)
+        # Sanity check.
+        if os.path.abspath(dest) == os.path.abspath(self.fpath):
+            raise Exception("may not overwrite the original file: %s" % dest)
 
-        d = os.path.dirname(loc)
-        if not os.path.exists(d):
-            os.makedirs(d)
-        with open(loc, "wb") as fp:
-            fp.write(text)
+        # Only write newer files.
+        if update and (mtime(dest) > mtime(self.fpath)):
+            logger.info("destination file is more recent: %s" % dest)
+            return
+
+        # Make the directory if needed.
+        dpath = os.path.dirname(dest)
+        if not os.path.exists(dpath):
+            os.makedirs(dpath)
+
+        if self.is_template and content:
+            with open(dest, "wt") as fp:
+                fp.write(content)
+        else:
+            shutil.copyfile(self.fpath, dest)
+
 
     def relpath(self, start=None):
         """
@@ -143,8 +172,11 @@ class File(object):
         rpath = os.path.join(rpath, self.fname)
         return rpath
 
+
     def __getattr__(self, name):
-        "Fallback context attributes"
+        """
+        Metadata will be exposed as attributes on the class.
+        """
         value = self.meta.get(name, None)
         if not value:
             logger.error(self.meta)
@@ -153,15 +185,22 @@ class File(object):
         return value
 
     def __repr__(self):
-        return "File: %s (%s)" % (self.name, self.fname)
+        """
+        User friendly representation
+        """
+        return "%s: %s (%s)" % (self.__class__.__name__, self.name, self.fname)
 
 
+# Conversion regular expressions.
 int_patt = re.compile("\d+")
 flt_patt = re.compile("\d+\.\d+")
 lst_patt = re.compile("\[(?P<body>[\S\s]+?)\]")
 
-
-def convert(text):
+def convert_text(text):
+    """
+    Converts text to an appropriate python datatype: int, float or list.
+    """
+    global int_patt, flt_patt, lst_patt
     text = text.strip()
     try:
         if flt_patt.match(text):
@@ -173,26 +212,26 @@ def convert(text):
         m = lst_patt.search(text)
         if m:
             vals = m.group('body').split(",")
-            vals = map(convert, vals)
+            vals = map(convert_text, vals)
             return vals
-
-    except Exception, exc:
+    except Exception as exc:
         logger.error("conversion error of %s -> %s " % (text, exc))
         return text
     return text
 
+# Match Django template comments.
+com_patt = re.compile(r'^{# (?P<name>\w+)\s?=\s?(?P<value>[\S\s]+) #}')
 
 def parse_lines(lines):
     "Attempts to parse out metadata from django comments"
+    global com_patt
     meta = dict()
-    lines = map(string.strip, lines)
-    lines = filter(lambda x: x.startswith("{#"), lines)
-    p = re.compile(r'{# (?P<name>\w+)\s?=\s?(?P<value>[\S\s]+)#}')
+    lines = map(strip, lines)
     for line in lines:
-        m = p.search(line)
+        m = com_patt.search(line)
         if m:
             name, value = m.group('name'), m.group('value')
-            meta[name] = convert(value)
+            meta[name] = convert_text(value)
     return meta
 
 
@@ -202,23 +241,20 @@ class PyBlue(object):
 
     def django_init(self, context="context.py"):
         "Initializes the django engine. The root must have been set already!"
-        tmpl_dir = join(PYBLUE_DIR, "templates")
+
         settings.configure(
             DEBUG=True, TEMPLATE_DEBUG=True,
-            TEMPLATE_DIRS=(self.root, tmpl_dir),
-            TEMPLATE_LOADERS = (
+            TEMPLATE_DIRS=(self.root, TEMPLATE_DIR),
+            TEMPLATE_LOADERS=(
                 'django.template.loaders.filesystem.Loader',
             ),
-            INSTALLED_APPS= ["pyblue", "django.contrib.humanize"],
+            INSTALLED_APPS=["pyblue", "django.contrib.humanize"],
             TEMPLATE_STRING_IF_INVALID=" ??? ",
         )
         django.setup()
 
 
     def __init__(self, root, context="context.py", auto_refresh=True):
-
-        # Initialize logging.
-        logging.basicConfig()
 
         # Rescan all subdirectories for changes on each request.
         self.auto_refresh = auto_refresh
@@ -241,7 +277,7 @@ class PyBlue(object):
         try:
             # Attempts to import a python module as a context
             ctx = imp.load_source('ctx', join(self.root, context))
-        except Exception, exc:
+        except Exception as exc:
             ctx = None
             logger.info("unable to import context module: %s" % context)
 
@@ -296,6 +332,20 @@ class PyBlue(object):
         "Launch the WSGI app development web server"
         waitress.serve(self.app, host=host, port=port)
 
+    def generate(self, output):
+        """
+        Generates a complete static version of the web site.
+        """
+        self.auto_refresh = False
+        for f in self.files:
+            if f.is_template:
+                logger.info("generating %s" % f.fname)
+                content = self.render(f.fname)
+                f.write(output, content)
+            else:
+                logger.info("copying %s" % f.fname)
+                f.write(output)
+
 def run():
     # Process command line arguments.
     parser = get_parser()
@@ -307,12 +357,17 @@ def run():
     # Parse the command line.
     args = parser.parse_args(sys.argv[1:])
 
+    if args.verbose:
+        logging.basicConfig(level=logging.DEBUG)
+    else:
+        logging.basicConfig(level=logging.ERROR)
+
+    pb = PyBlue(root=args.root)
     if args.action == "serve":
-        pb = PyBlue(root=args.root)
         pb.serve()
 
-    elif args.action == "gen":
-        pass
+    elif args.action == "make":
+        pb.generate(args.output)
 
 
 def test():
@@ -345,7 +400,7 @@ def test():
     lines = text.splitlines()
     meta = parse_lines(lines)
 
-    print (meta)
+    print(meta)
 
 if __name__ == '__main__':
     run()

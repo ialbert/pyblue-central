@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
 from setuptools import setup
-import os.path
+import os.path, sys
 import pyblue
 
 setup(name='pyblue',
@@ -19,7 +19,7 @@ setup(name='pyblue',
               'pyblue/templates/base.html',
           ]),
       ],
-      long_description=file("README.md").read(),
+      long_description=open("README.md").read(),
       keywords="",
       license="MIT",
 
@@ -41,7 +41,7 @@ setup(name='pyblue',
 
       install_requires=[
           "django >= 1.7",
-          "argparse",
+          "bottle",
           "markdown",
           "waitress",
           "pygments",
