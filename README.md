@@ -17,16 +17,16 @@ Install
 Install it with `easy_install pyblue` or `pip install pyblue --upgrade`, or download it from
 the [PyBlue at PyPI](https://pypi.python.org/pypi/pyblue/) site.
 
-* Launch pyblue to serve a directory <code>pyblue serve -r docs/src</code>.
+* Launch pyblue to serve a directory <code>pyblue serve -r docs</code>.
 * View your site by visiting <code>http:://localhost:8080</code>.
 * Edit your pages and make changes. Reload to page to see the effect.
-* Finally, generate static output: <code>pyblue make -r docs/src -o docs/html</code>
+* Finally, generate static output: <code>pyblue make -r docs -o html</code>
 
 Documentation
 -------------
 
 * PyBlue ready [source format][docs-src]
-* PyBlue generated [html format][html-src]
+* PyBlue generated [html format][docs-html]
 
 Licensing
 ---------

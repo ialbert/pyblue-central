@@ -1,5 +1,0 @@
-<ol>
-    {% for elem in p.bar %}
-        <li>{{ elem }}</li>
-    {% endfor %}
-</ol>
