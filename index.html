@@ -110,9 +110,9 @@ variables that exists.</p>
 <ul>
 <li>Writing: <code>{{ page.name }}</code> will produce: Index</li>
 <li>Writing:  <code>{{ page.last_modified }}</code> 
-will produce: Tuesday, November 25, 2014</li>
+will produce: Thursday, November 27, 2014</li>
 <li>Writing:  <code>{{ page.size|filesizeformat }}</code> 
-will produce: 3.8 KB</li>
+will produce: 4.1 KB</li>
 </ul>
 
 <p>Note how in this last case we also made use of the code>filesizeformat</code> builtin filter from Django.</p>
@@ -123,13 +123,10 @@ will produce: 3.8 KB</li>
 
 <h2>Links</h2>
 
-<p>To access more advanced features users must add the pyblue tag loader into each page:</p>
+<p>To access more advanced features users must add the pyblue tag loader into each page:
+<code>{% load pytags %}</code>. You can now make use of specific tags.</p>
 
-<p><code>{% load pytags %}</code></p>
-
-<p>You can now make use of specific tags for example:</p>
-
-<p><code>{% link "context.html" %}</code> will
+<p>For example <code>{% link "context.html" %}</code> will
 produce the following: <a href="./info/context.html">More About Contexts</a>.</p>
 
 <p>Why? The <code>{% link "context.html" %}</code>
@@ -138,8 +135,9 @@ once it finds a match it produces a link to it with the proper path.
 This keeps links correct even after moving files! Note how in this
 case the file is located in <code>info/context.html</code></p>
 
-<p>In PyBlue just about every string is used as a regular expression. All a user needs
-to specify is the shortest unambiguous part of the file.</p>
+<p>Note that the search string is used as a regular expression! All a user needs
+to specify is the shortest unambiguous part of the file and PyBlue will find
+it and link it.</p>
 
 <h2>Markdown</h2>
 
@@ -164,14 +162,14 @@ to specify is the shortest unambiguous part of the file.</p>
 <span class="cp">{%</span> <span class="k">endmarkdown</span> <span class="cp">%}</span><span class="x"></span>
 </pre></div>
 
-<p>Visit the <a href="./info/markdown-example.html">Markdown Example</a> page.</p>
+<p>Here is the result of processing the file above: <a href="./info/markdown-example.html">Markdown Example</a></p>
 
 <h2>Include</h2>
 
 <p>To include syntax highlighted code write <code>{% code "context.py" %}</code></p>
 
 <div class="highlight"><pre><span class="c">#</span>
-<span class="c"># The data file name context.py in the root folder</span>
+<span class="c"># The data file named context.py in the root folder</span>
 <span class="c"># will be loaded automatically into the page.</span>
 <span class="c">#</span>
 
@@ -184,6 +182,9 @@ to specify is the shortest unambiguous part of the file.</p>
 
 <span class="n">greeting</span> <span class="o">=</span> <span class="n">say_hello</span><span class="p">(</span><span class="s">&quot;World!&quot;</span><span class="p">)</span>
 </pre></div>
+
+<p>Now this file is also special because of its name. The contents of it are available in the page. For example
+writing <code>{{ context.greeting }}</code> produces: Hello World!</p>
 
 <h2>Bootstrap</h2>
 

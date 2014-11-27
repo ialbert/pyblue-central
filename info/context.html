@@ -105,7 +105,7 @@ to produce: More About Contexts</p>
 
 <p>Note that in the last example for <code>bar</code> gets turned into python list accessible as
 <code>{{ page.bar }}</code> 
-to produce [100, 200, &#39;Hello World&#39;].</p>
+to produce [100, 200, u&#39;Hello World&#39;].</p>
 
 <p>The <code>{{ page.bar }}</code>  object can also be looped over with Django :</p>
 
@@ -134,7 +134,7 @@ any python construct.</p>
 <p>Remember to <code>{% load pytags %}</code> as well!</p>
 
 <div class="highlight"><pre><span class="c">#</span>
-<span class="c"># The data file name context.py in the root folder</span>
+<span class="c"># The data file named context.py in the root folder</span>
 <span class="c"># will be loaded automatically into the page.</span>
 <span class="c">#</span>
 
