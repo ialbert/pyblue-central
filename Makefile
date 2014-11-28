@@ -5,7 +5,7 @@ all:
 	#
 	pyblue serve -r docs
 
-aaa:
+doc:
 	#
 	# Generates documentation into a GitHub Page repository
 	#
