@@ -1,4 +1,4 @@
-
+PYBLUE_PAGES=../pyblue-pages
 all:
 	#
 	# Edit the documentation
@@ -9,7 +9,5 @@ pages:
 	#
 	# Generates documentation into a GitHub Page repository
 	#
-	pyblue make -r docs -o ../pyblue-pages
-	cd ../pyblue-pages
-	git commit -am "updated the docs"
-	git push
+	pyblue make -r docs -o ${PYBLUE_PAGES}
+	cd ${PYBLUE_PAGES} && git commit -am "updated the docs" && git push
