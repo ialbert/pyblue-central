@@ -46,7 +46,7 @@ setup(name='pyblue',
           "markdown2",
           "waitress",
           "pygments",
-          # "bleach",
+          "bleach",
       ],
 )
 

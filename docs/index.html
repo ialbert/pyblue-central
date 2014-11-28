@@ -18,14 +18,38 @@ and it can generate static sites from dynamic templates.
 
 PyBlue also makes it easy to use [Markdown][markdown] inside of  webpages.
 
-This file is located in <code><a href="https://github.com/ialbert/pyblue/tree/master/docs/src/index.html">docs/src/index.html</a></code>
+This file is located in <code><a href="https://github.com/ialbert/pyblue/tree/master/docs/index.html">docs/src/index.html</a></code>
 of the <a href="https://github.com/ialbert/pyblue">PyBlue distribution</a>.
+
+
+Why PyBlue?
+----------
+
+There is no shortage of static html generators. PyBlue is a personal project
+that aims to address my personal annoyances with other options. I have evaluated
+quite a few alternatives, some for many months yet slowly each drove me nuts.
+Hence the motivation to write my own.
+The following are some of the reasons why PyBlue exists:
+
+1. Requires no configuration or predetermined directory/file naming. I hate
+when software starts by imposing rules on what should go where.
+1. Automatic linking! PyBlue keeps track of your links based on the file name.
+You can move the files around to other directories and these
+will be found and linked correctly.
+1. Allows users to embed code/files with syntax highlighting.
+1. Allows users to load data into every page. Data can either go into
+each page as comments or a python module can be loaded that may contain
+any python object.
+1. Advanced templating. Users may use the [Django Templating][django] system and all
+ that it offers.
+1. [Bootstrap][bootstrap] integration. Handy shortcuts to Bootstrap features.
+1. Tiny codebase. PyBlue is around 500 lines of code. Runs on Python 2.7 and 3.4 as well.
 
 Install
 -------
 
 Install it with `easy_install pyblue` or `pip install pyblue --upgrade`, or download it from
-the [PyBlue at PyPI](https://pypi.python.org/pypi/pyblue/) site.
+the [PyBlue PyPI](https://pypi.python.org/pypi/pyblue/) site.
 
 * Launch pyblue to serve a directory <code>pyblue serve -r docs/src</code>.
 * View your site by visiting <code>http:://localhost:8080</code>.

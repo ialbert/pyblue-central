@@ -102,6 +102,7 @@ class File(object):
 
         # Full path to the file.
         self.fpath = os.path.join(root, fname)
+        self.is_template = False
 
         if not os.path.isfile(self.fpath):
             logger.warning("file does not exist: %s" % fname)
@@ -255,8 +256,8 @@ def parse_lines(lines):
 
 
 class PyBlue(object):
-    TEMPLATE_EXTS = ".html .md .rst".split()
-    IGNORE_EXTS = ".pyc".split()
+
+    IGNORE_EXTS = ".pyc"
 
     def django_init(self, context="context.py"):
         "Initializes the django engine. The root must have been set already!"
@@ -286,8 +287,7 @@ class PyBlue(object):
 
         # A set of strings that identifies the extension of the files
         # that should be processed using the Django templates.
-        self.template_exts = set(self.TEMPLATE_EXTS)
-        self.ignore_exts = set(self.IGNORE_EXTS)
+        self.ignore_exts = set(self.IGNORE_EXTS.split())
 
         # The folder where the files to serve are located.
         # Do not set this attribute directly, use set_root() method instead.
@@ -335,6 +335,10 @@ class PyBlue(object):
     def set_root(self, path):
         "Sets the folder where the files to serve are located."
         self.root = os.path.abspath(path)
+
+        if not os.path.isdir(self.root):
+            logger.error("directory does not exist: %s" % self.root)
+            sys.exit()
 
         # Reads all files in the root.
         self.files = [File(fname=path, root=self.root) for path in self.collect()]

@@ -5,7 +5,7 @@ import re, logging
 from pygments import highlight
 from pygments.lexers import guess_lexer, PythonLexer
 from pygments.formatters import HtmlFormatter
-# import bleach
+import bleach
 
 logger = logging.getLogger(__name__)
 
@@ -80,14 +80,27 @@ def bootstrap_cdn():
 #
 # Based on http://jamie.curle.io/blog/minimal-markdown-template-tag-django/
 #
+
+def top_level_only(attrs, new=False):
+
+    if not new:
+        return attrs
+
+    text = attrs['_text']
+    if not text.startswith(('http:', 'https:')):
+        return None
+
+    return attrs
+
 class MarkDownNode(template.Node):
+    CALLBACKS = [ top_level_only ]
     def __init__(self, nodelist):
         self.nodelist = nodelist
 
     def render(self, context):
         text = self.nodelist.render(context)
         text = markdown(text, safe_mode=False, extras=["code-friendly", "tables"])
-        #text = bleach.linkify(text, skip_pre=True)
+        text = bleach.linkify(text, callbacks=self.CALLBACKS, skip_pre=True)
         return text
 
 @register.tag('markdown')
