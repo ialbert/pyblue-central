@@ -3,7 +3,7 @@ all:
 	#
 	# Edit the documentation
 	#
-	pyblue serve -r docs
+	pyblue serve -r docs -v
 
 pages:
 	#

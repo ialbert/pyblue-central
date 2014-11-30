@@ -5,9 +5,9 @@ __author__ = 'ialbert'
 
 import django
 from django.conf import settings
-from django.template import Context, Template
+from django.template import Context, Template, get_templatetags_modules
 from django.template.loader import get_template
-import bottle, waitress
+import bottle, waitress, importlib
 import sys, os, io, imp, argparse, logging, re, time, shutil
 
 from pyblue import VERSION
@@ -16,20 +16,25 @@ DESCRIPTION = "PyBlue %s, static site generator" % VERSION
 
 logger = logging.getLogger(__name__)
 
+
 def join(*args):
     # Shorcut to building full paths.
     return os.path.abspath(os.path.join(*args))
 
+
 def strip(text):
     # Why was this removed from Python 3?
     return text.strip()
+
 
 def mtime(fname):
     # File modification time.
     t = os.stat(fname).st_mtime if os.path.isfile(fname) else 0
     return t
 
+
 TEMPLATE_DIR = join(os.path.dirname(__file__), "templates")
+
 
 def get_parser():
     parser = argparse.ArgumentParser(description=DESCRIPTION)
@@ -59,27 +64,27 @@ def get_parser():
                        help='bypass timestamp check (%(default)s)')
 
     serve.add_argument('--context', dest="context", metavar="FILE", type=str, required=False,
-                      default="context.py", help='the python module to load as context (%(default)s)')
+                       default="context.py", help='the python module to load as context (%(default)s)')
 
     # The make subcommand.
     make = subpar.add_parser('make',
-                                 help='generates the static website',
-                                 epilog="And that's how pyblue makes static output.")
+                             help='generates the static website',
+                             epilog="And that's how pyblue makes static output.")
 
     make.add_argument('-r', dest='root', metavar="DIR", default=".", required=True,
-                          help='root directory to process (%(default)s)')
+                      help='root directory to process (%(default)s)')
 
     make.add_argument('-o', dest="output", metavar="DIR", type=str, required=True,
-                          help='the target directory to store the generated site in')
+                      help='the target directory to store the generated site in')
 
     make.add_argument('-v', dest="verbose", default=False, action="store_true",
-                       help='increase message verbosity')
+                      help='increase message verbosity')
 
     make.add_argument('--no-scan', dest="no_scan", default=False, action="store_true",
-                       help='turn off file scan on each request (%(default)s)')
+                      help='turn off file scan on each request (%(default)s)')
 
     make.add_argument('--no-time', dest="no_time", default=False, action="store_true",
-                       help='bypass timestamp check (%(default)s)')
+                      help='bypass timestamp check (%(default)s)')
 
     make.add_argument('--context', dest="context", metavar="FILE", type=str, required=False,
                       default="context.py", help='the python module to load as context (%(default)s)')
@@ -216,6 +221,7 @@ int_patt = re.compile("\d+")
 flt_patt = re.compile("\d+\.\d+")
 lst_patt = re.compile("\[(?P<body>[\S\s]+?)\]")
 
+
 def convert_text(text):
     """
     Converts text to an appropriate python datatype: int, float or list.
@@ -242,6 +248,7 @@ def convert_text(text):
 # Match Django template comments.
 com_patt = re.compile(r'^{# (?P<name>\w+)\s?=\s?(?P<value>[\S\s]+) #}')
 
+
 def parse_lines(lines):
     "Attempts to parse out metadata from django comments"
     global com_patt
@@ -256,22 +263,35 @@ def parse_lines(lines):
 
 
 class PyBlue(object):
-
     IGNORE_EXTS = ".pyc"
 
     def django_init(self, context="context.py"):
         "Initializes the django engine. The root must have been set already!"
+
+        BASE_APP = [ ]
+        try:
+            # checks if the root is importable
+            base = os.path.split(self.root)[-1]
+            importlib.import_module(base)
+            logger.info("imported %s" % base)
+            BASE_APP = [ base ]
+        except Exception as exc:
+            logger.info("%s" % exc)
 
         settings.configure(
             DEBUG=True, TEMPLATE_DEBUG=True,
             TEMPLATE_DIRS=(self.root, TEMPLATE_DIR),
             TEMPLATE_LOADERS=(
                 'django.template.loaders.filesystem.Loader',
+
             ),
-            INSTALLED_APPS=["pyblue", "django.contrib.humanize"],
-            TEMPLATE_STRING_IF_INVALID=" ??? ",
+            INSTALLED_APPS=["pyblue", "django.contrib.humanize"] + BASE_APP,
+            TEMPLATE_STRING_IF_INVALID = " ??? ",
         )
+
         django.setup()
+
+        logger.info("templatetag modules: %s" % ", ".join(get_templatetags_modules()))
 
 
     def __init__(self, root, args):
@@ -373,6 +393,7 @@ class PyBlue(object):
             else:
                 f.write(output, check=self.time_check)
 
+
 def run():
     # Process command line arguments.
     parser = get_parser()
@@ -385,7 +406,7 @@ def run():
     args = parser.parse_args(sys.argv[1:])
 
     # Loggins setup.
-    level = level=logging.DEBUG if args.verbose else logging.WARNING
+    level = level = logging.DEBUG if args.verbose else logging.WARNING
     format = '%(levelname)s\t%(module)s.%(funcName)s\t%(message)s'
     logging.basicConfig(format=format, level=level)
 
@@ -428,6 +449,7 @@ def test():
     meta = parse_lines(lines)
 
     print(meta)
+
 
 if __name__ == '__main__':
     run()
