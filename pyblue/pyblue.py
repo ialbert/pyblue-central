@@ -99,7 +99,7 @@ class File(object):
     """
     MAX_SIZE_MB = 5
     IMAGE_EXTENSIONS = set(".png .jpg .gif .svg".split())
-    TEMPLATE_EXTENSIONS = set(".html .htm".split())
+    TEMPLATE_EXTENSIONS = set(".html .htm .md".split())
 
     def __init__(self, fname, root):
         self.root = root
@@ -133,6 +133,9 @@ class File(object):
         # Only templates will be handled through Django.
         self.is_template = self.ext in self.TEMPLATE_EXTENSIONS
 
+        # Is it a markdown document.
+        self.is_markdown = (self.ext == ".md")
+
         # The nice name is used by default for name and title.
         name = self.nicer_name(fname)
 
@@ -146,6 +149,14 @@ class File(object):
                 self.meta.update(parse_lines(lines))
             except Exception as exc:
                 logger.error(exc)
+    @property
+    def content(self):
+        # Don't load large files
+        if self.size > 1024 * 1024 * 5:
+            logger.warn("file size is too large to be rendered %s" % self.size)
+            return "?"
+
+        return io.open(self.fpath).read()
 
     def nicer_name(self, fname):
         """
@@ -336,9 +347,15 @@ class PyBlue(object):
 
             logger.info("render: %s" % path)
             page = File(fname=path, root=self.root)
+
             if page.is_template:
                 params = dict(page=page, root=self.root, context=ctx, files=self.files)
-                templ = get_template(page.fname)
+                if page.is_markdown:
+                    templ_name = "markdown-base.html"
+                else:
+                    templ_name = page.fname
+
+                templ = get_template(templ_name)
                 cont = Context(params)
                 return templ.render(cont)
             else:
