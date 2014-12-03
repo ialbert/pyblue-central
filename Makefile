@@ -5,6 +5,10 @@ all:
 	#
 	pyblue serve -r docs -v
 
+pypi:
+	# Push out to PyPI
+	python setup.py sdist upload -r pypi
+
 pages:
 	#
 	# Generates documentation into a GitHub Page repository

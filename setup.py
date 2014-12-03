@@ -4,7 +4,8 @@ from setuptools import setup
 import os.path, sys
 import pyblue
 
-setup(name='pyblue',
+setup(
+      name='pyblue2',
       version=pyblue.VERSION,
       description='PyBlue',
       author='Istvan Albert',
@@ -19,7 +20,7 @@ setup(name='pyblue',
               'pyblue/templates/pyblue-base.html',
           ]),
       ],
-      long_description=open("README.md").read(),
+      #long_description=open("README.md").read(),
       keywords="",
       license="MIT",
 
@@ -35,7 +36,10 @@ setup(name='pyblue',
           'Operating System :: Microsoft :: Windows',
           'Operating System :: POSIX',
           'Programming Language :: Python :: 2.7',
-          'Programming Language :: Python :: 3.0',
+          'Programming Language :: Python :: 3.1',
+          'Programming Language :: Python :: 3.2',
+          'Programming Language :: Python :: 3.3',
+          'Programming Language :: Python :: 3.4',
           'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
           'Topic :: Scientific/Engineering :: Bio-Informatics',
       ],

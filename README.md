@@ -1,5 +1,5 @@
-Welcome to Pyblue
-=================
+Welcome to Pyblue2
+==================
 
 A simple static site generator. Zero configuration. Works with any existing site.
 
@@ -14,10 +14,10 @@ of the <a href="https://github.com/ialbert/pyblue">PyBlue distribution</a>.
 Install
 -------
 
-Install it with `easy_install pyblue` or `pip install pyblue --upgrade`
+Install it with `easy_install pyblue2` or `pip install pyblue2 --upgrade`
 
 Alternatively download it from
-the [PyBlue at PyPI](https://pypi.python.org/pypi/pyblue/) site.
+the [PyBlue2 at PyPI](https://pypi.python.org/pypi/pyblue2/) site.
 
 Use
 ---
@@ -34,7 +34,11 @@ The [PyBlue documentation][docs-html] was generated with PyBlue itself.
 
 You can also browse the [help in source format][docs-src] for examples.
 
-Note: This is version 2.0 that moved from Mako Templates to Django Templating.
+
+Note
+----
+
+Version 2.0 moved from Mako Templates to Django Templates.
 
 
 Licensing
