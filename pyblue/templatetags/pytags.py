@@ -3,8 +3,7 @@ from django import template
 from markdown2 import markdown
 import re, logging
 from pygments import highlight
-from pygments.lexers import guess_lexer, PythonLexer
-from pygments.formatters import HtmlFormatter
+
 import bleach
 
 logger = logging.getLogger(__name__)
@@ -31,7 +30,7 @@ def link(context, word, text=None):
         if len(items) > 1:
             logger.warn("link '%s' matches more than one item: %s" % (word, items))
         rpath = f.relpath(start=start)
-    text = text or f.title
+    text = text or f.name
     return '<a href="%s">%s</a>' % (rpath, text)
 
 @register.simple_tag(takes_context=True)
@@ -49,13 +48,21 @@ def load(context, word):
         text = open(f.fpath).read()
     return text
 
+from pygments.lexers import guess_lexer, PythonLexer, HtmlLexer, XmlLexer, BashLexer
+from pygments.formatters import HtmlFormatter
+
+HINT2LEXER = dict(
+    python=PythonLexer,
+    html=HtmlLexer,
+    xml=XmlLexer,
+    bash=BashLexer,
+)
+
 @register.simple_tag(takes_context=True)
-def code(context, word):
+def code(context, word, hint="bash"):
+
     text = load(context=context, word=word)
-    try:
-        lexer = guess_lexer(text)
-    except Exception as exc:
-        lexer = PythonLexer()
+    lexer = HINT2LEXER.get(hint, PythonLexer)()
     html = highlight(text, lexer, HtmlFormatter())
     return html
 
