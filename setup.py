@@ -20,7 +20,7 @@ setup(
               'pyblue/templates/pyblue-base.html',
           ]),
       ],
-      #long_description=open("README.md").read(),
+      long_description=open("README.rst").read(),
       keywords="",
       license="MIT",
 

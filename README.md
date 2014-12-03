@@ -8,19 +8,23 @@ and it can generate static sites from dynamic templates.
 
 PyBlue also makes it easy to use [Markdown][markdown] inside of  webpages.
 
-This file is located in <code>https://github.com/ialbert/pyblue/blob/master/docs/index.html</code>
+This file is located in <code>docs/index.html</code>
 of the <a href="https://github.com/ialbert/pyblue">PyBlue distribution</a>.
 
 Install
 -------
 
-Install it with `easy_install pyblue2` or `pip install pyblue2 --upgrade`
+Install it with `easy_install pyblue` or `pip install pyblue --upgrade`
 
 Alternatively download it from
-the [PyBlue2 at PyPI](https://pypi.python.org/pypi/pyblue2/) site.
+the [PyBlue at PyPI](https://pypi.python.org/pypi/pyblue/) site.
 
-Use
----
+**Note:** Version 2.0 of pyblue moved from Mako Templates to Django Templates and
+with that introduced other semantic differences. To install
+the last version of the `1.*` line use: `easy_install pyblue==1.2` or `pip install pyblue=1.2`
+
+Usage
+-----
 
 * Launch pyblue to serve a directory <code>pyblue serve -r docs</code>.
 * View your site by visiting <code>http:://localhost:8080</code>.
@@ -33,13 +37,6 @@ Documentation
 The [PyBlue documentation][docs-html] was generated with PyBlue itself.
 
 You can also browse the [help in source format][docs-src] for examples.
-
-
-Note
-----
-
-Version 2.0 moved from Mako Templates to Django Templates.
-
 
 Licensing
 ---------
