@@ -24,10 +24,12 @@ PyPI <https://pypi.python.org/pypi/pyblue/>`__ site.
 **Note:** Version 2.0 of pyblue moved from Mako Templates to Django
 Templates and with that introduced other semantic differences. To
 install the last version of the ``1.*`` line use:
-``easy_install pyblue==1.2`` or ``pip install pyblue=1.2``
+``easy_install pyblue==1.1.2`` or ``pip install pyblue=1.1.2``. See also
+the docs at: `Pyblue
+1.1.2 <https://pypi.python.org/pypi/pyblue/1.1.2>`__
 
-Use
----
+Usage
+-----
 
 -  Launch pyblue to serve a directory pyblue serve -r docs.
 -  View your site by visiting http:://localhost:8080.
@@ -43,9 +45,6 @@ generated with PyBlue itself.
 You can also browse the `help in source
 format <https://github.com/ialbert/pyblue/tree/master/docs>`__ for
 examples.
-
-Note
-----
 
 Licensing
 ---------

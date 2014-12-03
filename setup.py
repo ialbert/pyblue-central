@@ -5,7 +5,7 @@ import os.path, sys
 import pyblue
 
 setup(
-      name='pyblue2',
+      name='pyblue',
       version=pyblue.VERSION,
       description='PyBlue',
       author='Istvan Albert',
