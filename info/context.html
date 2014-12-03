@@ -98,22 +98,22 @@ to produce: More About Contexts</p>
 
 <p>To add more variables list them one on each line:</p>
 
-<div class="highlight"><pre><span class="p">{</span><span class="c"># title = More About Context #}</span>
-<span class="p">{</span><span class="c"># foo = 1234.5 #}</span>
-<span class="p">{</span><span class="c"># bar = [ 100, 200, Hello World ] #}</span>
+<div class="highlight"><pre><span class="o">{</span><span class="c"># title = More About Context #}</span>
+<span class="o">{</span><span class="c"># foo = 1234.5 #}</span>
+<span class="o">{</span><span class="c"># bar = [ 100, 200, Hello World ] #}</span>
 </pre></div>
 
 <p>Note that in the last example for <code>bar</code> gets turned into python list accessible as
 <code>{{ page.bar }}</code> 
-to produce [100, 200, u&#39;Hello World&#39;].</p>
+to produce [100, 200, u'Hello World'].</p>
 
 <p>The <code>{{ page.bar }}</code>  object can also be looped over with Django :</p>
 
-<div class="highlight"><pre><span class="nt">&lt;ol&gt;</span>
-    <span class="cp">{%</span> <span class="k">for</span> <span class="nv">elem</span> <span class="k">in</span> <span class="nv">p.bar</span> <span class="cp">%}</span>
-        <span class="nt">&lt;li&gt;</span><span class="cp">{{</span> <span class="nv">elem</span> <span class="cp">}}</span><span class="nt">&lt;/li&gt;</span>
-    <span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span>
-<span class="nt">&lt;/ol&gt;</span>
+<div class="highlight"><pre>&lt;ol&gt;
+    <span class="o">{</span>% <span class="k">for</span> elem in p.bar %<span class="o">}</span>
+        &lt;li&gt;<span class="o">{{</span> elem <span class="o">}}</span>&lt;/li&gt;
+    <span class="o">{</span>% endfor %<span class="o">}</span>
+&lt;/ol&gt;
 </pre></div>
 
 <p>To produce</p>
@@ -138,14 +138,14 @@ any python construct.</p>
 <span class="c"># will be loaded automatically into the page.</span>
 <span class="c">#</span>
 
-<span class="n">NUMBERS</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="nv">NUMBERS</span> <span class="o">=</span> range<span class="o">(</span>5<span class="o">)</span>
 
 <span class="c"># It may contain any valid python construct.</span>
 
-<span class="k">def</span> <span class="nf">say_hello</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-    <span class="k">return</span> <span class="s">&quot;Hello </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">name</span>
+def say_hello<span class="o">(</span>name<span class="o">)</span>:
+    <span class="k">return</span> <span class="s2">"Hello %s"</span> % name
 
-<span class="n">greeting</span> <span class="o">=</span> <span class="n">say_hello</span><span class="p">(</span><span class="s">&quot;World!&quot;</span><span class="p">)</span>
+<span class="nv">greeting</span> <span class="o">=</span> say_hello<span class="o">(</span><span class="s2">"World!"</span><span class="o">)</span>
 </pre></div>
 
 <p>We can now access the contenxt of contex.py like

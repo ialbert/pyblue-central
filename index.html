@@ -1,4 +1,5 @@
 
+
 <html>
 <head>
     
@@ -134,16 +135,16 @@ variables that exists.</p>
 <ul>
 <li>Writing: <code>{{ page.name }}</code> will produce: Index</li>
 <li>Writing:  <code>{{ page.last_modified }}</code> 
-will produce: Friday, November 28, 2014</li>
+will produce: Wednesday, December 03, 2014</li>
 <li>Writing:  <code>{{ page.size|filesizeformat }}</code> 
-will produce: 5.2 KB</li>
+will produce: 5.3 KB</li>
 </ul>
 
 <p>Note how in this last case we also made use of the code&gt;filesizeformat builtin filter from Django.</p>
 
 <p>Users may add more information even load a python module into the page.</p>
 
-<p>Learn <a href="./info/context.html">More About Contexts</a>.</p>
+<p>Learn <a href="./info/context.html">Context</a>.</p>
 
 <h2>Links</h2>
 
@@ -151,7 +152,7 @@ will produce: 5.2 KB</li>
 <code>{% load pytags %}</code>. You can now make use of specific tags.</p>
 
 <p>For example <code>{% link "context.html" %}</code> will
-produce the following: <a href="./info/context.html">More About Contexts</a>.</p>
+produce the following: <a href="./info/context.html">Context</a>.</p>
 
 <p>Why? The <code>{% link "context.html" %}</code>
 command performs a regular expression search on all files in the directory and
@@ -167,26 +168,29 @@ it and link it.</p>
 
 <p>To include markdown content place it between <code>markdown</code> template tags.</p>
 
-<div class="highlight"><pre><span class="cp">{%</span> <span class="k">load</span> <span class="nv">pytags</span> <span class="cp">%}</span><span class="x"></span>
+<div class="highlight"><pre><span class="o">{</span>% load pytags %<span class="o">}</span>
+<span class="o">{</span><span class="c"># title=Markdown embedded into html template #}</span>
 
-<span class="cp">{%</span> <span class="k">markdown</span> <span class="cp">%}</span><span class="x"></span>
-<span class="x">Hello World!</span>
-<span class="x">============</span>
+<span class="o">{</span>% markdown %<span class="o">}</span>
+Hello World!
+<span class="o">============</span>
 
-<span class="x">Now you can write markdown in your templates. This is good because:</span>
+Now you can write markdown in your templates. This is good because:
 
-<span class="x">* Markdown is awesome</span>
-<span class="x">* Markdown is less verbose than writing html by hand</span>
-<span class="x">* The page title is: </span><span class="cp">{{</span> <span class="nv">page.title</span> <span class="cp">}}</span><span class="x"></span>
+* Markdown is awesome
+* Markdown is less verbose than writing html by hand
+* The page title is: <span class="o">{{</span> page.title <span class="o">}}</span>
 
-<span class="x">Note how you can use other template constructs inside the markdown section.</span>
+Note how you can use other template constructs inside the markdown section.
 
-<span class="x">Back to home: </span><span class="cp">{%</span> <span class="k">link</span> <span class="s2">"index.html"</span> <span class="cp">%}</span><span class="x"></span>
+Back to home: <span class="o">{</span>% link <span class="s2">"index.html"</span> %<span class="o">}</span>
 
-<span class="cp">{%</span> <span class="k">endmarkdown</span> <span class="cp">%}</span><span class="x"></span>
+<span class="o">{</span>% endmarkdown %<span class="o">}</span>
 </pre></div>
 
 <p>Here is the result of processing the file above: <a href="./info/markdown-example.html">Markdown Example</a></p>
+
+<p>Files with <code>.md</code> extension will get rendered automatically as html: <a href="./info/markdown-example.md">Markdown Example</a></p>
 
 <h2>Include</h2>
 
@@ -197,14 +201,14 @@ it and link it.</p>
 <span class="c"># will be loaded automatically into the page.</span>
 <span class="c">#</span>
 
-<span class="n">NUMBERS</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="nv">NUMBERS</span> <span class="o">=</span> range<span class="o">(</span>5<span class="o">)</span>
 
 <span class="c"># It may contain any valid python construct.</span>
 
-<span class="k">def</span> <span class="nf">say_hello</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-    <span class="k">return</span> <span class="s">"Hello </span><span class="si">%s</span><span class="s">"</span> <span class="o">%</span> <span class="n">name</span>
+def say_hello<span class="o">(</span>name<span class="o">)</span>:
+    <span class="k">return</span> <span class="s2">"Hello %s"</span> % name
 
-<span class="n">greeting</span> <span class="o">=</span> <span class="n">say_hello</span><span class="p">(</span><span class="s">"World!"</span><span class="p">)</span>
+<span class="nv">greeting</span> <span class="o">=</span> say_hello<span class="o">(</span><span class="s2">"World!"</span><span class="o">)</span>
 </pre></div>
 
 <p>Now this file is also special because of its name. The contents of it are available in the page. For example
