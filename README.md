@@ -8,19 +8,24 @@ and it can generate static sites from dynamic templates.
 
 PyBlue also makes it easy to use [Markdown][markdown] inside of  webpages.
 
-This file is located in <code><a href="https://github.com/ialbert/pyblue/tree/master/docs/src/index.html">docs/src/index.html</a></code>
+This file is located in <code>https://github.com/ialbert/pyblue/blob/master/docs/index.html</code>
 of the <a href="https://github.com/ialbert/pyblue">PyBlue distribution</a>.
 
 Install
 -------
 
-Install it with `easy_install pyblue` or `pip install pyblue --upgrade`, or download it from
+Install it with `easy_install pyblue` or `pip install pyblue --upgrade`
+
+Alternatively download it from
 the [PyBlue at PyPI](https://pypi.python.org/pypi/pyblue/) site.
+
+Use
+---
 
 * Launch pyblue to serve a directory <code>pyblue serve -r docs</code>.
 * View your site by visiting <code>http:://localhost:8080</code>.
-* Edit your pages and make changes. Reload to page to see the effect.
-* Finally, generate static output: <code>pyblue make -r docs -o html</code>
+* Edit your pages and make changes. Reload to page to see your edits.
+* Finally, generate static output with: <code>pyblue make -r docs -o html</code>
 
 Documentation
 -------------
@@ -29,6 +34,9 @@ The [PyBlue documentation][docs-html] was generated with PyBlue itself.
 
 You can also browse the [help in source format][docs-src] for examples.
 
+Note: This is version 2.0 that moved from Mako Templates to Django Templating.
+
+
 Licensing
 ---------
 
@@ -36,7 +44,7 @@ Licensing
 * PyBlue has been inspired by [PyGreen][pygreen] created by Nicolas Vanhoren see https://github.com/nicolas-van
 * PyBlue uses the [MIT license][license].
 
-[docs-src]: https://github.com/ialbert/pyblue/tree/master/docs/src/
+[docs-src]: https://github.com/ialbert/pyblue/tree/master/docs
 [docs-html]: http://ialbert.github.io/pyblue/
 [django]: https://www.djangoproject.com/
 [markdown]: http://en.wikipedia.org/wiki/Markdown
