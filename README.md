@@ -1,5 +1,5 @@
-Welcome to Pyblue2
-==================
+Welcome to Pyblue
+=================
 
 A simple static site generator. Zero configuration. Works with any existing site.
 
