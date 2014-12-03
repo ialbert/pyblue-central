@@ -32,16 +32,11 @@ quite a few alternatives, some for many months yet slowly each drove me nuts.
 Hence the motivation to write my own.
 The following are some of the reasons why PyBlue exists:
 
-1. Requires no configuration or predetermined directory/file naming. I hate
-when software starts by imposing rules on what should go where.
-1. Automatic linking! PyBlue keeps track of your links based on the file name.
-You can move the files around to other directories and these
-will be found and linked correctly.
-1. Allows users to embed code/files with syntax highlighting.
-1. Allows users to load data into every page. Data can either go into
-each page as comments or a python module can be loaded that may contain
-any python object.
-1. Advanced templating. Users may use the [Django Templating][django] system and all
+1. No configuration or predetermined naming.
+1. Automatic linking! Pyblue will produce the correct links even when files are moved around.
+1. Embed code/files with syntax highlighting.
+1. Load python data structures into pages.
+1. Advanced templating: [Django Templating][django] system and all
  that it offers.
 1. [Bootstrap][bootstrap] integration. Handy shortcuts to Bootstrap features.
 1. Tiny codebase. PyBlue is around 500 lines of code. Runs on Python 2.7 and 3.4 as well.
@@ -52,10 +47,20 @@ Install
 Install it with `easy_install pyblue` or `pip install pyblue --upgrade`, or download it from
 the [PyBlue PyPI](https://pypi.python.org/pypi/pyblue/) site.
 
-* Launch pyblue to serve a directory <code>pyblue serve -r docs/src</code>.
-* View your site by visiting <code>http:://localhost:8080</code>.
+**Note:** Version 2.0 of pyblue moved from Mako Templates to Django Templates and
+with that introduced other semantic differences.
+
+To install the last version of the `1.*` line use: `easy_install pyblue==1.1.2` or `pip install pyblue=1.1.2`.
+See also the previous docs at: [Pyblue 1.1.2](https://pypi.python.org/pypi/pyblue/1.1.2)
+
+Use
+---
+
+* Launch pyblue to serve a directory `pyblue serve -r docs/src`.
+* View your site by visiting `http:://localhost:8080`.
 * Edit your pages and make changes. Reload to page to see the effect.
-* Finally, generate static output: <code>pyblue make -r docs/src -o docs/html</code>
+* Finally, generate static output: `pyblue make -r docs/src -o docs/html`
+* To see extra help on options run: `pyblue -h`
 
 Context
 -------
@@ -63,7 +68,6 @@ Context
 The pages are rendered through the Django Template engine.
 Users automatically get additional context for each of the pages as
 variables that exists.
-
 
 For example the {% verbatim %}<code>{{ page }}</code>{% endverbatim %} variable is present:
 
@@ -77,7 +81,7 @@ Note how in this last case we also made use of the code>filesizeformat</code> bu
 
 Users may add more information even load a python module into the page.
 
-Learn {% link "context.html" %}.
+Read about how to add more {% link "context.html" %}.
 
 Links
 -----
@@ -94,8 +98,8 @@ once it finds a match it produces a link to it with the proper path.
 This keeps links correct even after moving files! Note how in this
 case the file is located in <code>info/context.html</code>
 
-Note that the search string is used as a regular expression! All a user needs
-to specify is the shortest unambiguous part of the file and PyBlue will find
+Note that the search string is used as a regular expression!
+It is sufficient to specify the shortest unambiguous part of the file and PyBlue will find
 it and link it.
 
 Markdown
@@ -116,13 +120,16 @@ To include syntax highlighted code write {% verbatim %}<code>{% code "context.py
 
 {% code "context.py" %}
 
-Now this file is also special because of its name. The contents of it are available in the page. For example
-writing {% verbatim %}<code>{{ context.greeting }}</code>{% endverbatim %} produces: {{ context.greeting }}
+Add {% verbatim %}<code>{% pygments_css %}</code>{% endverbatim %} to the header of the page to
+generate the CSS classes needed to syntax color embedded code.
+
+This file is also special because of its name. The contents of it are available in the page. For example
+writing {% verbatim %}`{{ context.greeting }}`{% endverbatim %} produces: {{ context.greeting }}
 
 Bootstrap
 ---------
 
-There are helper methods for [Bootstrap][boostrap].
+There are helper methods for [Bootstrap][bootstrap].
 
 For example {% verbatim %}<code>{% boostrap_cdn %}</code>{% endverbatim %} will include
 the CSS and Javascript files used with Boostrap.
@@ -130,9 +137,11 @@ the CSS and Javascript files used with Boostrap.
 Licensing
 ---------
 
-* PyBlue is being developed by Istvan Albert see https://github.com/ialbert
-* PyBlue has been inspired by [PyGreen][pygreen] created by Nicolas Vanhoren see https://github.com/nicolas-van
 * PyBlue uses the [MIT license][license].
+* PyBlue is being developed by Istvan Albert see https://github.com/ialbert
+* PyBlue has been inspired by [PyGreen][pygreen] created by Nicolas Vanhoren see (https://github.com/nicolas-van/pygreen) but it does
+  not use any code from it.
+
 
 [django]: https://www.djangoproject.com/
 [markdown]: http://en.wikipedia.org/wiki/Markdown

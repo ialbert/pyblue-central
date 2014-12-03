@@ -1,5 +1,5 @@
 # The repository that contains the GITHUB pages checkout
-GIHUB_PAGES=../pyblue-pages
+GITHUB_PAGES=../pyblue-pages
 
 all: docs
 
@@ -20,5 +20,6 @@ pypi: rst
 
 pages: rst
 	# Generate/commit/push documentation into the GitHub Page repository.
+	cd ${GITHUB_PAGES} && git pull
 	pyblue make -r docs -o ${GITHUB_PAGES}
 	cd ${GITHUB_PAGES} && git commit -am "updated the docs" && git push
