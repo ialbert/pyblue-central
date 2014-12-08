@@ -1,15 +1,26 @@
 {% extends "presentation.html" %}
+{# title=Presentation Demo #}
+{# static=/static/ #}
+
 {% load pytags %}
 
 {% block body %}
 
 <section>
 
-    <h2>Title 1</h2>
-    <p>
-        content for slide 1
-    </p>
+{% markdown %}
+Presentations with PyBlue
+-------------------------
 
+Some setup required:
+
+    pyblue slideinit -r dirname
+
+This will copy over all assets into the folder used serve your slides.
+
+It may be a subfolder of your main PyBlue site.
+
+{% endmarkdown %}
 </section>
 
 <section>

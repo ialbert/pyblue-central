@@ -5,7 +5,7 @@
 	<head>
 		<meta charset="utf-8">
 
-		<title>reveal.js - The HTML Presentation Framework</title>
+		<title>{{ page.title }}</title>
 
 		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
 		<meta name="author" content="Hakim El Hattab">
@@ -15,8 +15,8 @@
 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<link rel="stylesheet" href="/static/reveal/css/reveal.min.css">
-		<link rel="stylesheet" href="/static/reveal/css/theme/default.css" id="theme">
+		<link rel="stylesheet" href="{{page.static}}/reveal/css/reveal.min.css">
+		<link rel="stylesheet" href="{{page.static}}/reveal/css/theme/beige.css" id="theme">
 
 		<!-- If the query includes 'print-pdf', include the PDF print sheet -->
 		<script>
@@ -24,7 +24,7 @@
 				var link = document.createElement( 'link' );
 				link.rel = 'stylesheet';
 				link.type = 'text/css';
-				link.href = 'css/print/pdf.css';
+				link.href = '{{page.static}}/reveal/css/print/pdf.css';
 				document.getElementsByTagName( 'head' )[0].appendChild( link );
 			}
 		</script>
@@ -44,14 +44,14 @@
 
 		</div>
 
-		<script src="/static/reveal/js/reveal.min.js"></script>
+		<script src="{{page.static}}/reveal/js/reveal.min.js"></script>
 
 		<script>
 			Reveal.initialize({
 				controls: true,
 				progress: true,
 				history: true,
-				center: true
+				center: false
 			});
 
 		</script>
