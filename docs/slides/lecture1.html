@@ -1,0 +1,43 @@
+{% extends "presentation.html" %}
+{% load pytags %}
+
+{% block body %}
+
+<section>
+
+    <h2>Title 1</h2>
+    <p>
+        content for slide 1
+    </p>
+
+</section>
+
+<section>
+
+    <h2>Title 2</h2>
+    <p>
+        Content for slide 2
+    </p>
+
+</section>
+
+<section>
+
+    <h2>Title 2</h2>
+    <p>
+
+{% markdown %}
+
+OK Add More stuff here
+----------------------
+
+Content for slide 2
+
+{% endmarkdown %}
+
+    </p>
+
+</section>
+
+{% endblock %}
+

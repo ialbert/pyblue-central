@@ -3,7 +3,6 @@ from __future__ import print_function, unicode_literals, absolute_import, divisi
 
 __author__ = 'ialbert'
 
-import markdown2
 import django
 from django.conf import settings
 from django.template import Context, Template, get_templatetags_modules
@@ -100,7 +99,7 @@ class File(object):
     """
     MAX_SIZE_MB = 5
     IMAGE_EXTENSIONS = set(".png .jpg .gif .svg".split())
-    TEMPLATE_EXTENSIONS = set(".html .htm .md".split())
+    TEMPLATE_EXTENSIONS = set(".html .htm".split())
 
     def __init__(self, fname, root):
         self.root = root
@@ -134,12 +133,6 @@ class File(object):
         # Only templates will be handled through Django.
         self.is_template = self.ext in self.TEMPLATE_EXTENSIONS
 
-        # We can only figure this out later.
-        self.is_slide = False
-
-        # Is it a markdown document.
-        self.is_markdown = (self.ext == ".md")
-
         # The nice name is used by default for name and title.
         name = self.nicer_name(fname)
 
@@ -151,7 +144,6 @@ class File(object):
             try:
                 lines = io.open(self.fpath).read().splitlines()[:20]
                 self.meta.update(parse_lines(lines))
-                self.is_slide = lines and lines[0].strip().startswith("presentation:")
             except Exception as exc:
                 logger.error(exc)
 
@@ -237,64 +229,6 @@ class File(object):
         User friendly representation
         """
         return "%s: %s (%s)" % (self.__class__.__name__, self.name, self.fname)
-
-def process_slides(fname, params={}):
-    #
-    # From io-2012-slides package
-    # https://code.google.com/p/io-2012-slides/source/browse/scripts/md/render.py
-    #
-    # this will be merged fully into pyblue
-    #
-
-
-
-    md = io.open(fname, encoding='utf8').read()
-    md_slides = md.split('\n---\n')[1:]
-
-    logger.info('found %s slides.' % len(md_slides))
-
-    def parse_metadata(section):
-        """Given the first part of a slide, returns metadata associated with it."""
-        meta = {}
-        metadata_lines = section.split('\n')
-        for line in metadata_lines:
-            colon_index = line.find(':')
-            if colon_index != -1:
-                key = line[:colon_index].strip()
-                val = line[colon_index + 1:].strip()
-                meta[key] = val
-
-        return meta
-
-    def postprocess_html(html, meta):
-        """Returns processed HTML to fit into the slide template format."""
-        if meta.get('build_lists') and meta['build_lists'] == 'true':
-            html = html.replace('<ul>', '<ul class="build">')
-            html = html.replace('<ol>', '<ol class="build">')
-        return html
-
-    slides = []
-    # Process each slide separately.
-    for md_slide in md_slides:
-        slide = dict(title="Title", subtitle='Subtitle', content='Content')
-        sections = md_slide.split('\n\n')
-
-        # Extract metadata at the beginning of the slide (look for key: value) pairs.
-        metadata_section = sections[0]
-        metadata = parse_metadata(metadata_section)
-        slide.update(metadata)
-        remainder_index = metadata and 1 or 0
-
-        # Get the content from the rest of the slide.
-        content_section = '\n\n'.join(sections[remainder_index:])
-        html = markdown2.markdown(content_section)
-        tmpl = Template(html)
-        cont = Context(params)
-        html = tmpl.render(cont)
-        slide['content'] = postprocess_html(html, metadata)
-        slides.append(slide)
-
-    return slides
 
 
 # Conversion regular expressions.
@@ -427,19 +361,8 @@ class PyBlue(object):
                 return bottle.static_file(path, root=self.root)
 
             params = dict(page=page, root=self.root, context=ctx, files=self.files)
-            if page.is_slide:
-                # Markdown based slide, render with HTML5 slidebase.
-                slides = process_slides(page.fpath, params=params)
-
-                params.update(dict(slides=slides))
-                templ = get_template("slide.html")
-                cont = Context(params)
-            elif page.is_markdown:
-                templ = get_template("markdown-base.html")
-                cont = Context(params)
-            else:
-                templ = get_template(page.fname)
-                cont = Context(params)
+            templ = get_template(page.fname)
+            cont = Context(params)
 
             return templ.render(cont)
 

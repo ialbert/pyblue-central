@@ -107,11 +107,18 @@ Markdown
 
 To include markdown content place it between <code>markdown</code> template tags.
 
-{% code "markdown-example.html" %}
+{% code "markdown-embed.html" %}
 
-Here is the result of processing the file above: {% link "markdown-example.html" %}
+Here is the result of processing the file above: {% link "markdown-embed.html" %}
 
-Files with `.md` extension will get rendered automatically as html: {% link "markdown-example.md" %}
+Slides
+------
+
+To have the system generate slides add the
+
+    {% verbatim %}{% extends "presentation.html" %}{% endverbatim %}
+
+Here is the result of processing the file above: {% link "lecture1.html" %}
 
 Include
 -------
