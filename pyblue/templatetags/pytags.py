@@ -66,6 +66,19 @@ def code(context, word, hint="bash"):
     html = highlight(text, lexer, HtmlFormatter())
     return html
 
+@register.simple_tag()
+def slide_style(slide):
+    klass = slide.get("class")
+    image = slide.get("image")
+
+    if klass and image:
+        return 'class="%s" style="background-image: url(%s)"' % (klass, image)
+    elif klass:
+        return 'class="%s"' % klass
+    else:
+        return 'class="slide"'
+
+
 
 @register.simple_tag()
 def pygments_css():

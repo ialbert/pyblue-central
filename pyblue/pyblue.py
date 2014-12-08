@@ -3,6 +3,7 @@ from __future__ import print_function, unicode_literals, absolute_import, divisi
 
 __author__ = 'ialbert'
 
+import markdown2
 import django
 from django.conf import settings
 from django.template import Context, Template, get_templatetags_modules
@@ -95,7 +96,7 @@ def get_parser():
 class File(object):
     """
     Represents a file object within PyBlue.
-    Each file object is visible in the template context.
+    Each file object is visible in the template context as the 'page' variable.
     """
     MAX_SIZE_MB = 5
     IMAGE_EXTENSIONS = set(".png .jpg .gif .svg".split())
@@ -133,6 +134,9 @@ class File(object):
         # Only templates will be handled through Django.
         self.is_template = self.ext in self.TEMPLATE_EXTENSIONS
 
+        # We can only figure this out later.
+        self.is_slide = False
+
         # Is it a markdown document.
         self.is_markdown = (self.ext == ".md")
 
@@ -147,8 +151,10 @@ class File(object):
             try:
                 lines = io.open(self.fpath).read().splitlines()[:20]
                 self.meta.update(parse_lines(lines))
+                self.is_slide = lines and lines[0].strip().startswith("presentation:")
             except Exception as exc:
                 logger.error(exc)
+
     @property
     def content(self):
         # Don't load large files
@@ -157,6 +163,12 @@ class File(object):
             return "?"
 
         return io.open(self.fpath).read()
+
+    @property
+    def get_slides(self):
+        # Returns a slides
+        slides = self.content.split("\n---\n")
+        return slides[1:]
 
     def nicer_name(self, fname):
         """
@@ -226,6 +238,64 @@ class File(object):
         """
         return "%s: %s (%s)" % (self.__class__.__name__, self.name, self.fname)
 
+def process_slides(fname, params={}):
+    #
+    # From io-2012-slides package
+    # https://code.google.com/p/io-2012-slides/source/browse/scripts/md/render.py
+    #
+    # this will be merged fully into pyblue
+    #
+
+
+
+    md = io.open(fname, encoding='utf8').read()
+    md_slides = md.split('\n---\n')[1:]
+
+    logger.info('found %s slides.' % len(md_slides))
+
+    def parse_metadata(section):
+        """Given the first part of a slide, returns metadata associated with it."""
+        meta = {}
+        metadata_lines = section.split('\n')
+        for line in metadata_lines:
+            colon_index = line.find(':')
+            if colon_index != -1:
+                key = line[:colon_index].strip()
+                val = line[colon_index + 1:].strip()
+                meta[key] = val
+
+        return meta
+
+    def postprocess_html(html, meta):
+        """Returns processed HTML to fit into the slide template format."""
+        if meta.get('build_lists') and meta['build_lists'] == 'true':
+            html = html.replace('<ul>', '<ul class="build">')
+            html = html.replace('<ol>', '<ol class="build">')
+        return html
+
+    slides = []
+    # Process each slide separately.
+    for md_slide in md_slides:
+        slide = dict(title="Title", subtitle='Subtitle', content='Content')
+        sections = md_slide.split('\n\n')
+
+        # Extract metadata at the beginning of the slide (look for key: value) pairs.
+        metadata_section = sections[0]
+        metadata = parse_metadata(metadata_section)
+        slide.update(metadata)
+        remainder_index = metadata and 1 or 0
+
+        # Get the content from the rest of the slide.
+        content_section = '\n\n'.join(sections[remainder_index:])
+        html = markdown2.markdown(content_section)
+        tmpl = Template(html)
+        cont = Context(params)
+        html = tmpl.render(cont)
+        slide['content'] = postprocess_html(html, metadata)
+        slides.append(slide)
+
+    return slides
+
 
 # Conversion regular expressions.
 int_patt = re.compile("\d+")
@@ -235,7 +305,11 @@ lst_patt = re.compile("\[(?P<body>[\S\s]+?)\]")
 
 def convert_text(text):
     """
-    Converts text to an appropriate python datatype: int, float or list.
+    Converts text to the most appropriate python datatype: int, float or list.
+    '1' -> 1 (int)
+    '1.0' -> 1.0 (float)
+    [1, 2, Hello] -> [ 1, 2, 'Hello' ] (list)
+    'foo' -> 'foo' (string)
     """
     global int_patt, flt_patt, lst_patt
     text = text.strip()
@@ -279,13 +353,13 @@ class PyBlue(object):
     def django_init(self, context="context.py"):
         "Initializes the django engine. The root must have been set already!"
 
-        BASE_APP = [ ]
+        BASE_APP = []
         try:
             # checks if the root is importable
             base = os.path.split(self.root)[-1]
             importlib.import_module(base)
             logger.info("imported %s" % base)
-            BASE_APP = [ base ]
+            BASE_APP = [base]
         except Exception as exc:
             logger.info("%s" % exc)
 
@@ -297,7 +371,7 @@ class PyBlue(object):
 
             ),
             INSTALLED_APPS=["pyblue", "django.contrib.humanize"] + BASE_APP,
-            TEMPLATE_STRING_IF_INVALID = " ??? ",
+            TEMPLATE_STRING_IF_INVALID=" ??? ",
         )
 
         django.setup()
@@ -348,18 +422,27 @@ class PyBlue(object):
             logger.info("render: %s" % path)
             page = File(fname=path, root=self.root)
 
-            if page.is_template:
-                params = dict(page=page, root=self.root, context=ctx, files=self.files)
-                if page.is_markdown:
-                    templ_name = "markdown-base.html"
-                else:
-                    templ_name = page.fname
-
-                templ = get_template(templ_name)
-                cont = Context(params)
-                return templ.render(cont)
-            else:
+            if not page.is_template:
+                # Non template files rendered in static context.
                 return bottle.static_file(path, root=self.root)
+
+            params = dict(page=page, root=self.root, context=ctx, files=self.files)
+            if page.is_slide:
+                # Markdown based slide, render with HTML5 slidebase.
+                slides = process_slides(page.fpath, params=params)
+
+                params.update(dict(slides=slides))
+                templ = get_template("slide.html")
+                cont = Context(params)
+            elif page.is_markdown:
+                templ = get_template("markdown-base.html")
+                cont = Context(params)
+            else:
+                templ = get_template(page.fname)
+                cont = Context(params)
+
+            return templ.render(cont)
+
 
         # Make a shortcut to the renderer.
         self.render = render
@@ -368,6 +451,7 @@ class PyBlue(object):
         self.app = bottle.Bottle()
         self.app.route('/', method=['GET', 'POST', 'PUT', 'DELETE'])(lambda: self.render('index.html'))
         self.app.route('/<path:path>', method=['GET', 'POST', 'PUT', 'DELETE'])(lambda path: self.render(path))
+
 
     def set_root(self, path):
         "Sets the folder where the files to serve are located."
