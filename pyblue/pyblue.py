@@ -5,16 +5,39 @@ __author__ = 'ialbert'
 
 import django
 from django.conf import settings
+from django.utils.text import slugify
+
 from django.template import Context, Template, get_templatetags_modules
 from django.template.loader import get_template
 import bottle, waitress, importlib
-import sys, os, io, imp, argparse, logging, re, time, shutil
+import sys, os, io, imp, argparse, logging, re, time, shutil, json
+import requests
 
 from pyblue import VERSION
+
+API_GET_URL = "{0.url}/api/post/{1}/"
 
 DESCRIPTION = "PyBlue %s, static site generator" % VERSION
 
 logger = logging.getLogger(__name__)
+
+
+class BiostarPost(object):
+    METADATA_FIELDS = "title uuid id type domain tag_val".split()
+
+    def __init__(self, data={}, **kwargs):
+        self.__dict__.update(data)
+        self.__dict__.update(kwargs)
+
+    def body(self):
+        output = []
+        for field in self.METADATA_FIELDS:
+            value = self.__dict__.get(field)
+            if value:
+                output.append("{{# {} = {} #}}".format(field, value))
+
+        output.append(self.content)
+        return "\n".join(output)
 
 
 def join(*args):
@@ -22,9 +45,8 @@ def join(*args):
     return os.path.abspath(os.path.join(*args))
 
 
-def strip(text):
-    # Why was this removed from Python 3?
-    return text.strip()
+# To allow functional style call.
+strip = lambda text: text.strip()
 
 
 def mtime(fname):
@@ -36,58 +58,82 @@ def mtime(fname):
 TEMPLATE_DIR = join(os.path.dirname(__file__), "templates")
 
 
+def add_common_arguments(parser):
+    parser.add_argument('-r', dest='root', metavar="DIR", default=".", required=True,
+                        help='root directory to operate from (%(default)s)')
+
+    parser.add_argument('--no-scan', dest="no_scan", default=False, action="store_true",
+                        help='turn off file scan on each request (%(default)s)')
+
+    parser.add_argument('--no-time', dest="no_time", default=False, action="store_true",
+                        help='bypass timestamp check (%(default)s)')
+
+    parser.add_argument('--context', dest="context", metavar="FILE", type=str, required=False,
+                        default="context.py", help='the python module to load as context (%(default)s)')
+
+    parser.add_argument('--verbose', dest="verbose", default=False, action="store_true",
+                        help='increase message verbosity')
+
+
 def get_parser():
     parser = argparse.ArgumentParser(description=DESCRIPTION)
 
     # Subcommands to the parser.
     subpar = parser.add_subparsers(dest="action",
-                                   help=" action: serve, deploy")
+                                   help=" action: serve, deploy, push, pull")
 
     # The serve subcommand.
     serve = subpar.add_parser('serve',
                               help='serve the web site',
                               epilog="And that's how pyblue serves a directory during development.")
 
-    serve.add_argument('-r', dest='root', metavar="DIR", default=".", required=True,
-                       help='root directory to serve from (%(default)s)')
-
     serve.add_argument('-p', metavar="NUMBER", type=int, default=8080,
                        help='server port to bind to (%(default)s)')
 
-    serve.add_argument('-v', dest="verbose", default=False, action="store_true",
-                       help='increase message verbosity')
+    add_common_arguments(serve)
 
-    serve.add_argument('--no-scan', dest="no_scan", default=False, action="store_true",
-                       help='turn off file scan on each request (%(default)s)')
-
-    serve.add_argument('--no-time', dest="no_time", default=False, action="store_true",
-                       help='bypass timestamp check (%(default)s)')
-
-    serve.add_argument('--context', dest="context", metavar="FILE", type=str, required=False,
-                       default="context.py", help='the python module to load as context (%(default)s)')
 
     # The make subcommand.
     make = subpar.add_parser('make',
                              help='generates the static website',
                              epilog="And that's how pyblue makes static output.")
 
-    make.add_argument('-r', dest='root', metavar="DIR", default=".", required=True,
-                      help='root directory to process (%(default)s)')
-
     make.add_argument('-o', dest="output", metavar="DIR", type=str, required=True,
                       help='the target directory to store the generated site in')
 
-    make.add_argument('-v', dest="verbose", default=False, action="store_true",
-                      help='increase message verbosity')
+    add_common_arguments(make)
 
-    make.add_argument('--no-scan', dest="no_scan", default=False, action="store_true",
-                      help='turn off file scan on each request (%(default)s)')
+    # The push subcommand.
+    push = subpar.add_parser('push',
+                             help='pushes content to a Biostar instance',
+                             epilog="And that's how you push to Biostar.")
 
-    make.add_argument('--no-time', dest="no_time", default=False, action="store_true",
-                      help='bypass timestamp check (%(default)s)')
+    push.add_argument('--url', metavar="URL", default="http://www.lvh.me:8080",
+                      help='the url to push to')
 
-    make.add_argument('--context', dest="context", metavar="FILE", type=str, required=False,
-                      default="context.py", help='the python module to load as context (%(default)s)')
+    push.add_argument('--overwrite', dest="overwrite", default=False, action="store_true",
+                      help='overwrite the remote content if exists')
+
+
+    # add_common_arguments(push)
+
+    # The pull subcommand.
+    pull = subpar.add_parser('pull',
+                             help='pulls content from a Biostar instance',
+                             epilog="And that's how you push to Biostar.")
+
+    pull.add_argument('--uuid', metavar="UUID", default="",
+                      help='the uuid of the document to pull')
+
+    pull.add_argument('--url', metavar="URL", default="http://www.lvh.me:8080",
+                      help='the url to pull from (%(default)s).')
+
+    pull.add_argument('--overwrite', dest="overwrite", default=False, action="store_true",
+                      help='overwrite the local content if it exists')
+
+    add_common_arguments(pull)
+
+    # add_common_arguments(push)
 
     return parser
 
@@ -142,13 +188,18 @@ class File(object):
         # This object stores the metadata.
         self.meta = dict(fname=fname, name=name, title=name, sortkey="5")
 
+        # This will be the body of the file with no metadata.
+        self.body = ""
+
         # Parse templates files only for metadata.
         if self.is_template:
             try:
-                lines = io.open(self.fpath).read().splitlines()[:20]
-                self.meta.update(parse_lines(lines))
+                body, meta = parse_metadata(self.fpath)
+                self.body = body
+                self.meta.update(meta)
             except Exception as exc:
                 logger.error(exc)
+
     @property
     def content(self):
         # Don't load large files
@@ -257,20 +308,23 @@ def convert_text(text):
     return text
 
 # Match Django template comments.
-com_patt = re.compile(r'^{# (?P<name>\w+)\s?=\s?(?P<value>[\S\s]+) #}')
+PATTERN = re.compile(r'^{# (?P<name>\w+)\s?=\s?(?P<value>[\S\s]+) #}')
 
 
-def parse_lines(lines):
+def parse_metadata(path):
     "Attempts to parse out metadata from django comments"
-    global com_patt
-    meta = dict()
+    lines = io.open(path).read().splitlines()
     lines = map(strip, lines)
+    content, meta = [], dict()
     for line in lines:
-        m = com_patt.search(line)
+        m = PATTERN.search(line)
         if m:
             name, value = m.group('name'), m.group('value')
             meta[name] = convert_text(value)
-    return meta
+        else:
+            content.append(line)
+    body = '\n'.join(content)
+    return body, meta
 
 
 class PyBlue(object):
@@ -279,13 +333,13 @@ class PyBlue(object):
     def django_init(self, context="context.py"):
         "Initializes the django engine. The root must have been set already!"
 
-        BASE_APP = [ ]
+        BASE_APP = []
         try:
             # checks if the root is importable
             base = os.path.split(self.root)[-1]
             importlib.import_module(base)
             logger.info("imported %s" % base)
-            BASE_APP = [ base ]
+            BASE_APP = [base]
         except Exception as exc:
             logger.info("%s" % exc)
 
@@ -297,7 +351,7 @@ class PyBlue(object):
 
             ),
             INSTALLED_APPS=["pyblue", "django.contrib.humanize"] + BASE_APP,
-            TEMPLATE_STRING_IF_INVALID = " ??? ",
+            TEMPLATE_STRING_IF_INVALID=" ??? ",
         )
 
         django.setup()
@@ -331,11 +385,16 @@ class PyBlue(object):
         self.django_init()
 
         try:
-            # Attempts to import a python module as a context
-            ctx = imp.load_source('ctx', join(self.root, self.context))
-        except Exception as exc:
             ctx = None
-            logger.warning("unable to import context module: %s" % self.context)
+            ctx_path = join(self.root, self.context)
+            if os.path.isfile(ctx_path):
+                # Attempts to import a python module as a context
+                ctx = imp.load_source('ctx', ctx_path)
+            else:
+                logger.warning("cannot find context module {}".format(ctx_path))
+
+        except Exception as exc:
+            logger.warning("unable to import context module: {} error: {}".format(ctx_path, exc))
 
         def render(path):
 
@@ -410,6 +469,34 @@ class PyBlue(object):
             else:
                 f.write(output, check=self.time_check)
 
+    def pull(self, args):
+
+        for uuid in args.uuid.split(","):
+            url = API_GET_URL.format(args, uuid)
+            resp = requests.get(url)
+            data = json.loads(resp.content)
+            post = BiostarPost(data)
+            fname = "{}.md".format(slugify(post.title))
+            fpath = join(self.root, fname)
+            fp = io.open(fpath, "wt")
+            fp.write(post.body())
+            fp.close()
+            print("wrote uuid={} to {}".format(args.uuid, fpath))
+
+    def push(self, args):
+
+        for uuid in args.uuid.split(","):
+            url = API_GET_URL.format(args, uuid)
+            resp = requests.get(url)
+            data = json.loads(resp.content)
+            post = BiostarPost(data)
+            fname = "{}.md".format(slugify(post.title))
+            fpath = join(self.root, fname)
+            fp = io.open(fpath, "wt")
+            fp.write(post.body())
+            fp.close()
+            print("wrote uuid={} to {}".format(args.uuid, fpath))
+
 
 def run():
     # Process command line arguments.
@@ -428,11 +515,15 @@ def run():
     logging.basicConfig(format=format, level=level)
 
     pb = PyBlue(root=args.root, args=args)
+
     if args.action == "serve":
         pb.serve()
 
     elif args.action == "make":
         pb.generate(args.output)
+
+    elif args.action == "pull":
+        pb.pull(args)
 
 
 def test():
@@ -463,9 +554,9 @@ def test():
     <body>Done!</body>
     """
     lines = text.splitlines()
-    meta = parse_lines(lines)
+    # body, meta = parse_metadata(lines)
 
-    print(meta)
+    # print(meta)
 
 
 if __name__ == '__main__':
