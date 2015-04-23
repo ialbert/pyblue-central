@@ -45,7 +45,7 @@ setup(
       ],
 
       install_requires=[
-          "django >= 1.7",
+          "django >= 1.7, < 1.8",
           "bottle",
           "markdown2",
           "waitress",

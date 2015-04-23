@@ -105,7 +105,7 @@ def get_parser():
 
     # The push subcommand.
     push = subpar.add_parser('push',
-                             help='pushes content to a Biostar instance',
+                             help='pushes content to Biostar instance (not yet)',
                              epilog="And that's how you push to Biostar.")
 
     push.add_argument('--url', metavar="URL", default="http://www.lvh.me:8080",
@@ -119,7 +119,7 @@ def get_parser():
 
     # The pull subcommand.
     pull = subpar.add_parser('pull',
-                             help='pulls content from a Biostar instance',
+                             help='pulls content from Biostar instance (not yet)',
                              epilog="And that's how you push to Biostar.")
 
     pull.add_argument('--uuid', metavar="UUID", default="",
