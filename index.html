@@ -77,49 +77,40 @@
 <body>
 <div class="container">
 <h1>Welcome to Pyblue</h1>
-
 <p>A simple static site generator. Zero configuration. Works with any existing site.</p>
-
 <p>PyBlue allows the reuse of data and visuals (header/footer) across many pages
-and it can generate static sites from dynamic templates.</p>
-
-<p>PyBlue also makes it easy to use <a href="http://en.wikipedia.org/wiki/Markdown">Markdown</a> inside of  webpages.</p>
-
-<p>This file is located in <code><a href="https://github.com/ialbert/pyblue/tree/master/docs/index.html">docs/src/index.html</a></code>
+and it can generate static sites from dynamic templates.
+PyBlue also makes it easy to use <a href="http://en.wikipedia.org/wiki/Markdown">Markdown</a> inside of  webpages.
+This file is located in <code><a href="https://github.com/ialbert/pyblue/tree/master/docs/index.html">docs/src/index.html</a></code>
 of the <a href="https://github.com/ialbert/pyblue">PyBlue distribution</a>.</p>
-
-<h2>Why PyBlue?</h2>
-
+<h3>Why PyBlue?</h3>
 <p>There is no shortage of static html generators. PyBlue is a personal project
 that aims to address my personal annoyances with other options. I have evaluated
-quite a few alternatives, some for many months yet slowly each drove me nuts.
-Hence the motivation to write my own.
-The following are some of the reasons why PyBlue exists:</p>
-
+quite a few alternatives even used some options over longer periods
+of time but neither of them did everything I needed for my work.
+Hence came the motivation to write my own static site generator.</p>
+<p>The following are some of the reasons why PyBlue exists:</p>
 <ol>
-<li>No configuration or predetermined naming.</li>
-<li>Automatic linking! Pyblue will produce the correct links even when files are moved around.</li>
-<li>Embed code/files with syntax highlighting.</li>
-<li>Load python data structures into pages.</li>
+<li>Pyblue requires no initial configuration, special file naming schemes etc to get started. Pyblue will work fine with existing html files.</li>
+<li>Automatic linking!!! Pyblue will produce the correct links even when files are moved around. As long
+as the <code>link</code> tag has a unique match to any part of the file name the links will stay valid.
+What this means is that one can freely reorganize the site at any time without having to worry about broken links.</li>
+<li>Pyblue can embed and syntax highligh code.</li>
+<li>Pyblue integrates seamlessly with Markdown. Users may use markdown in pages or load them from files.</li>
+<li>Pyblue can load python data structures into pages. Again this is optional but one can access any type of data.</li>
 <li>Advanced templating: <a href="https://www.djangoproject.com/">Django Templating</a> system and all
 that it offers.</li>
 <li><a href="http://getbootstrap.com/">Bootstrap</a> integration. Handy shortcuts to Bootstrap features.</li>
 <li>Tiny codebase. PyBlue is around 500 lines of code. Runs on Python 2.7 and 3.4 as well.</li>
 </ol>
-
-<h2>Install</h2>
-
+<h3>Install</h3>
 <p>Install it with <code>easy_install pyblue</code> or <code>pip install pyblue --upgrade</code>, or download it from
 the <a href="https://pypi.python.org/pypi/pyblue/">PyBlue PyPI</a> site.</p>
-
 <p><strong>Note:</strong> Version 2.0 of pyblue moved from Mako Templates to Django Templates and
-with that introduced other semantic differences.</p>
-
-<p>To install the last version of the <code>1.*</code> line use: <code>easy_install pyblue==1.1.2</code> or <code>pip install pyblue=1.1.2</code>.
+with that introduced other semantic differences.
+To install the last version of the <code>1.*</code> line use: <code>easy_install pyblue==1.1.2</code> or <code>pip install pyblue=1.1.2</code>.
 See also the previous docs at: <a href="https://pypi.python.org/pypi/pyblue/1.1.2">Pyblue 1.1.2</a></p>
-
-<h2>Use</h2>
-
+<h3>Use</h3>
 <ul>
 <li>Launch pyblue to serve a directory <code>pyblue serve -r docs/src</code>.</li>
 <li>View your site by visiting <code>http:://localhost:8080</code>.</li>
@@ -127,109 +118,92 @@ See also the previous docs at: <a href="https://pypi.python.org/pypi/pyblue/1.1.
 <li>Finally, generate static output: <code>pyblue make -r docs/src -o docs/html</code></li>
 <li>To see extra help on options run: <code>pyblue -h</code></li>
 </ul>
-
-<h2>Context</h2>
-
+<h3>Context</h3>
 <p>The pages are rendered through the Django Template engine.
 Users automatically get additional context for each of the pages as
-variables that exists.</p>
-
-<p>For example the <code>{{ page }}</code> variable is present:</p>
-
+variables that exists. For example the
+<code>{{ page }}</code> variable is always available:</p>
 <ul>
 <li>Writing: <code>{{ page.name }}</code> will produce: Index</li>
 <li>Writing:  <code>{{ page.last_modified }}</code> 
-will produce: Wednesday, December 03, 2014</li>
+will produce: Saturday, November 07, 2015</li>
 <li>Writing:  <code>{{ page.size|filesizeformat }}</code> 
-will produce: 5.6 KB</li>
+will produce: 7.1 KB</li>
 </ul>
-
-<p>Note how in this last case we also made use of the code&gt;filesizeformat builtin filter from Django.</p>
-
-<p>Users may add more information even load a python module into the page.</p>
-
-<p>Read about how to add more <a href="./info/context.html">Context</a>.</p>
-
-<h2>Links</h2>
-
+<p>Note how in this last case we also made use of the <code>filesizeformat</code> builtin filter from Django.
+Users may add more information even load a python module into the page.
+More details on the <a href="./info/context.html">Context</a> page.</p>
+<h3>Links</h3>
 <p>To access more advanced features users must add the pyblue tag loader into each page:
-<code>{% load pytags %}</code>. You can now make use of specific tags.</p>
-
-<p>For example <code>{% link "context.html" %}</code> will
+<code>{% load pytags %}</code>. Once this is added to a page
+users can make use of pyblue specific tags.
+For example <code>{% link "context.html" %}</code> will
 produce the following: <a href="./info/context.html">Context</a>.</p>
-
-<p>Why? The <code>{% link "context.html" %}</code>
+<p>How does that work? The <code>{% link "context.html" %}</code>
 command performs a regular expression search on all files in the directory and
 once it finds a match it produces a link to it with the proper path.
-This keeps links correct even after moving files! Note how in this
+This keeps links correct even after a file is moved! Note how in this
 case the file is located in <code>info/context.html</code></p>
-
-<p>Note that the search string is used as a regular expression!
-It is sufficient to specify the shortest unambiguous part of the file and PyBlue will find
+<p>Note that the search string is a regular expression that does not need a full path to the file.
+It is sufficient to specify the shortest unambiguous part of the filename PyBlue will find
 it and link it.</p>
-
-<h2>Markdown</h2>
-
-<p>To include markdown content place it between <code>markdown</code> template tags.</p>
-
-<div class="highlight"><pre><span class="o">{</span>% load pytags %<span class="o">}</span>
-<span class="o">{</span><span class="c"># title=Markdown embedded into html template #}</span>
-
-<span class="o">{</span>% markdown %<span class="o">}</span>
-Hello World!
-<span class="o">============</span>
-
-Now you can write markdown in your templates. This is good because:
-
-* Markdown is awesome
-* Markdown is less verbose than writing html by hand
-* The page title is: <span class="o">{{</span> page.title <span class="o">}}</span>
-
-Note how you can use other template constructs inside the markdown section.
-
-Back to home: <span class="o">{</span>% link <span class="s2">"index.html"</span> %<span class="o">}</span>
-
-<span class="o">{</span>% endmarkdown %<span class="o">}</span>
+<h3>Write in markdown</h3>
+<p>To include markdown content place it between <code>{% markdown %}{% endmarkdown %}</code> template tags.</p>
+<h3>Fenced code blocks</h3>
+<p>When using markdown fenced codeblocks with highlighting hints can be used:</p>
+<pre>```python
+for line in open("data.txt"):
+    print line.strip()[:10]
+```
+</pre><p>will  render as:</p>
+<div class="highlight"><pre><span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="s">"data.txt"</span><span class="p">):</span>
+    <span class="k">print</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()[:</span><span class="mi">10</span><span class="p">]</span>
 </pre></div>
-
-<p>Here is the result of processing the file above: <a href="./info/markdown-example.html">Markdown Example</a></p>
-
-<p>Files with <code>.md</code> extension will get rendered automatically as html: <a href="./info/markdown-example.md">Markdown Example</a></p>
-
-<h2>Include</h2>
-
-<p>To include syntax highlighted code write <code>{% code "context.py" %}</code></p>
-
+<h3>Include code</h3>
+<p>To include syntax highlighted code from a file write <code>{% code "context.py" hint="python" %}</code></p>
 <div class="highlight"><pre><span class="c">#</span>
 <span class="c"># The data file named context.py in the root folder</span>
 <span class="c"># will be loaded automatically into the page.</span>
 <span class="c">#</span>
 
-<span class="nv">NUMBERS</span> <span class="o">=</span> range<span class="o">(</span>5<span class="o">)</span>
+<span class="n">NUMBERS</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 
 <span class="c"># It may contain any valid python construct.</span>
 
-def say_hello<span class="o">(</span>name<span class="o">)</span>:
-    <span class="k">return</span> <span class="s2">"Hello %s"</span> % name
+<span class="k">def</span> <span class="nf">say_hello</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s">"Hello </span><span class="si">%s</span><span class="s">"</span> <span class="o">%</span> <span class="n">name</span>
 
-<span class="nv">greeting</span> <span class="o">=</span> say_hello<span class="o">(</span><span class="s2">"World!"</span><span class="o">)</span>
-</pre></div>
-
-<p>Add <code>{% pygments_css %}</code> to the header of the page to
+<span class="n">greeting</span> <span class="o">=</span> <span class="n">say_hello</span><span class="p">(</span><span class="s">"World!"</span><span class="p">)</span>
+</pre></div><p>Add <code>{% pygments_css %}</code> to the header of the page to
 generate the CSS classes needed to syntax color embedded code.</p>
+<p>This file is also special because of its name: <code>context.py</code>. The contents of
+this python module are available inside every page under the name of <code>context</code>. For example
+writing <code>{{ context.greeting }}</code> produces: Hello World!.
+Hence we can add more complex datastructures into every page.</p>
+<h3>Include markdown</h3>
+<p>Alternatively one can instruct PyBlue to include the rendered content of markdown files.
+For example to include <code>example.md</code> in original form one would use
+<code>{% code "example.md" %}</code> this would produce:</p>
+<div class="highlight"><pre>- - -
 
-<p>This file is also special because of its name. The contents of it are available in the page. For example
-writing <code>{{ context.greeting }}</code> produces: Hello World!</p>
+**Note**: The lines between the horizontal rules come from a **markdown** file.
 
-<h2>Bootstrap</h2>
+- - -
+</pre></div><p>This same file could be included as html with <code>{% include_markdown "example.md" %}</code>
+In that case it will produce the following:</p>
+<p></p><hr><p></p>
+<p></p><p><strong>Note</strong>: The lines between the horizontal rules come from a <strong>markdown</strong> file.</p><p></p>
+<hr>
 
+
+<h3>Include other templates</h3>
+<p>The django templating system allows including other templates or sections.</p>
+<p><code>{% include "sometemplate.html" %}</code></p>
+<h3>Bootstrap</h3>
 <p>There are helper methods for <a href="http://getbootstrap.com/">Bootstrap</a>.</p>
-
 <p>For example <code>{% boostrap_cdn %}</code> will include
 the CSS and Javascript files used with Boostrap.</p>
-
-<h2>Licensing</h2>
-
+<h3>Licensing</h3>
 <ul>
 <li>PyBlue uses the <a href="https://github.com/ialbert/pyblue/blob/master/LICENSE.txt">MIT license</a>.</li>
 <li>PyBlue is being developed by Istvan Albert see <a href="https://github.com/ialbert">https://github.com/ialbert</a></li>
