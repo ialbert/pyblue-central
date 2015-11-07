@@ -435,6 +435,8 @@ def run():
     if args.action == "serve":
         pb.serve()
 
+    elif args.action == "make":
+        pb.generate(args.output)
 
 def test():
     # Initialize logging.
