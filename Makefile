@@ -9,14 +9,14 @@ README.rst: README.md
 
 rst: README.rst
 
-docs: rst
+docs:
 	# View the documentation.
 	pyblue serve -r docs -v
 
-pypi: rst
+pypi:
 	# Push out to PyPI.
-	pandoc --from=markdown --to=rst README.md -o README.rst
-	python setup.py sdist upload -r pypi
+	#pandoc --from=markdown --to=rst README.md -o README.rst
+	python setup.py sdist upload
 
 pages: rst
 	# Generate/commit/push documentation into the GitHub Page repository.
