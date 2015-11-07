@@ -21,24 +21,6 @@ DESCRIPTION = "PyBlue %s, static site generator" % VERSION
 logger = logging.getLogger(__name__)
 
 
-class BiostarPost(object):
-    METADATA_FIELDS = "title uuid id type domain tag_val".split()
-
-    def __init__(self, data={}, **kwargs):
-        self.__dict__.update(data)
-        self.__dict__.update(kwargs)
-
-    def body(self):
-        output = []
-        for field in self.METADATA_FIELDS:
-            value = self.__dict__.get(field)
-            if value:
-                output.append("{{# {} = {} #}}".format(field, value))
-
-        output.append(self.content)
-        return "\n".join(output)
-
-
 def join(*args):
     # Shorcut to building full paths.
     return os.path.abspath(os.path.join(*args))
