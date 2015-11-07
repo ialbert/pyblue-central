@@ -328,14 +328,9 @@ class PyBlue(object):
 
             if page.is_template:
                 params = dict(page=page, root=self.root, context=ctx, files=self.files)
-                if page.is_markdown:
-                    templ_name = "markdown-base.html"
-                else:
-                    templ_name = page.fname
-
-                templ = get_template(templ_name)
-                cont = Context(params)
-                return templ.render(cont)
+                template = get_template(page.fname)
+                context = Context(params)
+                return template.render(context)
             else:
                 return bottle.static_file(path, root=self.root)
 

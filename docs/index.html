@@ -26,16 +26,17 @@ of the <a href="https://github.com/ialbert/pyblue">PyBlue distribution</a>.
 There is no shortage of static html generators. PyBlue is a personal project
 that aims to address my personal annoyances with other options. I have evaluated
 quite a few alternatives even used some options over longer periods
-of time but I did not like neither of them.
-Hence the motivation to write my own.
+of time but neither of them did everything I needed for my work.
+Hence came the motivation to write my own static site generator.
 
 The following are some of the reasons why PyBlue exists:
 
-1. No configuration or predetermined naming. It works fine with existing html files.
-1. Automatic linking! Pyblue will produce the correct links even when files are moved around. As long
-   as the `link tag` has a unique match to any part of the file name the links will stay valid.
-   What this means is that one can freely reorganize the site at any time.
-1. Pyblue can embed code and code files with syntax highlighting.
+1. Pyblue requires no initial configuration, special file naming schemes etc to get started. Pyblue will work fine with existing html files.
+1. Automatic linking!!! Pyblue will produce the correct links even when files are moved around. As long
+   as the `link` tag has a unique match to any part of the file name the links will stay valid.
+   What this means is that one can freely reorganize the site at any time without having to worry about broken links.
+1. Pyblue can embed and syntax highligh code.
+1. Pyblue integrates seamlessly with Markdown. Users may use markdown in pages or load them from files.
 1. Pyblue can load python data structures into pages. Again this is optional but one can access any type of data.
 1. Advanced templating: [Django Templating][django] system and all
  that it offers.
@@ -95,34 +96,31 @@ Note that the search string is a regular expression that does not need a full pa
 It is sufficient to specify the shortest unambiguous part of the filename PyBlue will find
 it and link it.
 
-### Markdown
+### Write in markdown
 
-To include markdown content place it between <code>markdown</code> template tags.
-
-{% code "markdown-example.md" hint='bash' %}
-
-Files with `.md` extension will get rendered automatically as html: {% link "markdown-example.md" %}
-
+To include markdown content place it between {% verbatim %}<code>{% markdown %}{% endmarkdown %}{% endverbatim %}</code> template tags.
 
 ### Fenced code blocks
 
+When using markdown fenced codeblocks with highlighting hints can be used:
+
 <pre>
 ```python
-for x in range(10):
-    print x
+for line in open("data.txt"):
+    print line.strip()[:10]
 ```
 </pre>
 
 will  render as:
 
 ```python
-for x in range(10):
-    print x
+for line in open("data.txt"):
+    print line.strip()[:10]
 ```
 
 ### Include code
 
-To include syntax highlighted code write {% verbatim %}<code>{% code "context.py" hint="python" %}</code>{% endverbatim %}
+To include syntax highlighted code from a file write {% verbatim %}<code>{% code "context.py" hint="python" %}</code>{% endverbatim %}
 
 {% code "context.py" hint="python"%}
 
@@ -133,6 +131,25 @@ This file is also special because of its name: `context.py`. The contents of
 this python module are available inside every page under the name of `context`. For example
 writing {% verbatim %}`{{ context.greeting }}`{% endverbatim %} produces: {{ context.greeting }}.
 Hence we can add more complex datastructures into every page.
+
+### Include markdown
+
+Alternatively one can instruct PyBlue to include the rendered content of markdown files.
+For example to include `example.md` in original form one would use
+{% verbatim %}<code>{% code "example.md" %}{% endverbatim %}</code> this would produce:
+
+{%  code "example.md" %}
+
+This same file could be included as html with {% verbatim %}<code>{% include_markdown "example.md" %}{% endverbatim %}</code>
+In that case it will produce the following:
+
+{% include_markdown "example.md" %}
+
+### Include other templates
+
+The django templating system allows including other templates or sections.
+
+{% verbatim %}<code>{% include "sometemplate.html" %}{% endverbatim %}</code>
 
 ### Bootstrap
 

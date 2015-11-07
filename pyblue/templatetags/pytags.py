@@ -58,17 +58,17 @@ def link(context, word, text=None):
     return '<a href="%s">%s</a>' % (rpath, text)
 
 @register.simple_tag(takes_context=True)
-def load(context, word):
+def load(context, pattern):
     files = context['files']
-    items = filter(lambda x: re.search(word, x.fname, re.IGNORECASE), files)
+    items = filter(lambda x: re.search(pattern, x.fname, re.IGNORECASE), files)
     items = list(items)
     if not items:
-        logger.error("pattern '%s' does not match" % word)
-        text = "include pattern '%s' does not match!" % word
+        logger.error("pattern '%s' does not match" % pattern)
+        text = "include pattern '%s' does not match!" % pattern
     else:
         f = items[0]
         if len(items) > 1:
-            logger.warn("link '%s' matches more than one item: %s" % (word, items))
+            logger.warn("link '%s' matches more than one item: %s" % (pattern, items))
         text = open(f.fpath).read()
     return text
 
@@ -80,11 +80,19 @@ HINT2LEXER = dict(
 )
 
 @register.simple_tag(takes_context=True)
-def code(context, word, hint="bash"):
+def code(context, pattern, hint="bash"):
 
-    text = load(context=context, word=word)
+    text = load(context=context, pattern=pattern)
     lexer = HINT2LEXER.get(hint, PythonLexer)
     html = highlight(text, lexer(), HtmlFormatter())
+    return html
+
+
+
+@register.simple_tag(takes_context=True)
+def include_markdown(context, pattern):
+    text = load(context=context, pattern=pattern)
+    html = markdown(text)
     return html
 
 
