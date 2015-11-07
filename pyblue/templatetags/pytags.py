@@ -1,10 +1,34 @@
 from __future__ import print_function, unicode_literals, absolute_import, division
 from django import template
-from markdown2 import markdown
+#from markdown2 import markdown
 import re, logging
 from pygments import highlight
+from pygments.lexers import guess_lexer, get_lexer_by_name, PythonLexer, HtmlLexer, XmlLexer, BashLexer
+from pygments.formatters import HtmlFormatter
 
 import bleach
+
+def get_markdown():
+    import mistune
+
+    formatter = HtmlFormatter()
+
+    class HighlightRenderer(mistune.Renderer):
+
+
+        def block_code(self, code, lang='bash'):
+            if not lang:
+                code = code.strip().strip("\n")
+                return '\n<pre><code>%s</code></pre>\n' % \
+                    mistune.escape(code)
+            lexer = get_lexer_by_name(lang, stripall=True)
+            return highlight(code, lexer, formatter)
+
+    renderer = HighlightRenderer()
+    md = mistune.Markdown(renderer=renderer)
+    return md
+
+markdown = get_markdown()
 
 logger = logging.getLogger(__name__)
 
@@ -48,9 +72,6 @@ def load(context, word):
         text = open(f.fpath).read()
     return text
 
-from pygments.lexers import guess_lexer, PythonLexer, HtmlLexer, XmlLexer, BashLexer
-from pygments.formatters import HtmlFormatter
-
 HINT2LEXER = dict(
     python=PythonLexer,
     html=HtmlLexer,
@@ -62,8 +83,8 @@ HINT2LEXER = dict(
 def code(context, word, hint="bash"):
 
     text = load(context=context, word=word)
-    lexer = HINT2LEXER.get(hint, PythonLexer)()
-    html = highlight(text, lexer, HtmlFormatter())
+    lexer = HINT2LEXER.get(hint, PythonLexer)
+    html = highlight(text, lexer(), HtmlFormatter())
     return html
 
 
@@ -106,7 +127,7 @@ class MarkDownNode(template.Node):
 
     def render(self, context):
         text = self.nodelist.render(context)
-        text = markdown(text, safe_mode=False, extras=["code-friendly", "tables"])
+        text = markdown(text)
         text = bleach.linkify(text, callbacks=self.CALLBACKS, skip_pre=True)
         return text
 

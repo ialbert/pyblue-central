@@ -11,7 +11,6 @@ from django.template import Context, Template, get_templatetags_modules
 from django.template.loader import get_template
 import bottle, waitress, importlib
 import sys, os, io, imp, argparse, logging, re, time, shutil, json
-import requests
 
 from pyblue import VERSION
 
@@ -80,7 +79,7 @@ def get_parser():
 
     # Subcommands to the parser.
     subpar = parser.add_subparsers(dest="action",
-                                   help=" action: serve, deploy, push, pull")
+                                   help=" action: serve, make")
 
     # The serve subcommand.
     serve = subpar.add_parser('serve',
@@ -102,38 +101,6 @@ def get_parser():
                       help='the target directory to store the generated site in')
 
     add_common_arguments(make)
-
-    # The push subcommand.
-    push = subpar.add_parser('push',
-                             help='pushes content to Biostar instance (not yet)',
-                             epilog="And that's how you push to Biostar.")
-
-    push.add_argument('--url', metavar="URL", default="http://www.lvh.me:8080",
-                      help='the url to push to')
-
-    push.add_argument('--overwrite', dest="overwrite", default=False, action="store_true",
-                      help='overwrite the remote content if exists')
-
-
-    # add_common_arguments(push)
-
-    # The pull subcommand.
-    pull = subpar.add_parser('pull',
-                             help='pulls content from Biostar instance (not yet)',
-                             epilog="And that's how you push to Biostar.")
-
-    pull.add_argument('--uuid', metavar="UUID", default="",
-                      help='the uuid of the document to pull')
-
-    pull.add_argument('--url', metavar="URL", default="http://www.lvh.me:8080",
-                      help='the url to pull from (%(default)s).')
-
-    pull.add_argument('--overwrite', dest="overwrite", default=False, action="store_true",
-                      help='overwrite the local content if it exists')
-
-    add_common_arguments(pull)
-
-    # add_common_arguments(push)
 
     return parser
 
@@ -310,7 +277,6 @@ def convert_text(text):
 # Match Django template comments.
 PATTERN = re.compile(r'^{# (?P<name>\w+)\s?=\s?(?P<value>[\S\s]+) #}')
 
-
 def parse_metadata(path):
     "Attempts to parse out metadata from django comments"
     lines = io.open(path).read().splitlines()
@@ -329,35 +295,6 @@ def parse_metadata(path):
 
 class PyBlue(object):
     IGNORE_EXTS = ".pyc"
-
-    def django_init(self, context="context.py"):
-        "Initializes the django engine. The root must have been set already!"
-
-        BASE_APP = []
-        try:
-            # checks if the root is importable
-            base = os.path.split(self.root)[-1]
-            importlib.import_module(base)
-            logger.info("imported %s" % base)
-            BASE_APP = [base]
-        except Exception as exc:
-            logger.info("%s" % exc)
-
-        settings.configure(
-            DEBUG=True, TEMPLATE_DEBUG=True,
-            TEMPLATE_DIRS=(self.root, TEMPLATE_DIR),
-            TEMPLATE_LOADERS=(
-                'django.template.loaders.filesystem.Loader',
-
-            ),
-            INSTALLED_APPS=["pyblue", "django.contrib.humanize"] + BASE_APP,
-            TEMPLATE_STRING_IF_INVALID=" ??? ",
-        )
-
-        django.setup()
-
-        logger.info("templatetag modules: %s" % ", ".join(get_templatetags_modules()))
-
 
     def __init__(self, root, args):
 
@@ -428,6 +365,36 @@ class PyBlue(object):
         self.app.route('/', method=['GET', 'POST', 'PUT', 'DELETE'])(lambda: self.render('index.html'))
         self.app.route('/<path:path>', method=['GET', 'POST', 'PUT', 'DELETE'])(lambda path: self.render(path))
 
+
+    def django_init(self, context="context.py"):
+        "Initializes the django engine. The root must have been set already!"
+
+        BASE_APP = []
+        try:
+            # checks if the root is importable
+            base = os.path.split(self.root)[-1]
+            importlib.import_module(base)
+            logger.info("imported %s" % base)
+            BASE_APP = [base]
+        except Exception as exc:
+            logger.info("%s" % exc)
+
+        settings.configure(
+            DEBUG=True, TEMPLATE_DEBUG=True,
+            TEMPLATE_DIRS=(self.root, TEMPLATE_DIR),
+            TEMPLATE_LOADERS=(
+                'django.template.loaders.filesystem.Loader',
+
+            ),
+            INSTALLED_APPS=["pyblue", "django.contrib.humanize"] + BASE_APP,
+            TEMPLATE_STRING_IF_INVALID=" ??? ",
+        )
+
+        django.setup()
+
+        logger.info("templatetag modules: %s" % ", ".join(get_templatetags_modules()))
+
+
     def set_root(self, path):
         "Sets the folder where the files to serve are located."
         self.root = os.path.abspath(path)
@@ -469,34 +436,6 @@ class PyBlue(object):
             else:
                 f.write(output, check=self.time_check)
 
-    def pull(self, args):
-
-        for uuid in args.uuid.split(","):
-            url = API_GET_URL.format(args, uuid)
-            resp = requests.get(url)
-            data = json.loads(resp.content)
-            post = BiostarPost(data)
-            fname = "{}.md".format(slugify(post.title))
-            fpath = join(self.root, fname)
-            fp = io.open(fpath, "wt")
-            fp.write(post.body())
-            fp.close()
-            print("wrote uuid={} to {}".format(args.uuid, fpath))
-
-    def push(self, args):
-
-        for uuid in args.uuid.split(","):
-            url = API_GET_URL.format(args, uuid)
-            resp = requests.get(url)
-            data = json.loads(resp.content)
-            post = BiostarPost(data)
-            fname = "{}.md".format(slugify(post.title))
-            fpath = join(self.root, fname)
-            fp = io.open(fpath, "wt")
-            fp.write(post.body())
-            fp.close()
-            print("wrote uuid={} to {}".format(args.uuid, fpath))
-
 
 def run():
     # Process command line arguments.
@@ -518,12 +457,6 @@ def run():
 
     if args.action == "serve":
         pb.serve()
-
-    elif args.action == "make":
-        pb.generate(args.output)
-
-    elif args.action == "pull":
-        pb.pull(args)
 
 
 def test():

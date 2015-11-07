@@ -51,7 +51,7 @@ setup(
           "waitress",
           "pygments",
           "bleach",
-          "requests",
+          "mistune",
       ],
 )
 
