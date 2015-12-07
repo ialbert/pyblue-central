@@ -38,38 +38,63 @@ register = template.Library()
 def lower(value):
     return value.lower()
 
+def render_attrs(attrs={}):
+    "Renders a dictionary attributes as key=value pairs in text."
+    items = map(lambda item: "%s=%s" % item, attrs.items())
+    text = " ".join(items)
+    return text
 
-@register.simple_tag(takes_context=True)
-def link(context, word, text=None):
+def match_file(context, pattern):
+    """
+    Returns a relative path and a name for a matched object.
+    """
     start = context['page']
     files = context['files']
-    items = filter(lambda x: re.search(word, x.fname, re.IGNORECASE), files)
+    items = filter(lambda page: re.search(pattern, page.fname, re.IGNORECASE), files)
     items = list(items)
+
     if not items:
-        f = files[0]
-        logger.error("link '%s' does not match" % word)
-        rpath, text = "#", "Link pattern '%s' does not match!" % word
-    else:
-        f = items[0]
-        if len(items) > 1:
-            logger.warn("link '%s' matches more than one item: %s" % (word, items))
-        rpath = f.relpath(start=start)
-    text = text or f.name
-    return '<a href="%s">%s</a>' % (rpath, text)
+        # Pattern does not match
+        relpath = "#"
+        msg = "*** pattern '%s' does not match" % pattern
+        logger.error(msg)
+        return relpath, msg
+
+    first = items[0]
+    if len(items) > 1:
+        # More than one file matches the pattern.
+        msg = "*** pattern '%s' matches more than one item: %s" % (pattern, items)
+        logger.error(msg)
+
+    name = first.name
+    relpath = first.relpath(start=start)
+
+    return first, relpath, name
+
+
+@register.simple_tag(takes_context=True)
+def img(context, pattern, css='', attrs={}):
+    obj, relpath, name = match_file(context=context, pattern=pattern)
+    other = render_attrs(attrs)
+    html =  '<img src="{}" class="{}" alt="{}" {}>'.format(relpath, css, name, other)
+    return html
+
+
+@register.simple_tag(takes_context=True)
+def link(context, pattern, text=None, css='', attrs={}):
+    "Returns an html link to the pattern"
+    obj, relpath, name = match_file(context=context, pattern=pattern)
+    # Allow overriding the link display.
+    text = text or name
+    other = render_attrs(attrs)
+    html = '<a class="%s" href="%s" %s>%s</a>' % (css, relpath, other, text)
+    return html
 
 @register.simple_tag(takes_context=True)
 def load(context, pattern):
-    files = context['files']
-    items = filter(lambda x: re.search(pattern, x.fname, re.IGNORECASE), files)
-    items = list(items)
-    if not items:
-        logger.error("pattern '%s' does not match" % pattern)
-        text = "include pattern '%s' does not match!" % pattern
-    else:
-        f = items[0]
-        if len(items) > 1:
-            logger.warn("link '%s' matches more than one item: %s" % (pattern, items))
-        text = open(f.fpath).read()
+    "Returns the content of a file matched by the pattern"
+    obj, relpath, name = match_file(context=context, pattern=pattern)
+    text = open(obj.fpath).read()
     return text
 
 HINT2LEXER = dict(
