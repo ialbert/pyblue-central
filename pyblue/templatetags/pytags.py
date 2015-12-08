@@ -58,7 +58,7 @@ def match_file(context, pattern):
         relpath = "#"
         msg = "*** pattern '%s' does not match" % pattern
         logger.error(msg)
-        return relpath, msg
+        return None, relpath, msg
 
     first = items[0]
     if len(items) > 1:
@@ -94,7 +94,10 @@ def link(context, pattern, text=None, css='', attrs={}):
 def load(context, pattern):
     "Returns the content of a file matched by the pattern"
     obj, relpath, name = match_file(context=context, pattern=pattern)
-    text = open(obj.fpath).read()
+    if obj:
+        text = open(obj.fpath).read()
+    else:
+        text = name
     return text
 
 HINT2LEXER = dict(
