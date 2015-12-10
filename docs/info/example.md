@@ -1,5 +1,1 @@
-- - -
-
-**Note**: The lines between the horizontal rules come from a **markdown** file.
-
-- - -
+**Note**: This text comes from a **markdown** file.
