@@ -192,7 +192,8 @@ class File(object):
 
         if self.is_template and content:
             logger.info("save: %s" % dest)
-            with io.open(dest, "wt") as fp:
+            with io.open(dest, "wt", encoding='utf-8') as fp:
+                content = unicode(content)
                 fp.write(content)
         else:
             logger.info("copy: %s" % dest)
@@ -363,8 +364,9 @@ class PyBlue(object):
                 'django.template.loaders.filesystem.Loader',
 
             ),
-            INSTALLED_APPS=["pyblue", "django.contrib.humanize"] + BASE_APP,
+            INSTALLED_APPS=["pyblue", "django.contrib.humanize", "django.contrib.staticfiles" ] + BASE_APP,
             TEMPLATE_STRING_IF_INVALID=" ??? ",
+            STATIC_URL = '/static/',
         )
 
         django.setup()

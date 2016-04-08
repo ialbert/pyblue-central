@@ -79,6 +79,11 @@ def img(context, pattern, css='', attrs={}):
     html =  '<img src="{}" class="{}" alt="{}" {}>'.format(relpath, css, name, other)
     return html
 
+@register.inclusion_tag('thumbnail.html', takes_context=True)
+def thumb(context, pattern, link="#", title="title", size=4):
+    obj, relpath, name = match_file(context=context, pattern=pattern)
+    params = dict(src=relpath, name=name, link=link, title=title, size=size)
+    return params
 
 @register.simple_tag(takes_context=True)
 def link(context, pattern, text=None, css='', attrs={}):

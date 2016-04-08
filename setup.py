@@ -48,6 +48,7 @@ setup(
           "django >= 1.7, < 1.8",
           "bottle",
           "markdown2",
+          "commonmark",
           "waitress",
           "pygments",
           "bleach",
