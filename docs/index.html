@@ -9,39 +9,41 @@
 <div class="container">
 {% markdown %}
 
-Welcome to Pyblue
+Welcome to PyBlue
 =================
+
+- - -
 
 A simple static site generator. Zero configuration. Works with any existing site.
 
 PyBlue allows the reuse of data and visuals (header/footer) across many pages
 and it can generate static sites from dynamic templates.
-PyBlue also makes it easy to use [Markdown][markdown] inside of  webpages.
-This file is located in <code><a href="https://github.com/ialbert/pyblue/tree/master/docs/index.html">docs/src/index.html</a></code>
-of the <a href="https://github.com/ialbert/pyblue">PyBlue distribution</a>.
 
+This page was created with PyBlue from the file located in <a href="https://github.com/ialbert/pyblue/tree/master/docs/index.html">docs/src/index.html</a>.
+
+- - -
 
 ### Why PyBlue?
 
 There is no shortage of static html generators. PyBlue is a personal project
 that aims to address my personal annoyances with other options. I have evaluated
 quite a few alternatives even used some options over longer periods
-of time but neither of them did everything I needed for my work.
+of time. Neither of the choices did everything I needed for my work.
 Hence came the motivation to write my own static site generator.
 
 The following are some of the reasons why PyBlue exists:
 
-1. Pyblue requires no initial configuration, special file naming schemes etc to get started. Pyblue will work fine with existing html files.
-1. Automatic linking!!! Pyblue will produce the correct links even when files are moved around. As long
-   as the `link` tag has a unique match to any part of the file name the links will stay valid.
+1. Pyblue requires no initial configuration, special file naming scheme to get started. Pyblue will work with existing html files. Every feature is optional!
+1. Automatic linking!  Pyblue can be told to produce correct links automatically.
    What this means is that one can freely reorganize the site at any time without having to worry about broken links.
-1. Pyblue can embed and syntax highligh code.
-1. Pyblue integrates seamlessly with Markdown. Users may use markdown in pages or load them from files.
-1. Pyblue can load python data structures into pages. Again this is optional but one can access any type of data.
-1. Advanced templating: [Django Templating][django] system and all
- that it offers.
+1. Pyblue can embed and syntax highlight code.
+1. Pyblue integrates seamlessly with Markdown.
+1. Pyblue can be told to load data into any page. The template system can operate on this data.
+1. Advanced templating [Django Templating][django] system and all that it offers.
 1. [Bootstrap][bootstrap] integration. Handy shortcuts to Bootstrap features.
 1. Tiny codebase. PyBlue is around 500 lines of code. Runs on Python 2.7 and 3.4 as well.
+
+- - -
 
 ### Install
 
@@ -53,15 +55,28 @@ with that introduced other semantic differences.
 To install the last version of the `1.*` line use: `easy_install pyblue==1.1.2` or `pip install pyblue=1.1.2`.
 See also the previous docs at: [Pyblue 1.1.2](https://pypi.python.org/pypi/pyblue/1.1.2)
 
-### Use
+- - -
 
-* Launch pyblue to serve a directory `pyblue serve -r docs/src`.
-* View your site by visiting `http:://localhost:8080`.
-* Edit your pages and make changes. Reload to page to see the effect.
-* Finally, generate static output: `pyblue make -r docs/src -o docs/html`
-* To see extra help on options run: `pyblue -h`
+### Usage
 
-### Context
+1. Launch pyblue to serve a directory. Serve these docs: `pyblue serve -r docs`.
+1. View your site by visiting `http:://localhost:8080`.
+1. Edit your files  and make changes. Reload your page to see the effect.
+
+Once the site is done generate the final static output
+
+1. `pyblue make -r docs -o html`
+1. Upload the files to your static server
+
+To see extra help on options run: `pyblue -h`
+
+- - -
+
+### Features
+
+- - -
+
+#### Context
 
 The pages are rendered through the Django Template engine.
 Users automatically get additional context for each of the pages as
@@ -78,7 +93,9 @@ Note how in this last case we also made use of the <code>filesizeformat</code> b
 Users may add more information even load a python module into the page.
 More details on the {% link "context.html" %} page.
 
-### Links
+- - -
+
+#### Links
 
 To access more advanced features users must add the pyblue tag loader into each page:
 {% verbatim %}<code>{% load pytags %}</code>{% endverbatim %}. Once this is added to a page
@@ -96,11 +113,25 @@ Note that the search string is a regular expression that does not need a full pa
 It is sufficient to specify the shortest unambiguous part of the filename PyBlue will find
 it and link it.
 
-### Write in markdown
+- - -
 
-To include markdown content place it between {% verbatim %}<code>{% markdown %}{% endmarkdown %}{% endverbatim %}</code> template tags.
+#### Markdown
 
-### Fenced code blocks
+To include markdown content place it between
+
+<pre>
+{% verbatim %}{% markdown %}
+
+Hello **Markdown**!
+
+{% endmarkdown %}{% endverbatim %}
+</pre>
+
+template tags.
+
+- - -
+
+#### Fenced code blocks
 
 When using markdown fenced codeblocks with highlighting hints can be used:
 
@@ -118,7 +149,9 @@ for line in open("data.txt"):
     print line.strip()[:10]
 ```
 
-### Include code
+- - -
+
+#### Include code
 
 To include syntax highlighted code from a file write {% verbatim %}<code>{% code "context.py" hint="python" %}</code>{% endverbatim %}
 
@@ -132,7 +165,9 @@ this python module are available inside every page under the name of `context`. 
 writing {% verbatim %}`{{ context.greeting }}`{% endverbatim %} produces: {{ context.greeting }}.
 Hence we can add more complex datastructures into every page.
 
-### Include markdown
+- - -
+
+#### Include markdown
 
 Alternatively one can instruct PyBlue to include the rendered content of markdown files.
 For example to include `example.md` in original form one would use
@@ -145,18 +180,24 @@ In that case it will produce the following:
 
 {% include_markdown "example.md" %}
 
-### Include other templates
+- - -
+
+#### Include other templates
 
 The django templating system allows including other templates or sections.
 
 {% verbatim %}<code>{% include "sometemplate.html" %}{% endverbatim %}</code>
 
-### Bootstrap
+- - -
+
+#### Bootstrap
 
 There are helper methods for [Bootstrap][bootstrap].
 
 For example {% verbatim %}<code>{% boostrap_cdn %}</code>{% endverbatim %} will include
 the CSS and Javascript files used with Boostrap.
+
+- - -
 
 ### Licensing
 
