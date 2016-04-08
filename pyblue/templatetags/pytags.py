@@ -80,15 +80,18 @@ def img(context, pattern, css='', attrs={}):
     return html
 
 @register.inclusion_tag('thumbnail.html', takes_context=True)
-def thumb(context, pattern, link="#", title="title", size=4):
+def thumb(context, pattern, link="#", title="", size=4, clearfix=False):
     obj, relpath, name = match_file(context=context, pattern=pattern)
-    params = dict(src=relpath, name=name, link=link, title=title, size=size)
+    obj, rellink, linkname = match_file(context=context, pattern=link)
+    title = title or linkname
+    params = dict(src=relpath, name=name, link=rellink, title=title, size=size, clearfix=clearfix)
     return params
 
 @register.simple_tag(takes_context=True)
 def link(context, pattern, text=None, css='', attrs={}):
     "Returns an html link to the pattern"
     obj, relpath, name = match_file(context=context, pattern=pattern)
+
     # Allow overriding the link display.
     text = text or name
     other = render_attrs(attrs)
