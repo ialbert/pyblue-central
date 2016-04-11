@@ -1,5 +1,5 @@
 <ol>
-    {% for elem in p.bar %}
-        <li>{{ elem }}</li>
+    {% for elem in page.bar %}
+        <li>aaa {{ elem }}</li>
     {% endfor %}
 </ol>

@@ -1,6 +1,6 @@
 {# title = More About Contexts #}
 {# foo = 1234.5 #}
-{# bar = [ 100, 200, Hello World ] #}
+{# bar = [ 100, 200, 'Hello World' ] #}
 
 {% load pytags %}
 
@@ -10,7 +10,6 @@
     <meta charset="UTF-8">
     <title>{{ page.title }}</title>
     {% pygments_css %}
-       {% bootstrap_cdn %}
 </head>
 
 
@@ -40,9 +39,9 @@ to produce {{page.bar}}.
 The {% verbatim %}<code>{{ page.bar }}</code> {% endverbatim %} object can also be looped over with Django :
 {% code "context-loop" %}
 
-To produce
+To produce {{page.bar }} =
 {% for elem in page.bar %}
-* {{ elem }}{% endfor %}
+{{ elem }}{% endfor %}
 
 The second method of getting context into a page is a python module named <code>context.py</code>
 placed in the directory root. This may contain

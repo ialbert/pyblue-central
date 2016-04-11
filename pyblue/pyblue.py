@@ -5,14 +5,15 @@ __author__ = 'ialbert'
 
 import django
 from django.conf import settings
-from django.utils.text import slugify
 
 from django.template import Context, Template, get_templatetags_modules
 from django.template.loader import get_template
 import bottle, waitress, importlib
 import sys, os, io, imp, argparse, logging, re, time, shutil, json
 
-from pyblue import VERSION
+VERSION = '2.1.1'
+
+#from pyblue import VERSION
 
 API_GET_URL = "{0.url}/api/post/{1}/"
 
@@ -344,34 +345,35 @@ class PyBlue(object):
         self.app.route('/<path:path>', method=['GET', 'POST', 'PUT', 'DELETE'])(lambda path: self.render(path))
 
 
-    def django_init(self, context="context.py"):
-        "Initializes the django engine. The root must have been set already!"
+    def django_init(self):
+        '''
+        Initializes the django engine. The root must have been set already."
+        '''
 
         BASE_APP = []
         try:
-            # checks if the root is importable
+            # Attempt to import the root folder. This is necessary to access
+            # the local templatetag libraries.
             base = os.path.split(self.root)[-1]
+            logger.debug("importing base app %s" % base)
             importlib.import_module(base)
-            logger.info("imported %s" % base)
             BASE_APP = [base]
         except Exception as exc:
-            logger.info("%s" % exc)
+            logger.error("base app import error: %s" % exc)
 
         settings.configure(
             DEBUG=True, TEMPLATE_DEBUG=True,
             TEMPLATE_DIRS=(self.root, TEMPLATE_DIR),
             TEMPLATE_LOADERS=(
                 'django.template.loaders.filesystem.Loader',
-
             ),
             INSTALLED_APPS=["pyblue", "django.contrib.humanize", "django.contrib.staticfiles" ] + BASE_APP,
             TEMPLATE_STRING_IF_INVALID=" ??? ",
             STATIC_URL = '/static/',
         )
-
         django.setup()
 
-        logger.info("templatetag modules: %s" % ", ".join(get_templatetags_modules()))
+        logger.info("templatetags: %s" % ", ".join(get_templatetags_modules()))
 
 
     def set_root(self, path):

@@ -87,6 +87,15 @@ def thumb(context, pattern, link="#", title="", size=4, clearfix=False):
     params = dict(src=relpath, name=name, link=rellink, title=title, size=size, clearfix=clearfix)
     return params
 
+@register.inclusion_tag('hidden-content.html', takes_context=True)
+def hidden_markdown(context, pattern):
+    text = load(context=context, pattern=pattern)
+    html = markdown(text)
+    html = ""
+    print (html)
+    params = dict(stuff=html)
+    return params
+
 @register.simple_tag(takes_context=True)
 def link(context, pattern, text=None, css='', attrs={}):
     "Returns an html link to the pattern"
