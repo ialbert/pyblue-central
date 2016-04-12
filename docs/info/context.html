@@ -9,10 +9,11 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>{{ page.title }}</title>
+    {%  site_assets %}
 </head>
 
 
-<body>
+<body class="language-bash">
 <div class="container">
 {% markdown %}
 
@@ -27,7 +28,7 @@ at the top of the HTML page will create the variable <code>title</code> that
 can be used in the page as {% verbatim %}<code>{{ page.title }}</code>{% endverbatim %}
 to produce: {{page.title}}
 
-To add more variables list them one on each line:
+To add more variables list them one on each line. To add data beyond a simple string use the JSON format:
 
 {% code "django-comments" %}
 
@@ -49,11 +50,9 @@ any python construct.
 The content of this module will be visible under the parameter data
     {% verbatim %}<code>{{ context }}</code>{% endverbatim %} variable name.
 
-Remember to {% verbatim %}<code>{% load pytags %}</code>{% endverbatim %} as well!
+{% code "context.py" lang='python' %}
 
-{% code "context.py" %}
-
-We can now access the contenxt of contex.py like
+We can now access the contenxt of `contex.py` like
 so {% verbatim %}<code>{{ context.greeting }}</code>{% endverbatim %} to produce: {{ context.greeting }}
 
 Go back to: {% link "index.html" "Home Page" %}.

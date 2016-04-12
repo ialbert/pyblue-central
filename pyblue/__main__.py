@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import pyblue3
+import pyblue
 
 # Run the server.
-pyblue3.run()
+pyblue.run()

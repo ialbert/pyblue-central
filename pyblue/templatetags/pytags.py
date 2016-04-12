@@ -56,7 +56,7 @@ def match_file(context, pattern):
 
 
 @register.simple_tag(takes_context=True)
-def load(context, pattern):
+def find(context, pattern):
     "Returns the content of a file matched by the pattern"
     obj, rpath, name = match_file(context=context, pattern=pattern)
     if obj:
@@ -72,6 +72,10 @@ def img(context, pattern, css='', attrs={}):
     extras = render_attrs(attrs)
     html = '<img src="{}" class="{}" alt="{}" {}>'.format(relpath, css, name, extras)
     return html
+
+@register.inclusion_tag('say_hello.html')
+def say_hello():
+    return dict()
 
 
 @register.inclusion_tag('thumbnail.html', takes_context=True)
@@ -94,7 +98,7 @@ def link(context, pattern, text=None, css='', attrs={}):
 
 @register.simple_tag(takes_context=True)
 def code(context, pattern, lang="bash",  safe=True):
-    text = load(context=context, pattern=pattern)
+    text = find(context=context, pattern=pattern)
     html = '<pre><code class="language-{}">{}</code></pre>'.format(lang, text)
     if safe:
         html = mark_safe(html)
@@ -103,7 +107,7 @@ def code(context, pattern, lang="bash",  safe=True):
 
 @register.simple_tag(takes_context=True)
 def include_markdown(context, pattern, safe=True):
-    text = load(context=context, pattern=pattern)
+    text = find(context=context, pattern=pattern)
     html = markdown(text)
     html = mark_safe(html)
     return html
