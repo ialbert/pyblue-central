@@ -6,11 +6,9 @@ import CommonMark
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('pyblue')
 
 register = template.Library()
-
-
 
 def get_markdown():
     md = CommonMark.commonmark
@@ -46,9 +44,10 @@ def match_file(context, pattern):
     first = items[0]
     if len(items) > 1:
         # More than one file matches the pattern.
-        msg = "{} files match pattern: '{}'".format(len(items), pattern)
+        msg = "{} files match pattern: '{}' in file '{}'".format(len(items), pattern, start.fname)
         logger.error(msg)
-
+        for item in items:
+            logger.error("pattern '{}' matches '{}'".format(pattern, item.fname))
     name = first.name
     rpath = first.relpath(start=start)
 

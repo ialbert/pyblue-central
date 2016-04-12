@@ -14,10 +14,11 @@ from django.template.loader import get_template
 
 __author__ = 'ialbert'
 
-VERSION = '3.0.0'
+from pyblue import VERSION
+
 DESCRIPTION = "PyBlue %s, static site generator" % VERSION
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('pyblue')
 
 
 def join(*args):
@@ -152,6 +153,10 @@ class PyBlue(object):
         Initializes the django engine. The root must have been set already."
         '''
 
+        elems = os.path.split(self.root)[:-1]
+        parent = os.path.join(*elems)
+        sys.path.append(parent)
+
         BASE_APP = []
         try:
             # Attempt to import the root folder. This is necessary to access
@@ -159,9 +164,9 @@ class PyBlue(object):
             base = os.path.split(self.root)[-1]
             logger.debug("importing app: %s" % base)
             importlib.import_module(base)
-            BASE_APP = [base]
+            BASE_APP = [ base ]
         except ImportError as exc:
-            logger.debug("app '{}' cannot be imported.".format(base))
+            logger.debug("app '{}' cannot be imported: {}".format(base, exc))
 
         TEMPLATE_DIR = join(os.path.dirname(__file__), "templates")
         dirs = [self.root, join(self.root, 'templates'), TEMPLATE_DIR]
@@ -175,6 +180,10 @@ class PyBlue(object):
                     'APP_DIRS': True,
                     'OPTIONS': {
                         'string_if_invalid': "Undefined: %s ",
+                        'builtins': [
+                            'pyblue.templatetags.pytags',
+                            'django.contrib.humanize.templatetags.humanize',
+                        ],
                     }
                 }
             ],

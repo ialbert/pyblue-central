@@ -1,5 +1,3 @@
-{% load humanize %}
-{% load pytags %}
 {% load demotags %}
 
 <html>
@@ -100,13 +98,9 @@ More details on the {% link "context.html" %} page.
 
 #### Links
 
-To access more advanced features users must add the pyblue tag loader into each page:
-
-{% verbatim %}<code>{% load pytags %}</code>{% endverbatim %}.
-
-Once that is added to a page
-users can make use of pyblue specific template tags. For exmple `link` is such a tag that find
-files the directories and links them correctly.
+Users can also make use of pyblue specific template tags that are
+automatically available. For exmple `link` is such a tag that generates
+the proper relative path to any other template or file.
 
 * {% verbatim %}<code>{% link "context.html" %}</code>{% endverbatim %} will
 produce the following: {% link "context.html" %}.
