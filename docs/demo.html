@@ -1,0 +1,37 @@
+{% load humanize %}
+{% load pytags %}
+
+<html>
+<head>
+
+</head>
+<body>
+<div class="container">
+
+<h2>HELLO</h2>
+
+
+- - -
+
+<div>TEST</div>
+
+<pre><code>
+#
+# The data file named context.py in the root folder
+# will be loaded automatically into the page.
+#
+
+NUMBERS = range(5)
+
+# It may contain any valid python construct.
+
+def say_hello(name):
+    return "Hello %s" % name
+
+greeting = say_hello("World!")
+</code><pre>
+
+
+</body>
+</html>
+

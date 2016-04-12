@@ -1,13 +1,15 @@
-'''
-Really simple static site generator. Uses Django templates.
-'''
+"""
+Really simple static site generator. Uses Django templates
+"""
+
 from __future__ import print_function, unicode_literals, absolute_import, division
 import argparse, sys, io, json, re, shutil, os, logging, time, imp, importlib
 import bottle, importlib
 from string import strip
 import django
 from django.conf import settings
-from django.template import Context, get_templatetags_modules
+from django.template import Context
+from django.template.backends.django import get_installed_libraries
 from django.template.loader import get_template
 
 __author__ = 'ialbert'
@@ -21,6 +23,7 @@ logger = logging.getLogger(__name__)
 def join(*args):
     # Shorcut to building full paths.
     return os.path.abspath(os.path.join(*args))
+
 
 class PyBlue(object):
     IGNORE_EXTS = {".pyc"}
@@ -65,18 +68,17 @@ class PyBlue(object):
             if self.auto_refresh:
                 self.set_root(self.root)
 
-            logger.info("rendering: %s" % path)
+            logger.debug("%s" % path)
             fname = join(self.root, path)
             page = File(fname=fname, root=self.root)
 
             if page.is_template:
                 params = dict(page=page, root=self.root, context=ctx, files=self.files)
                 template = get_template(page.fname)
-                context = Context(params)
-                return template.render(context)
+                html = template.render(params)
+                return html
             else:
-                return bottle.static_file(fname, root=self.root)
-
+                return bottle.static_file(path, root=self.root)
 
         # Make a shortcut to the renderer.
         self.render = render
@@ -131,7 +133,7 @@ class PyBlue(object):
             # Attempt to import the root folder. This is necessary to access
             # the local templatetag libraries.
             base = os.path.split(self.root)[-1]
-            logger.debug("importing app: %s" % base)
+            logger.info("importing app: %s" % base)
             importlib.import_module(base)
             BASE_APP = [base]
         except ImportError as exc:
@@ -141,20 +143,24 @@ class PyBlue(object):
 
         settings.configure(
             DEBUG=True, TEMPLATE_DEBUG=True,
-            TEMPLATE_DIRS=[TEMPLATE_DIR, self.root],
-            TEMPLATE_LOADERS=(
-                'django.template.loaders.filesystem.Loader',
-                'django.template.loaders.app_directories.Loader',
-            ),
-            INSTALLED_APPS=["pyblue", "django.contrib.humanize", "django.contrib.staticfiles" ] + BASE_APP,
-            TEMPLATE_STRING_IF_INVALID=" ??? ",
-            STATIC_URL = '/static/',
+            TEMPLATES=[
+                {
+                    'BACKEND': 'django.template.backends.django.DjangoTemplates',
+                    'DIRS': [TEMPLATE_DIR, self.root],
+                    'APP_DIRS': True,
+                    'OPTIONS': {
+                        'string_if_invalid': "Undefined: %s ",
+                    }
+                }
+            ],
+            INSTALLED_APPS=["pyblue", "django.contrib.humanize",
+                            "django.contrib.staticfiles"] + BASE_APP,
+
+            STATIC_URL='/static/',
         )
         django.setup()
 
-
-
-        logger.info("templatetags: %s" % ", ".join(get_templatetags_modules()))
+        logger.info("templatetags: %s" % ", ".join(get_installed_libraries()))
 
 
 def mtime(fname):
@@ -170,8 +176,6 @@ class File(object):
     Represents a file object within PyBlue relative to a root directory.
     """
 
-    # Files over this size will not be copied when making the file.
-    MAX_SIZE_MB = 50
     TEMPLATE_EXTENSIONS = {".html", ".htm"}
     IMAGE_EXTENSIONS = {".png", ".gif", ".jpg", "jpeg", ".svg"}
     MARKDOWN_EXTENSION = {".md"}
@@ -230,7 +234,7 @@ class File(object):
         MAXSIZE = 1024 * 1024 * 50
         # Don't load large files
         if self.size > MAXSIZE:
-            logger.warn("file size is too large to be rendered %s" % self.size)
+            logger.error("file size is too large to be rendered %s" % self.size)
             return "?"
 
         return io.open(self.path).read()
@@ -322,8 +326,7 @@ def parse_metadata(path):
             except ValueError as exc:
                 obj = str(value)
             meta[name] = obj
-
-    print (meta)
+    #logger.debug("path: {}, metadata: {}".format(path, meta))
     return meta
 
 
@@ -393,8 +396,8 @@ def run():
     args = parser.parse_args()
 
     # Logging setup.
-    level = logging.DEBUG if args.verbose else logging.WARNING
-    format = '%(levelname)s\t%(module)s.%(funcName)s\t%(message)s'
+    level = logging.DEBUG if args.verbose else logging.INFO
+    format = '%(levelname)s\t%(funcName)s\t%(message)s'
     logging.basicConfig(format=format, level=level)
 
     pb = PyBlue(root=args.root, args=args)
@@ -404,6 +407,7 @@ def run():
 
     elif args.action == "make":
         pb.make(args.output)
+
 
 if __name__ == '__main__':
     run()

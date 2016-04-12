@@ -45,14 +45,14 @@ setup(
       ],
 
       install_requires=[
-          "django >= 1.7, < 1.8",
+          "django >= 1.9, < 1.10",
           "bottle",
           "markdown2",
           "commonmark",
           "waitress",
           "pygments",
           "bleach",
-          "mistune",
+          "coloredlogs",
       ],
 )
 

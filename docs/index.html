@@ -3,11 +3,22 @@
 
 <html>
 <head>
-    {% bootstrap_cdn %}
-    {% pygments_css %}
+{%  site_assets %}
+<style media="screen" type="text/css">
+        pre {
+            background-color: #EFEFEF;
+            padding:1ex;
+        }
+        pre code {
+            color: #333333;
+        }
+        code { color: orangered; }
+    </style>
 </head>
-<body>
-<div class="container">
+
+<body class="language-bash">
+<div class="container ">
+
 {% markdown %}
 
 Welcome to PyBlue
@@ -119,47 +130,27 @@ it and link it.
 #### Markdown
 
 To include markdown content place it between
-
-<pre>
-{% verbatim %}{% markdown %}
-
-Hello **Markdown**!
-
-{% endmarkdown %}{% endverbatim %}
-</pre>
-
+{% verbatim %}`{% markdown %}` and `{% endmarkdown %}`{% endverbatim %}
 template tags.
 
 - - -
 
 #### Fenced code blocks
 
-When using markdown fenced codeblocks with highlighting hints can be used:
+When using markdown fenced codeblocks may be used. Include code between ``` symbols.
+It will render the code as:
 
-<pre>
-```python
+```
 for line in open("data.txt"):
     print line.strip()[:10]
 ```
-</pre>
-
-will  render as:
-
-```python
-for line in open("data.txt"):
-    print line.strip()[:10]
-```
-
 - - -
 
 #### Include code
 
 To include syntax highlighted code from a file write {% verbatim %}<code>{% code "context.py" hint="python" %}</code>{% endverbatim %}
 
-{% code "context.py" hint="python"%}
-
-Add {% verbatim %}<code>{% pygments_css %}</code>{% endverbatim %} to the header of the page to
-generate the CSS classes needed to syntax color embedded code.
+{% code "context.py" hint="python" %}
 
 This file is also special because of its name: `context.py`. The contents of
 this python module are available inside every page under the name of `context`. For example
@@ -191,16 +182,16 @@ The django templating system allows including other templates or sections.
 
 - - -
 
-#### Bootstrap
+#### Site assets
 
-There are helper methods for [Bootstrap][bootstrap].
+Add {% verbatim %}<code>{% site_assets %}</code>{% endverbatim %} to the head tag of the page to
+generate the CSS classes needed to syntax color embedded code.
 
-For example {% verbatim %}<code>{% boostrap_cdn %}</code>{% endverbatim %} will include
-the CSS and Javascript files used with Boostrap.
+Override the template called `site_assets.html` to modify the assets.
 
 - - -
 
-### Licensing
+#### Licensing
 
 * PyBlue uses the [MIT license][license].
 * PyBlue is being developed by Istvan Albert see https://github.com/ialbert

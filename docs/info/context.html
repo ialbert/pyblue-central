@@ -2,7 +2,7 @@
 {# foo = 1234.5 #}
 {# bar = [ 100, 200, "Hello World" ] #}
 
-{% load pytags3 %}
+{% load pytags %}
 
 <!DOCTYPE html>
 <html>
@@ -35,10 +35,9 @@ Note that in the last example for <code>bar</code> gets turned into python list 
 {% verbatim %}<code>{{ page.bar }}</code> {% endverbatim %}
 to produce {{page.bar}}.
 
-The {% verbatim %}<code>{{ page.bar }}</code> {% endverbatim %} object can also be looped over with Django :
-{% code "context-loop" %}
+The {% verbatim %}<code>{{ page.bar }}</code> {% endverbatim %} object can also be looped over with Django
+to produce:
 
-To produce:
 {% for elem in page.bar %}
 * {{ elem }}
 {% endfor %}
