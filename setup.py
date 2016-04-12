@@ -47,12 +47,9 @@ setup(
       install_requires=[
           "django >= 1.9, < 1.10",
           "bottle",
-          "markdown2",
           "commonmark",
           "waitress",
-          "pygments",
           "bleach",
-          "coloredlogs",
       ],
 )
 
