@@ -1,54 +1,85 @@
 Welcome to Pyblue
-=================
+-----------------
 
-A simple static site generator. Zero configuration. Works with any
-existing site.
+A simple static site generator.
 
-PyBlue allows the reuse of data and visuals (header/footer) across many
-pages and it can generate static sites from dynamic templates.
+Why another one? There are `many static <https://www.staticgen.com/>`__
+site generators already. I found to be way too complicated, they have
+too many rules, put this here or there, call thing this or that.
 
-PyBlue also makes it easy to use
-`Markdown <http://en.wikipedia.org/wiki/Markdown>`__ inside of webpages.
+PyBlue is different. Everything is optional, only use what you need.
+Stays out of the way.
 
-This file is located in docs/index.html of the PyBlue distribution.
+From the simplest tasks:
+
+-  No configuration required.
+-  Works with any existing site.
+-  Easy to include ``markdown``.
+-  Easy linking to other pages.
+-  Tiny codebase, pyblue is around 500 lines in a single file!
+
+To more complicated:
+
+-  PyBlue generates the correct links even if you move pages around.
+-  Use `Django
+   Templates <https://docs.djangoproject.com/en/1.9/ref/templates/language/>`__
+   and all the features that it offers.
+-  Easily add data into each page (title, link name, or any arbitrary
+   content).
+
+Or go all the way out:
+
+-  Load python modules into each page.
+-  Exposed data: database queries, results of online requests etc.
+-  Run python code, access and modify data from inside of each page.
+-  Extend the Django templates. Add your own ``templatetags``.
 
 Install
--------
+~~~~~~~
 
-Install it with ``easy_install pyblue`` or
-``pip install pyblue --upgrade``
+::
 
-Alternatively download it from the `PyBlue at
-PyPI <https://pypi.python.org/pypi/pyblue/>`__ site.
+    pip install pyblue --upgrade
 
-**Note:** Version 2.0 of pyblue moved from Mako Templates to Django
-Templates and with that introduced other semantic differences. To
-install the last version of the ``1.*`` line use:
-``easy_install pyblue==1.1.2`` or ``pip install pyblue=1.1.2``. See also
-the docs at: `Pyblue
-1.1.2 <https://pypi.python.org/pypi/pyblue/1.1.2>`__
+Or download it from the `PyBlue at
+PyPI <https://pypi.python.org/pypi/pyblue/>`__.
 
 Usage
------
+~~~~~
 
--  Launch pyblue to serve a directory pyblue serve -r docs.
--  View your site by visiting http:://localhost:8080.
--  Edit your pages and make changes. Reload to page to see your edits.
--  Finally, generate static output with: pyblue make -r docs -o html
+Launch pyblue to serve a directory
+
+::
+
+    pyblue -r docs
+
+View your site by visiting http:://localhost:8080
+
+Edit your pages and make changes. Reload the page to see your edits
+live. Generate static output with:
+
+::
+
+    pyblue -r docs -o html
+
+That's all. Told you it was simple. To see extra help on options run:
+
+::
+
+    pyblue -h
 
 Documentation
--------------
+~~~~~~~~~~~~~
 
-Read the pyblue documentation with pyblue itself:
-
-    pyblue serve -f docs
+-  The `PyBlue Documentation <https://ialbert.github.io/pyblue/>`__ was
+   generated with PyBlue itself.
 
 You can also browse the `help in source
 format <https://github.com/ialbert/pyblue/tree/master/docs>`__ for
 examples.
 
 Licensing
----------
+~~~~~~~~~
 
 -  PyBlue is being developed by Istvan Albert see
    https://github.com/ialbert
@@ -57,4 +88,3 @@ Licensing
    Nicolas Vanhoren see https://github.com/nicolas-van
 -  PyBlue uses the `MIT
    license <https://github.com/ialbert/pyblue/blob/master/LICENSE.txt>`__.
-

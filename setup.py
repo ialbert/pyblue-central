@@ -3,6 +3,7 @@
 from setuptools import setup
 import os.path, sys
 import pyblue
+import glob
 
 setup(
       name='pyblue',
@@ -16,9 +17,7 @@ setup(
       include_package_data=True,
       test_suite="tests",
       data_files=[
-          ('pyblue/templates/', [
-              'pyblue/templates/pyblue_base.html',
-          ]),
+          ('pyblue/templates/', glob.glob('pyblue/templates/*.html')),
       ],
       long_description=open("README.rst").read(),
       keywords="",

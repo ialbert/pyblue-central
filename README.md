@@ -33,8 +33,6 @@ Or go all the way out:
 
 ### Install
 
-Use:
-
     pip install pyblue --upgrade
 
 Or download it from the [PyBlue at PyPI](https://pypi.python.org/pypi/pyblue/).
@@ -58,7 +56,7 @@ That's all. Told you it was simple. To see extra help on options run:
 
 ### Documentation
 
-The [PyBlue documentation][docs-html] was generated with PyBlue itself.
+* The [PyBlue Documentation][docs-html] was generated with PyBlue itself.
 
 You can also browse the [help in source format][docs-src] for examples.
 
@@ -69,9 +67,9 @@ You can also browse the [help in source format][docs-src] for examples.
 * PyBlue uses the [MIT license][license].
 
 [docs-src]: https://github.com/ialbert/pyblue/tree/master/docs
-[docs-html]: http://ialbert.github.io/pyblue/
+[docs-html]: https://ialbert.github.io/pyblue/
 [django]: https://www.djangoproject.com/
-[markdown]: http://en.wikipedia.org/wiki/Markdown
+[markdown]: https://en.wikipedia.org/wiki/Markdown
 [pygreen]: https://github.com/nicolas-van/pygreen
 [license]: https://github.com/ialbert/pyblue/blob/master/LICENSE.txt
 [django_templates]: https://docs.djangoproject.com/en/1.9/ref/templates/language/
