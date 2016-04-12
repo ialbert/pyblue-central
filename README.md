@@ -1,46 +1,54 @@
-Welcome to Pyblue
-=================
+## Welcome to Pyblue
 
-A simple static site generator. Zero configuration. Works with any existing site.
+A simple static site generator.
 
-PyBlue allows the reuse of data and visuals (header/footer) across many pages
-and it can generate static sites from dynamic templates.
+Why another one? There are [many static](https://www.staticgen.com/) site generators already.
 
-PyBlue also makes it easy to use [Markdown][markdown] inside of  webpages.
+PyBlue is different. Everything is optional.
 
-This file is located in <code>docs/index.html</code>
-of the <a href="https://github.com/ialbert/pyblue">PyBlue distribution</a>.
+From the simplest tasks:
 
-Install
--------
+- Zero configuration. No really.
+- Works with all existing pages.
+- Easy `markdown`.
+- Easy linking to other pages.
+- Tiny codebase, just 400 lines in a single file!
+
+To more complicated:
+
+- Move your pages around. PyBlue will always generate the correct links.
+- Full 'Django' templating, headers, footers if you need that.
+- Full site customization. Add your own `templatetags`.
+
+Or go all the way out:
+
+- Drop right into python
+- Put any type of data into your pages: database queries, results of
+  online requests etc.
+- Run python code and modify the entire system from
+  inside of each page.
+
+### Install
 
 Install it with `easy_install pyblue` or `pip install pyblue --upgrade`
 
 Alternatively download it from
 the [PyBlue at PyPI](https://pypi.python.org/pypi/pyblue/) site.
 
-**Note:** Version 2.0 of pyblue moved from Mako Templates to Django Templates and
-with that introduced other semantic differences. To install
-the last version of the `1.*` line use: `easy_install pyblue==1.1.2` or `pip install pyblue=1.1.2`.
-See also the docs at: [Pyblue 1.1.2](https://pypi.python.org/pypi/pyblue/1.1.2)
-
-Usage
------
+### Usage
 
 * Launch pyblue to serve a directory <code>pyblue serve -r docs</code>.
 * View your site by visiting <code>http:://localhost:8080</code>.
-* Edit your pages and make changes. Reload to page to see your edits.
+* Edit your pages and make changes. Reload the page to see your edits live.
 * Finally, generate static output with: <code>pyblue make -r docs -o html</code>
 
-Documentation
--------------
+### Documentation
 
 The [PyBlue documentation][docs-html] was generated with PyBlue itself.
 
 You can also browse the [help in source format][docs-src] for examples.
 
-Licensing
----------
+### Licensing
 
 * PyBlue is being developed by Istvan Albert see https://github.com/ialbert
 * PyBlue has been inspired by [PyGreen][pygreen] created by Nicolas Vanhoren see https://github.com/nicolas-van

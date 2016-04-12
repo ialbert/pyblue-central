@@ -39,8 +39,9 @@ Usage
 Documentation
 -------------
 
-The `PyBlue documentation <http://ialbert.github.io/pyblue/>`__ was
-generated with PyBlue itself.
+Read the pyblue documentation with pyblue itself:
+
+    pyblue serve -f docs
 
 You can also browse the `help in source
 format <https://github.com/ialbert/pyblue/tree/master/docs>`__ for

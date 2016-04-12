@@ -10,13 +10,10 @@ logger = logging.getLogger(__name__)
 
 register = template.Library()
 
-#
-# Based on http://jamie.curle.io/blog/minimal-markdown-template-tag-django/
-#
+
 
 def get_markdown():
-    import mistune
-    md = mistune.Markdown()
+    md = CommonMark.commonmark
     return md
 
 # Allow overriding the markdown parser.
@@ -96,9 +93,9 @@ def link(context, pattern, text=None, css='', attrs={}):
 
 
 @register.simple_tag(takes_context=True)
-def code(context, pattern, hint="bash",  safe=True):
+def code(context, pattern, lang="bash",  safe=True):
     text = load(context=context, pattern=pattern)
-    html = '<pre><code>{}</code></pre>'.format(text)
+    html = '<pre><code class="language-{}">{}</code></pre>'.format(lang, text)
     if safe:
         html = mark_safe(html)
     return html
@@ -116,6 +113,10 @@ def include_markdown(context, pattern, safe=True):
 def site_assets(context):
     return dict(context=context)
 
+
+#
+# Based on http://jamie.curle.io/blog/minimal-markdown-template-tag-django/
+#
 
 def top_level_only(attrs, new=False):
     if not new:

@@ -110,8 +110,12 @@ More details on the {% link "context.html" %} page.
 #### Links
 
 To access more advanced features users must add the pyblue tag loader into each page:
-{% verbatim %}<code>{% load pytags %}</code>{% endverbatim %}. Once this is added to a page
+
+{% verbatim %}<code>{% load pytags %}</code>{% endverbatim %}.
+
+Once that is added to a page
 users can make use of pyblue specific tags.
+
 For example {% verbatim %}<code>{% link "context.html" %}</code>{% endverbatim %} will
 produce the following: {% link "context.html" %}.
 
@@ -125,6 +129,8 @@ Note that the search string is a regular expression that does not need a full pa
 It is sufficient to specify the shortest unambiguous part of the filename PyBlue will find
 it and link it.
 
+This is one reason PyBlue exists.
+
 - - -
 
 #### Markdown
@@ -137,10 +143,12 @@ template tags.
 
 #### Fenced code blocks
 
-When using markdown fenced codeblocks may be used. Include code between ``` symbols.
-It will render the code as:
+When using markdown fenced codeblocks may be used. Include code between ``` symbols that can
+also take language hints:
 
-```
+
+```python
+import sys
 for line in open("data.txt"):
     print line.strip()[:10]
 ```
@@ -148,14 +156,17 @@ for line in open("data.txt"):
 
 #### Include code
 
-To include syntax highlighted code from a file write {% verbatim %}<code>{% code "context.py" hint="python" %}</code>{% endverbatim %}
+To include syntax highlighted code from a file write {% verbatim %}<code>{% code "context.py" lang="python" %}</code>{% endverbatim %}
 
-{% code "context.py" hint="python" %}
+{% code "context.py" lang="python" %}
 
 This file is also special because of its name: `context.py`. The contents of
-this python module are available inside every page under the name of `context`. For example
-writing {% verbatim %}`{{ context.greeting }}`{% endverbatim %} produces: {{ context.greeting }}.
-Hence we can add more complex datastructures into every page.
+this python module are available inside every page under the name of `context`.
+
+For example writing {% verbatim %}`{{ context.greeting }}`{% endverbatim %} produces: {{ context.greeting }}.
+
+This is where the full power of `pyblue` shows. You see, you can go wild and add any and all
+data that you might need. Call out to any program, read any file etc. It is all `Python` in there.
 
 - - -
 

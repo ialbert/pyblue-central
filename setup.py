@@ -17,7 +17,7 @@ setup(
       test_suite="tests",
       data_files=[
           ('pyblue/templates/', [
-              'pyblue/templates/pyblue-base.html',
+              'pyblue/templates/pyblue_base.html',
           ]),
       ],
       long_description=open("README.rst").read(),
