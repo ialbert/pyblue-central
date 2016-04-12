@@ -1,7 +1,5 @@
 
 
-
-
 <html>
 <head>
 
@@ -19,7 +17,7 @@
 <p>A simple static site generator. Zero configuration. Works with any existing site.</p>
 <p>PyBlue allows the reuse of data and visuals (header/footer) across many pages
 and it can generate static sites from dynamic templates.</p>
-<p>This page was created with PyBlue from the file located in <a href="https://github.com/ialbert/pyblue/tree/master/docs/index.html">docs/src/index.html</a>.</p>
+<p>This page was created with PyBlue from the file located in <a href="https://github.com/ialbert/pyblue/tree/master/docs/index.html">docs/index.html</a>.</p>
 <hr>
 <h3>Why PyBlue?</h3>
 <p>There is no shortage of static html generators. PyBlue is a personal project
@@ -72,18 +70,16 @@ For example the
 <li>Writing:  <code>{{ page.last_modified }}</code>
 will produce: Tuesday, April 12, 2016</li>
 <li>Writing:  <code>{{ page.size|filesizeformat }}</code>
-will produce: 9.4 KB</li>
+will produce: 9.2 KB</li>
 </ul>
 <p>Note how in this last case we also made use of the <code>filesizeformat</code> builtin filter of Django.
 Users may add more information even load a python module into the page.</p>
 <p>More details on the <a class="" href="./info/context.html">Context</a> page.</p>
 <hr>
 <h4>Links</h4>
-<p>To access more advanced features users must add the pyblue tag loader into each page:</p>
-<p><code>{% load pytags %}</code>.</p>
-<p>Once that is added to a page
-users can make use of pyblue specific template tags. For exmple <code>link</code> is such a tag that find
-files the directories and links them correctly.</p>
+<p>Users can also make use of pyblue specific template tags that are
+automatically available. For exmple <code>link</code> is such a tag that generates
+the proper relative path to any other template or file.</p>
 <ul>
 <li>
 <p><code>{% link "context.html" %}</code> will
