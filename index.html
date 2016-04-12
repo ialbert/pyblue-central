@@ -1,81 +1,19 @@
 
 
+
+
 <html>
 <head>
-    
-        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
-        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-    
-    
-    <style media="screen" type="text/css">
-        .highlight .hll { background-color: #ffffcc }
-.highlight  { background: #f8f8f8; }
-.highlight .c { color: #408080; font-style: italic } /* Comment */
-.highlight .err { border: 1px solid #FF0000 } /* Error */
-.highlight .k { color: #008000; font-weight: bold } /* Keyword */
-.highlight .o { color: #666666 } /* Operator */
-.highlight .cm { color: #408080; font-style: italic } /* Comment.Multiline */
-.highlight .cp { color: #BC7A00 } /* Comment.Preproc */
-.highlight .c1 { color: #408080; font-style: italic } /* Comment.Single */
-.highlight .cs { color: #408080; font-style: italic } /* Comment.Special */
-.highlight .gd { color: #A00000 } /* Generic.Deleted */
-.highlight .ge { font-style: italic } /* Generic.Emph */
-.highlight .gr { color: #FF0000 } /* Generic.Error */
-.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
-.highlight .gi { color: #00A000 } /* Generic.Inserted */
-.highlight .go { color: #888888 } /* Generic.Output */
-.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
-.highlight .gs { font-weight: bold } /* Generic.Strong */
-.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
-.highlight .gt { color: #0044DD } /* Generic.Traceback */
-.highlight .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
-.highlight .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
-.highlight .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
-.highlight .kp { color: #008000 } /* Keyword.Pseudo */
-.highlight .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
-.highlight .kt { color: #B00040 } /* Keyword.Type */
-.highlight .m { color: #666666 } /* Literal.Number */
-.highlight .s { color: #BA2121 } /* Literal.String */
-.highlight .na { color: #7D9029 } /* Name.Attribute */
-.highlight .nb { color: #008000 } /* Name.Builtin */
-.highlight .nc { color: #0000FF; font-weight: bold } /* Name.Class */
-.highlight .no { color: #880000 } /* Name.Constant */
-.highlight .nd { color: #AA22FF } /* Name.Decorator */
-.highlight .ni { color: #999999; font-weight: bold } /* Name.Entity */
-.highlight .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
-.highlight .nf { color: #0000FF } /* Name.Function */
-.highlight .nl { color: #A0A000 } /* Name.Label */
-.highlight .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
-.highlight .nt { color: #008000; font-weight: bold } /* Name.Tag */
-.highlight .nv { color: #19177C } /* Name.Variable */
-.highlight .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
-.highlight .w { color: #bbbbbb } /* Text.Whitespace */
-.highlight .mb { color: #666666 } /* Literal.Number.Bin */
-.highlight .mf { color: #666666 } /* Literal.Number.Float */
-.highlight .mh { color: #666666 } /* Literal.Number.Hex */
-.highlight .mi { color: #666666 } /* Literal.Number.Integer */
-.highlight .mo { color: #666666 } /* Literal.Number.Oct */
-.highlight .sb { color: #BA2121 } /* Literal.String.Backtick */
-.highlight .sc { color: #BA2121 } /* Literal.String.Char */
-.highlight .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
-.highlight .s2 { color: #BA2121 } /* Literal.String.Double */
-.highlight .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
-.highlight .sh { color: #BA2121 } /* Literal.String.Heredoc */
-.highlight .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
-.highlight .sx { color: #008000 } /* Literal.String.Other */
-.highlight .sr { color: #BB6688 } /* Literal.String.Regex */
-.highlight .s1 { color: #BA2121 } /* Literal.String.Single */
-.highlight .ss { color: #19177C } /* Literal.String.Symbol */
-.highlight .bp { color: #008000 } /* Name.Builtin.Pseudo */
-.highlight .vc { color: #19177C } /* Name.Variable.Class */
-.highlight .vg { color: #19177C } /* Name.Variable.Global */
-.highlight .vi { color: #19177C } /* Name.Variable.Instance */
-.highlight .il { color: #666666 } /* Literal.Number.Integer.Long */
-    </style>
-    
+
+<script src="/static/prism.js"></script>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="/static/prism.css">
+
 </head>
-<body>
-<div class="container">
+
+<body class="language-bash">
+<div class="container ">
+
 <h1>Welcome to PyBlue</h1>
 <hr>
 <p>A simple static site generator. Zero configuration. Works with any existing site.</p>
@@ -91,131 +29,172 @@ of time. Neither of the choices did everything I needed for my work.
 Hence came the motivation to write my own static site generator.</p>
 <p>The following are some of the reasons why PyBlue exists:</p>
 <ol>
-<li>Pyblue requires no initial configuration, special file naming scheme to get started. Pyblue will work with existing html files. Every feature is optional!</li>
-<li>Automatic linking!  Pyblue can be told to produce correct links automatically.
-What this means is that one can freely reorganize the site at any time without having to worry about broken links.</li>
+<li>Pyblue requires no initial configuration, special file naming scheme to get started.</li>
+<li>Pyblue will work with existing html files. Every feature is optional!</li>
+<li>Automatic linking!  Pyblue can be told to produce correct links automatically.</li>
+<li>Reorganize the site at any time without having to worry about broken links.</li>
 <li>Pyblue can embed and syntax highlight code.</li>
 <li>Pyblue integrates seamlessly with Markdown.</li>
 <li>Pyblue can be told to load data into any page. The template system can operate on this data.</li>
 <li>Advanced templating <a href="https://www.djangoproject.com/">Django Templating</a> system and all that it offers.</li>
-<li><a href="http://getbootstrap.com/">Bootstrap</a> integration. Handy shortcuts to Bootstrap features.</li>
 <li>Tiny codebase. PyBlue is around 500 lines of code. Runs on Python 2.7 and 3.4 as well.</li>
 </ol>
 <hr>
 <h3>Install</h3>
-<p>Install it with <code>easy_install pyblue</code> or <code>pip install pyblue --upgrade</code>, or download it from
-the <a href="https://pypi.python.org/pypi/pyblue/">PyBlue PyPI</a> site.</p>
-<p><strong>Note:</strong> Version 2.0 of pyblue moved from Mako Templates to Django Templates and
-with that introduced other semantic differences.
-To install the last version of the <code>1.*</code> line use: <code>easy_install pyblue==1.1.2</code> or <code>pip install pyblue=1.1.2</code>.
-See also the previous docs at: <a href="https://pypi.python.org/pypi/pyblue/1.1.2">Pyblue 1.1.2</a></p>
+<pre><code>pip install pyblue --upgrade
+</code></pre>
+<p>Or download it from the <a href="https://pypi.python.org/pypi/pyblue/">PyBlue at PyPI</a>.
+Alternatively to install the latest version:</p>
+<pre><code>git clone git@github.com:ialbert/pyblue.git
+cd pyblue
+python setup.py develop
+</code></pre>
 <hr>
 <h3>Usage</h3>
-<ol>
-<li>Launch pyblue to serve a directory. Serve these docs: <code>pyblue serve -r docs</code>.</li>
+<ul>
+<li>Launch pyblue to serve a directory <code>pyblue -r docs</code>.</li>
 <li>View your site by visiting <code>http:://localhost:8080</code>.</li>
-<li>Edit your files  and make changes. Reload your page to see the effect.</li>
-</ol>
-<p>Once the site is done generate the final static output</p>
-<ol>
-<li><code>pyblue make -r docs -o html</code></li>
-<li>Upload the files to your static server</li>
-</ol>
+<li>Edit your pages and make changes. Reload the page to see your edits live.</li>
+<li>Finally, generate static output with: <code>pyblue -r docs -o html</code></li>
+</ul>
 <p>To see extra help on options run: <code>pyblue -h</code></p>
 <hr>
 <h3>Features</h3>
 <hr>
 <h4>Context</h4>
-<p>The pages are rendered through the Django Template engine.
-Users automatically get additional context for each of the pages as
-variables that exists. For example the
-<code>{{ page }}</code> variable is always available:</p>
+<p>The pages are rendered through the <a href="https://docs.djangoproject.com/en/1.9/ref/templates/language/">Django Template</a> language.
+To make use of the templating you need to understand how this templating language works.</p>
+<p>There is extra data associated with each  page.
+For example the
+<code>{{ page }}</code> variable is available:</p>
 <ul>
 <li>Writing: <code>{{ page.name }}</code> will produce: Index</li>
-<li>Writing:  <code>{{ page.last_modified }}</code> 
-will produce: Thursday, December 10, 2015</li>
-<li>Writing:  <code>{{ page.size|filesizeformat }}</code> 
-will produce: 7.1 KB</li>
+<li>Writing:  <code>{{ page.last_modified }}</code>
+will produce: Tuesday, April 12, 2016</li>
+<li>Writing:  <code>{{ page.size|filesizeformat }}</code>
+will produce: 9.4 KB</li>
 </ul>
-<p>Note how in this last case we also made use of the <code>filesizeformat</code> builtin filter from Django.
-Users may add more information even load a python module into the page.
-More details on the <a class="" href="./info/context.html">Context</a> page.</p>
+<p>Note how in this last case we also made use of the <code>filesizeformat</code> builtin filter of Django.
+Users may add more information even load a python module into the page.</p>
+<p>More details on the <a class="" href="./info/context.html">Context</a> page.</p>
 <hr>
 <h4>Links</h4>
-<p>To access more advanced features users must add the pyblue tag loader into each page:
-<code>{% load pytags %}</code>. Once this is added to a page
-users can make use of pyblue specific tags.
-For example <code>{% link "context.html" %}</code> will
+<p>To access more advanced features users must add the pyblue tag loader into each page:</p>
+<p><code>{% load pytags %}</code>.</p>
+<p>Once that is added to a page
+users can make use of pyblue specific template tags. For exmple <code>link</code> is such a tag that find
+files the directories and links them correctly.</p>
+<ul>
+<li>
+<p><code>{% link "context.html" %}</code> will
 produce the following: <a class="" href="./info/context.html">Context</a>.</p>
+</li>
+<li>
+<p><code>{% link "context.html" text="Click the context now!" %}</code> will
+produce the following: <a class="" href="./info/context.html">Click the context now!</a>.</p>
+</li>
+</ul>
+<p>Important: Note how in this case the file is located in <code>info/context.html</code> Yet we did not have
+to put that into the linking tag. <code>PyBlue</code> found the file and linked it properly</p>
 <p>How does that work? The <code>{% link "context.html" %}</code>
 command performs a regular expression search on all files in the directory and
-once it finds a match it produces a link to it with the proper path.
-This keeps links correct even after a file is moved! Note how in this
-case the file is located in <code>info/context.html</code></p>
+once it finds a match it produces a link to it with the proper relative path.
+This keeps links correct even if the files were to be moved later.</p>
 <p>Note that the search string is a regular expression that does not need a full path to the file.
-It is sufficient to specify the shortest unambiguous part of the filename PyBlue will find
+It is sufficient to specify the shortest unambiguous part of the filename <code>PyBlue</code> will find
 it and link it.</p>
+<p>As a matter of fact this is one reason PyBlue was written. I got very tired of broken links
+after a more logical reorganization of my sites. That is not a problem now.</p>
 <hr>
 <h4>Markdown</h4>
-<p>To include markdown content place it between</p>
-<pre>{% markdown %}
-
-Hello **Markdown**!
-
-{% endmarkdown %}
-</pre><p>template tags.</p>
+<p>To include markdown content place it between
+<code>{% markdown %}</code> and <code>{% endmarkdown %}</code>
+template tags.</p>
 <hr>
 <h4>Fenced code blocks</h4>
-<p>When using markdown fenced codeblocks with highlighting hints can be used:</p>
-<pre>```python
+<p>When using markdown fenced codeblocks may be used. Include code between ``` symbols that can
+also take language hints:</p>
+<pre><code class="language-python">import sys
 for line in open("data.txt"):
     print line.strip()[:10]
-```
-</pre><p>will  render as:</p>
-<div class="highlight"><pre><span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="s">"data.txt"</span><span class="p">):</span>
-    <span class="k">print</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()[:</span><span class="mi">10</span><span class="p">]</span>
-</pre></div>
+</code></pre>
 <hr>
 <h4>Include code</h4>
-<p>To include syntax highlighted code from a file write <code>{% code "context.py" hint="python" %}</code></p>
-<div class="highlight"><pre><span class="c">#</span>
-<span class="c"># The data file named context.py in the root folder</span>
-<span class="c"># will be loaded automatically into the page.</span>
-<span class="c">#</span>
+<p>To include syntax highlighted code from a file write <code>{% code "context.py" lang="python" %}</code></p>
+<pre><code class="language-python">#
+# The data file named context.py in the root folder
+# will be loaded automatically into the page.
+#
 
-<span class="n">NUMBERS</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+NUMBERS = range(5)
 
-<span class="c"># It may contain any valid python construct.</span>
+# It may contain any valid python construct.
 
-<span class="k">def</span> <span class="nf">say_hello</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-    <span class="k">return</span> <span class="s">"Hello </span><span class="si">%s</span><span class="s">"</span> <span class="o">%</span> <span class="n">name</span>
+def say_hello(name):
+    return "Hello %s" % name
 
-<span class="n">greeting</span> <span class="o">=</span> <span class="n">say_hello</span><span class="p">(</span><span class="s">"World!"</span><span class="p">)</span>
-</pre></div><p>Add <code>{% pygments_css %}</code> to the header of the page to
-generate the CSS classes needed to syntax color embedded code.</p>
+greeting = say_hello("World!")
+</code></pre>
 <p>This file is also special because of its name: <code>context.py</code>. The contents of
-this python module are available inside every page under the name of <code>context</code>. For example
-writing <code>{{ context.greeting }}</code> produces: Hello World!.
-Hence we can add more complex datastructures into every page.</p>
+this python module is available inside every page under the name of <code>context</code>.</p>
+<p>For example writing <code>{{ context.greeting }}</code> produces: Hello World!.</p>
+<p>This is where the full power of <code>pyblue</code> shows. You see, you can go wild and add any and all
+data that you might need. Call out to any program, read any file etc. It is all <code>Python</code> in there.</p>
 <hr>
 <h4>Include markdown</h4>
-<p>Alternatively one can instruct PyBlue to include the rendered content of markdown files.
-For example to include <code>example.md</code> in original form one would use
+<p>Alternatively one can instruct PyBlue to include the rendered content of markdown files.</p>
+<p>To include <code>example.md</code> in original form one would use
 <code>{% code "example.md" %}</code> this would produce:</p>
-<div class="highlight"><pre>**Note**: This text comes from a **markdown** file.
-</pre></div><p>This same file could be included as html with <code>{% include_markdown "example.md" %}</code>
+<pre><code class="language-bash">**Note**: This text comes from a **markdown** file.</code></pre>
+<p>This same file could be included as html with <code>{% include_markdown "example.md" %}</code>
 In that case it will produce the following:</p>
-<p><strong>Note</strong>: This text comes from a <strong>markdown</strong> file.</p><hr>
-<h4>Include other templates</h4>
-<p>The django templating system allows including other templates or sections.</p>
-<p><code>{% include "sometemplate.html" %}</code></p>
+<p><strong>Note</strong>: This text comes from a <strong>markdown</strong> file.</p>
 <hr>
-<h4>Bootstrap</h4>
-<p>There are helper methods for <a href="http://getbootstrap.com/">Bootstrap</a>.</p>
-<p>For example <code>{% boostrap_cdn %}</code> will include
-the CSS and Javascript files used with Boostrap.</p>
+<h4>Advanced templates</h4>
+<p>The <a href="https://docs.djangoproject.com/en/1.9/ref/templates/language/">django templating</a> system allows extending or including other templates or sections.</p>
+<ul>
+<li><code>{% extend "sometemplate.html" %}</code></li>
+<li><code>{% include "sometemplate.html" %}</code></li>
+</ul>
+<p>These features support template inheritance and composition.</p>
 <hr>
-<h3>Licensing</h3>
+<h4>Overriding templates</h4>
+<p>By default all templates will be loaded from the root directory of your application
+and if not found it will fall back to the <code>PyBlue</code> defaults.</p>
+<p>Hence to override any
+template just add that file with the same name. To override the <code>site_assets.html</code> that
+contains the custom <code>css</code> and <code>js</code> modules create your own <code>site_assets.html</code> file in your project.</p>
+<p>To help demonstrate how this works there is a simple example template tag called <code>{%  say_hello %}</code>
+Normally this tag will create the output: Hello World! because it is using a template that contains:</p>
+<pre><code>Hello World!
+</code></pre>
+<p>This template tag accesses the template file called <code>say_hello.html</code>.
+If it does not find it in the current directory it falls back to the default location that is part of <code>PyBlue</code>.</p>
+<p>In the <code>templates</code> folder of your root directory create the file <code>say_hello.html</code> that contains</p>
+<pre><code class="language-bash">Goodbye World!
+</code></pre>
+<p>Now running <code>{%  say_hello %}</code> will produce: Goodbye World!</p>
+<hr>
+<h4>Custom template tags</h4>
+<p><code>PyBlue</code> comes with a few simple template tags such as <code>link</code> and <code>img</code> but it
+also allows you to extend your templates with so called <a href="https://docs.djangoproject.com/en/1.9/howto/custom-template-tags/">custom template tags</a>.
+There are some requirements nainly on naming.</p>
+<p>For that to work your root directory must be an <code>import</code> ready python module.
+This means a name that only has ascii characters and underscores and the root
+directory must contain a file name <code>__ini__.py</code>. This file may be empty.</p>
+<p>Once this is set up you may add your templatetags directory into the root folder as
+desribed in the <a href="https://docs.djangoproject.com/en/1.9/howto/custom-template-tags/">custom template tags</a> documentation.</p>
+<p>The <code>docs</code> root folder has its own <code>demotags</code> custom template tag</p>
+<ul>
+<li><code>{%  boom 'PyBlue' %}</code> will produce: BOOM! BOOM! POW! <b>PyBlue</b>!</li>
+</ul>
+<hr>
+<h4>Site assets</h4>
+<p>Add <code>{% site_assets %}</code> to the head tag of the page to
+generate the CSS classes needed to syntax color embedded code.</p>
+<p>Override the template called <code>site_assets.html</code> to modify the assets.</p>
+<hr>
+<h4>Licensing</h4>
 <ul>
 <li>PyBlue uses the <a href="https://github.com/ialbert/pyblue/blob/master/LICENSE.txt">MIT license</a>.</li>
 <li>PyBlue is being developed by Istvan Albert see <a href="https://github.com/ialbert">https://github.com/ialbert</a></li>
