@@ -70,7 +70,7 @@ def img(context, pattern, css='', attrs={}):
     obj, relpath, name = match_file(context=context, pattern=pattern)
     extras = render_attrs(attrs)
     html = '<img src="{}" class="{}" alt="{}" {}>'.format(relpath, css, name, extras)
-    return html
+    return mark_safe(html)
 
 @register.inclusion_tag('say_hello.html')
 def say_hello():

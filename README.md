@@ -1,4 +1,4 @@
-## Welcome to Pyblue
+## Welcome to PyBlue
 
 A simple static site generator.
 

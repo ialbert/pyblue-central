@@ -271,7 +271,7 @@ class File(object):
             logger.error("file size is too large to be rendered %s" % self.size)
             return "?"
 
-        return io.open(self.path).read()
+        return io.open(self.path, encoding='utf-8').read()
 
     def nicer_name(self, fname):
         """
@@ -280,10 +280,12 @@ class File(object):
         """
         head, tail = os.path.split(fname)
         base, ext = os.path.splitext(tail)
-        name = base.title().replace("-", " ").replace("_", " ")
+
+        # Non templates keep their original name.
         if not self.is_template:
-            # Add back extension for non templates.
-            name += self.ext
+            return tail
+
+        name = base.title().replace("-", " ").replace("_", " ")
         return name
 
     def write(self, output, content='', check=True):
@@ -348,7 +350,7 @@ def parse_metadata(path):
     PATTERN = re.compile(r'^{#\s?(?P<name>\w+)\s?=\s?(?P<value>[\S\s]+)\s?#}')
 
     # Check only the start of the file.
-    lines = io.open(path).read().splitlines()[:100]
+    lines = io.open(path, encoding='utf-8').read().splitlines()[:100]
     lines = map(strip, lines)
     meta = dict()
     for line in lines:
