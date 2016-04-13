@@ -4,8 +4,9 @@ GITHUB_PAGES=../pyblue-ghpages
 all: docs
 
 README.rst: README.md
+	# Generate .rst from .md
 	# PyPi accepts only rst files in long description.
-	echo pandoc README.md -o README.rst
+	pandoc README.md -o README.rst
 
 rst: README.rst
 
@@ -14,11 +15,10 @@ docs:
 	pyblue serve -r docs -v
 
 pypi: rst
-	#python setup.py sdist upload
-	echo done
+	python setup.py sdist upload
 
 pages: rst
 	# Generate/commit/push documentation into the GitHub Page repository.
-	echo cd ${GITHUB_PAGES} && git pull
-	echo pyblue -r docs -o ${GITHUB_PAGES}
-	echo cd ${GITHUB_PAGES} && git commit -am "updated the docs" && git push
+	cd ${GITHUB_PAGES} && git pull
+	pyblue -r docs -o ${GITHUB_PAGES}
+	cd ${GITHUB_PAGES} && git commit -am "updated the docs" && git push

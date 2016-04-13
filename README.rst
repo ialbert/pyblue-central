@@ -1,16 +1,17 @@
-Welcome to Pyblue
+Welcome to PyBlue
 -----------------
 
 A simple static site generator.
 
 Why another one? There are `many static <https://www.staticgen.com/>`__
-site generators already. I found to be way too complicated, they have
-too many rules, put this here or there, call thing this or that.
+site generators already. I found most to be way too complicated, too
+many conventions and rules: put this here or there, call it this or
+that. It was too tiring to keep up.
 
-PyBlue is different. Everything is optional, only use what you need.
-Stays out of the way.
+PyBlue is different. Everything is optional, nothing is required, use
+only what you need. It basically stays out of the way.
 
-From the simplest tasks:
+Simple things are very easy:
 
 -  No configuration required.
 -  Works with any existing site.
@@ -18,7 +19,7 @@ From the simplest tasks:
 -  Easy linking to other pages.
 -  Tiny codebase, pyblue is around 500 lines in a single file!
 
-To more complicated:
+Complicated tasks are easy:
 
 -  PyBlue generates the correct links even if you move pages around.
 -  Use `Django
@@ -27,7 +28,7 @@ To more complicated:
 -  Easily add data into each page (title, link name, or any arbitrary
    content).
 
-Or go all the way out:
+And you can go all the way out if you really want to:
 
 -  Load python modules into each page.
 -  Exposed data: database queries, results of online requests etc.
