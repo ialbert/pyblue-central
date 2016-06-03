@@ -20,7 +20,7 @@ markdown = get_markdown()
 
 
 def render_attrs(attrs={}):
-    "Renders dictionary attributes as key=value pairs as text."
+    "Renders dictionary attributes as key=value pairs of text."
     items = map(lambda item: "%s=%s" % item, attrs.items())
     text = " ".join(items)
     return text
