@@ -5,6 +5,7 @@ import bleach
 import CommonMark
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
+from django.utils import encoding
 
 logger = logging.getLogger('pyblue')
 
@@ -107,6 +108,7 @@ def code(context, pattern, lang="bash",  safe=True):
 @register.simple_tag(takes_context=True)
 def include_markdown(context, pattern, safe=True):
     text = find(context=context, pattern=pattern)
+    text = encoding.smart_unicode(text)
     html = markdown(text)
     html = mark_safe(html)
     return html
