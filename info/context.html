@@ -7,17 +7,40 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>More About Contexts </title>
-    
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="https://ialbert.github.io/pyblue/static/prism.css">
-<script src="https://ialbert.github.io/pyblue/static/prism.js"></script>
+    <style type="text/css">
+    body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        color: #333;
+        background-color: #fff;
+        margin: 40px auto;
+        max-width: 650px;
+        line-height: 1.6;
+        padding: 0 10px
+    }
+
+    h1, h2, h3 {
+        line-height: 1.2;
+        border-bottom: 1px solid #ECECEC;
+        padding-top: 1ex;
+
+    }
+
+    blockquote {
+        font-style: italic;
+    }
+</style>
+
+<script src="https://ialbert.github.io/pyblue-central/static/prism.js"></script>
+<link rel="stylesheet" type="text/css" href="https://ialbert.github.io/pyblue-central/static/prism.css">
 
 </head>
 
 
 <body class="language-bash">
-<div class="container">
+
 <h1>More About Contexts</h1>
+<p>The word "context" refers to data that can be used during the rendering of a page.</p>
+<h3>Default Context</h3>
 <p>There are two ways to get context into each page. The first is via template comments.</p>
 <p>Writing
 <code>{# title = More About Context #}</code></p>
@@ -44,11 +67,13 @@ to produce:</p>
 <p>Hello World</p>
 </li>
 </ul>
+<h3>Advanced Context</h3>
 <p>The second method of getting context into a page is a python module named <code>context.py</code>
 placed in the directory root. This may contain
-any python construct.</p>
+any python construct. Make sure that this python module can be executed without errors.</p>
 <p>The content of this module will be visible under the parameter data
 <code>{{ context }}</code> variable name.</p>
+<p>Example supposed that the <code>context.py</code> file contains the following:</p>
 <pre><code class="language-python">#
 # The data file named context.py in the root folder
 # will be loaded automatically into the page.
@@ -63,11 +88,12 @@ def say_hello(name):
 
 greeting = say_hello("World!")
 </code></pre>
-<p>We can now access the contenxt of <code>contex.py</code> like
-so <code>{{ context.greeting }}</code> to produce: Hello World!</p>
-<p>Go back to: <a class="" href="../index.html">Home Page</a>.</p>
+<p>This file has to be in the root location of the site. We can now access the contents of this module
+via <code>context</code> variable like
+so <code>{{ context.greeting }}</code> will produce: Hello World!</p>
+<p>Go back to: <a class="" href="../index.html">Home Page</a>
+.</p>
 
 
-</div>
 </body>
 </html>
