@@ -1,0 +1,68 @@
+
+
+
+<html>
+<head>
+<style type="text/css">
+    body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        color: #333;
+        background-color: #fff;
+        margin: 40px auto;
+        max-width: 650px;
+        line-height: 1.6;
+        padding: 0 10px
+    }
+
+    h1, h2, h3 {
+        line-height: 1.2;
+        border-bottom: 1px solid #ECECEC;
+        padding-top: 1ex;
+
+    }
+
+    blockquote {
+        font-style: italic;
+    }
+</style>
+
+<script src="https://ialbert.github.io/pyblue/static/prism.js"></script>
+<link rel="stylesheet" type="text/css" href="https://ialbert.github.io/pyblue/static/prism.css">
+
+</head>
+
+<body class="language-bash">
+
+<h2>Advanced Templating</h2>
+<p>For each project the <a href="https://docs.djangoproject.com/en/1.9/ref/templates/language/">django templating</a> system is activated. PyBlue
+behaves as if the root directory were a Django project. Hence users may add
+their own <code>templates</code> and <code>templatetags</code> folders</p>
+<h3>Overriding templates</h3>
+<p>By default all templates will be loaded from the root directory of your application
+and if not found it will fall back to the <code>PyBlue</code> defaults.</p>
+<p>Hence to override any
+template just add that file with the same name. To override the <code>pyblue_assets.html</code> that
+contains the custom <code>css</code> and <code>js</code> modules create your own <code>templates/pyblue_assets.html</code> file in your project.</p>
+<ul>
+<li>Here is a <a href="https://github.com/ialbert/pyblue/tree/master/pyblue/templates">list of all the templates</a> that may be overriden</li>
+<li>Here are the default <a href="https://github.com/ialbert/pyblue/tree/master/pyblue/templatetags">template tags</a> that are loaded into each page.</li>
+</ul>
+<p>Typically one would override the templates on a per project basis.</p>
+<h3>Custom template tags</h3>
+<p><code>PyBlue</code> comes with a few simple template tags such as <code>link</code> and <code>img</code> but it
+also allows you to extend your templates with so called <a href="https://docs.djangoproject.com/en/1.9/howto/custom-template-tags/">custom template tags</a>.</p>
+<p>The <code>docs</code> root folder has an example in the <a href="https://github.com/ialbert/pyblue/blob/master/docs/templatetags/demotags.py">demotags.py</a> custom template tag library
+that has the <code>boom</code> tag that be used as:</p>
+<ul>
+<li><code>{%  boom 'PyBlue' %}</code> to produce: BOOM! BOOM! POW! <b>PyBlue</b>!</li>
+</ul>
+<h3>Site assets</h3>
+<p>Add <code>{% assets %}</code> to the head tag of the page to
+generate the CSS classes needed to syntax color embedded code.</p>
+<p>Override the template called <code>pyblue_assets.html</code> to modify the assets.</p>
+<p>Go back to: <a class="" href="./index.html">Home Page</a>
+.</p>
+
+
+</body>
+</html>
