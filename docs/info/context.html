@@ -7,15 +7,19 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>{{ page.title }}</title>
-    {%  site_assets %}
+    {%  assets %}
 </head>
 
 
 <body class="language-bash">
-<div class="container">
+
 {% markdown %}
 
 # {{ page.title }}
+
+The word "context" refers to data that can be used during the rendering of a page.
+
+### Default Context
 
 There are two ways to get context into each page. The first is via template comments.
 
@@ -41,22 +45,26 @@ to produce:
 * {{ elem }}
 {% endfor %}
 
+### Advanced Context
+
 The second method of getting context into a page is a python module named <code>context.py</code>
 placed in the directory root. This may contain
-any python construct.
+any python construct. Make sure that this python module can be executed without errors.
 
 The content of this module will be visible under the parameter data
-    {% verbatim %}<code>{{ context }}</code>{% endverbatim %} variable name.
+{% verbatim %}<code>{{ context }}</code>{% endverbatim %} variable name.
+
+Example supposed that the `context.py` file contains the following:
 
 {% code "context.py" lang='python' %}
 
-We can now access the contenxt of `contex.py` like
-so {% verbatim %}<code>{{ context.greeting }}</code>{% endverbatim %} to produce: {{ context.greeting }}
+This file has to be in the root location of the site. We can now access the contents of this module
+via `context` variable like
+so {% verbatim %}<code>{{ context.greeting }}</code>{% endverbatim %} will produce: {{ context.greeting }}
 
 Go back to: {% link "index.html" "Home Page" %}.
 
 {% endmarkdown %}
 
-</div>
 </body>
 </html>

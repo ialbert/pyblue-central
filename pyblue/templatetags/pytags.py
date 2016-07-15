@@ -3,9 +3,9 @@ from django import template
 import logging, re
 import bleach
 import CommonMark
-from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils import encoding
+import textwrap
 
 logger = logging.getLogger('pyblue')
 
@@ -15,20 +15,23 @@ def get_markdown():
     md = CommonMark.commonmark
     return md
 
-# Allow overriding the markdown parser.
+# Allows overriding the markdown parser.
 markdown = get_markdown()
 
-
-def render_attrs(attrs={}):
-    "Renders dictionary attributes as key=value pairs of text."
-    items = map(lambda item: "%s=%s" % item, attrs.items())
-    text = " ".join(items)
-    return text
+@register.inclusion_tag('pyblue_hello.html')
+def hello(name='World'):
+    '''
+    Example of an inclusion tag.
+    '''
+    return dict(name=name)
 
 
 def match_file(context, pattern):
     """
-    Returns a relative path and a name for a matched object.
+    Returns a relative path and a name for a matched pattern.
+    The path is computed relative to the page object of the current context.
+
+    Returns a triplet of the object, the path and the name to of the object.
     """
     start = context['page']
     files = context['files']
@@ -49,6 +52,7 @@ def match_file(context, pattern):
         logger.error(msg)
         for item in items:
             logger.error("pattern '{}' matches '{}'".format(pattern, item.fname))
+
     name = first.name
     rpath = first.relpath(start=start)
 
@@ -56,8 +60,11 @@ def match_file(context, pattern):
 
 
 @register.simple_tag(takes_context=True)
-def find(context, pattern):
-    "Returns the content of a file matched by the pattern"
+def read_file(context, pattern):
+    """
+    Returns the content of a file matched by the pattern.
+    Returns an error message if the pattern cannot be found.
+    """
     obj, rpath, name = match_file(context=context, pattern=pattern)
     if obj:
         text = open(obj.fpath).read()
@@ -66,64 +73,72 @@ def find(context, pattern):
     return text
 
 
-@register.simple_tag(takes_context=True)
-def img(context, pattern, css='', attrs={}):
-    obj, relpath, name = match_file(context=context, pattern=pattern)
-    extras = render_attrs(attrs)
-    html = '<img src="{}" class="{}" alt="{}" {}>'.format(relpath, css, name, extras)
-    return mark_safe(html)
-
-@register.inclusion_tag('say_hello.html')
-def say_hello():
-    return dict()
-
-
-@register.inclusion_tag('thumbnail.html', takes_context=True)
-def thumb(context, pattern, link="#", title="", size=4, clearfix=False):
-    obj, relpath, name = match_file(context=context, pattern=pattern)
-    obj, rellink, linkname = match_file(context=context, pattern=link)
-    title = title or linkname
-    params = dict(src=relpath, name=name, link=rellink, title=title, size=size, clearfix=clearfix)
+@register.inclusion_tag('pyblue_img.html', takes_context=True)
+def img(context, pattern, css=''):
+    obj, rpath, name = match_file(context=context, pattern=pattern)
+    params = dict(src=rpath, name=name, css=css)
     return params
 
+
+@register.inclusion_tag('pyblue_thumb.html', takes_context=True)
+def thumb(context, pattern, css=''):
+    obj, rpath, name = match_file(context=context, pattern=pattern)
+    params = dict(src=rpath, name=name, css=css)
+    return params
+
+
 @register.simple_tag(takes_context=True)
-def link(context, pattern, text=None, css='', attrs={}):
+def href(context, pattern):
+    '''
+    Generates a relative path to a pattern.
+    '''
     obj, relpath, name = match_file(context=context, pattern=pattern)
-    # Allow overriding the link display.
-    text = text or name
-    extras = render_attrs(attrs)
-    html = '<a class="%s" href="%s" %s>%s</a>' % (css, relpath, extras, text)
-    return mark_safe(html)
+    return relpath
+
+
+@register.inclusion_tag('pyblue_link.html', takes_context=True)
+def link(context, pattern, text=None, css=''):
+    '''
+    Generates a link to a pattern.
+    '''
+    obj, href, name = match_file(context=context, pattern=pattern)
+    # Allows overriding the link display.
+    name = text or name
+    params = dict(href=href, name=name, css=css)
+    return params
+
+
+@register.inclusion_tag('pyblue_code.html', takes_context=True)
+def code(context, pattern, lang="bash", css=''):
+    '''
+    Formats the content of a file as syntax highlighted code.
+    '''
+    text = read_file(context=context, pattern=pattern)
+    params = dict(lang=lang, text=text, css=css)
+    return params
 
 
 @register.simple_tag(takes_context=True)
-def code(context, pattern, lang="bash",  safe=True):
-    text = find(context=context, pattern=pattern)
-    html = '<pre><code class="language-{}">{}</code></pre>'.format(lang, text)
-    if safe:
-        html = mark_safe(html)
-    return html
-
-
-@register.simple_tag(takes_context=True)
-def include_markdown(context, pattern, safe=True):
-    text = find(context=context, pattern=pattern)
+def markdown_file(context, pattern, safe=True):
+    text = read_file(context=context, pattern=pattern)
     text = encoding.smart_unicode(text)
     html = markdown(text)
     html = mark_safe(html)
     return html
 
 
-@register.inclusion_tag('site_assets.html', takes_context=True)
-def site_assets(context):
+@register.inclusion_tag('pyblue_assets.html', takes_context=True)
+def assets(context):
+    '''
+    A shortcut to site assets. Override template as needed.
+    '''
     return dict(context=context)
 
 
-#
-# Based on http://jamie.curle.io/blog/minimal-markdown-template-tag-django/
-#
-
 def top_level_only(attrs, new=False):
+    '''
+    Helper function used when linkifying with bleach.
+    '''
     if not new:
         return attrs
     text = attrs['_text']
@@ -131,6 +146,9 @@ def top_level_only(attrs, new=False):
         return None
     return attrs
 
+# Custom Markdown tag processor.
+# Based on http://jamie.curle.io/blog/minimal-markdown-template-tag-django/
+#
 class MarkDownNode(template.Node):
     CALLBACKS = [ top_level_only ]
     def __init__(self, nodelist):
@@ -163,3 +181,6 @@ def markdown_tag(parser, token):
     # need to do this otherwise we get big fail
     parser.delete_first_token()
     return MarkDownNode(nodelist)
+
+if __name__ == '__main__':
+    pass

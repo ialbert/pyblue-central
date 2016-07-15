@@ -1,0 +1,64 @@
+{# name = Advanced Features #}
+{% load demotags %}
+
+<html>
+<head>
+{%  assets %}
+</head>
+
+<body class="language-bash">
+
+{% markdown %}
+
+[django_templates]: https://docs.djangoproject.com/en/1.9/ref/templates/language/
+
+## Advanced Templating
+
+For each project the [django templating][django_templates] system is activated. PyBlue
+behaves as if the root directory were a Django project. Hence users may add
+their own `templates` and `templatetags` folders
+
+### Overriding templates
+
+By default all templates will be loaded from the root directory of your application
+and if not found it will fall back to the `PyBlue` defaults.
+
+Hence to override any
+template just add that file with the same name. To override the `pyblue_assets.html` that
+contains the custom `css` and `js` modules create your own `templates/pyblue_assets.html` file in your project.
+
+* Here is a [list of all the templates][templates] that may be overriden
+* Here are the default [template tags][tags] that are loaded into each page.
+
+[templates]: https://github.com/ialbert/pyblue/tree/master/pyblue/templates
+[tags]: https://github.com/ialbert/pyblue/tree/master/pyblue/templatetags
+
+Typically one would override the templates on a per project basis.
+
+### Custom template tags
+
+`PyBlue` comes with a few simple template tags such as `link` and `img` but it
+also allows you to extend your templates with so called [custom template tags][templatetags].
+
+[templatetags]: https://docs.djangoproject.com/en/1.9/howto/custom-template-tags/
+
+The `docs` root folder has an example in the [demotags.py][demotags] custom template tag library
+that has the `boom` tag that be used as:
+
+* {% verbatim %}<code>{%  boom 'PyBlue' %}</code>{% endverbatim %} to produce: {%  boom 'PyBlue' %}
+
+[demotags]: https://github.com/ialbert/pyblue/blob/master/docs/templatetags/demotags.py
+
+### Site assets
+
+Add {% verbatim %}<code>{% assets %}</code>{% endverbatim %} to the head tag of the page to
+generate the CSS classes needed to syntax color embedded code.
+
+Override the template called `pyblue_assets.html` to modify the assets.
+
+Go back to: {% link "index.html" "Home Page" %}.
+
+{% endmarkdown %}
+
+</body>
+</html>

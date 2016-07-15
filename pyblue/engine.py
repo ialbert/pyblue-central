@@ -58,8 +58,10 @@ class PyBlue(object):
                 # Attempts to import a python module as a context
                 ctx = imp.load_source('ctx', ctx_path)
             else:
+                # Can't find the context module. Not a fatal error.
                 logger.warning("cannot find context module {}".format(ctx_path))
         except Exception as exc:
+            # Importing the context raised an error.
             logger.warning("unable to import context module: {} error: {}".format(ctx_path, exc))
 
         def render(path):
@@ -67,6 +69,8 @@ class PyBlue(object):
             The rendering handler.
             '''
             if self.auto_refresh:
+                # Recrawls the entire directory tree on each request.
+                # Will add substantial overhead.
                 self.set_root(self.root)
 
             logger.debug("%s" % path)
@@ -74,14 +78,16 @@ class PyBlue(object):
             page = File(fname=fname, root=self.root)
 
             if page.is_template:
+                # Template files will be rendered with a context.
                 params = dict(page=page, root=self.root, context=ctx, files=self.files)
                 template = get_template(page.fname)
                 html = template.render(params)
                 return html
             else:
+                # Return non-template files as is.
                 return bottle.static_file(path, root=self.root)
 
-        # Make a shortcut to the renderer.
+        # Keep a shortcut to the renderer.
         self.render = render
 
         # The Bottle application will serve the pages.
@@ -103,6 +109,7 @@ class PyBlue(object):
         """
         if os.path.isfile(output):
             logger.error("invalid output directory: {}".format(output))
+            return
 
         if not os.path.isdir(output):
             logger.info("creating output directory: {}".format(output))
@@ -362,7 +369,7 @@ def parse_metadata(path):
             except ValueError as exc:
                 obj = str(value)
             meta[name] = obj
-    # logger.debug("path: {}, metadata: {}".format(path, meta))
+    #logger.debug("path: {}, metadata: {}".format(path, meta))
     return meta
 
 
@@ -407,7 +414,7 @@ def run():
     # Process command line arguments.
     parser = get_parser()
 
-    # Trigger help on plain invocation.
+    # Trigger help on clearly incorrect invocation.
     if len(sys.argv) < 3:
         sys.argv.append("--help")
 

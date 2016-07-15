@@ -2,49 +2,49 @@
 
 <html>
 <head>
-{%  site_assets %}
+{%  assets %}
 </head>
 
 <body class="language-bash">
-<div class="container ">
 
 {% markdown %}
 
-Welcome to PyBlue
-=================
+# Welcome to PyBlue
 
-- - -
+A simple static site generator.
 
-A simple static site generator. Zero configuration. Works with any existing site.
+PyBlue allows the reuse of visuals (header/footer) and data
+across many pages and it can generate static sites
+from dynamic templates.
 
-PyBlue allows the reuse of data and visuals (header/footer) across many pages
-and it can generate static sites from dynamic templates.
+This page was created with PyBlue from the file located in [docs/index.html][index]
 
-This page was created with PyBlue from the file located in <a href="https://github.com/ialbert/pyblue/tree/master/docs/index.html">docs/index.html</a>.
-
-- - -
+[index]: https://github.com/ialbert/pyblue/tree/master/docs/index.html
 
 ### Why PyBlue?
 
 There is no shortage of static html generators. PyBlue is a personal project
 that aims to address my personal annoyances with other options. I have evaluated
-quite a few alternatives even used some options over longer periods
-of time. Neither of the choices did everything I needed for my work.
-Hence came the motivation to write my own static site generator.
+quite a few alternatives even used some over longer periods
+of time. None of the choices did what I needed for my work.
+Hence came the motivation to write my own.
 
 The following are some of the reasons why PyBlue exists:
 
-1. Pyblue requires no initial configuration, special file naming scheme to get started.
-1. Pyblue will work with existing html files. Every feature is optional!
-1. Automatic linking!  Pyblue can be told to produce correct links automatically.
-1. Reorganize the site at any time without having to worry about broken links.
-1. Pyblue can embed and syntax highlight code.
-1. Pyblue integrates seamlessly with Markdown.
-1. Pyblue can be told to load data into any page. The template system can operate on this data.
-1. Advanced templating [Django Templating][django] system and all that it offers.
-1. Tiny codebase. PyBlue is around 500 lines of code. Runs on Python 2.7 and 3.4 as well.
+1. All features are optional!
+1. Requires no special configuration to get started.
+1. Automatic linking! Reorganize the site without having to worry about broken links.
+1. Automatic syntax highlighting of code.
+1. Integrates seamlessly with Markdown.
 
-- - -
+And then of course it has many advanced features:
+
+1. Advanced templating [Django Templating][django] system and all that it offers.
+1. Support extending the template language via custom template tags.
+1. Pyblue can be told to load data into any page.
+1. The template system can operate on data loaded into the page.
+1. Tiny codebase, eminently hackable. PyBlue is around 500 lines of code.
+1. Runs on all Python version from 2.7 to 3.6
 
 ### Install
 
@@ -57,29 +57,27 @@ Alternatively to install the latest version:
     cd pyblue
     python setup.py develop
 
-- - -
-
 ### Usage
 
-* Launch pyblue to serve a directory <code>pyblue -r docs</code>.
-* View your site by visiting <code>http:://localhost:8080</code>.
+The documentation that you read now has been created from the files in the [docs][docs] folder.
+
+* Launch pyblue to serve a directory `pyblue -r docs`
+* View your site by visiting `http:://localhost:8080`.
 * Edit your pages and make changes. Reload the page to see your edits live.
-* Finally, generate static output with: <code>pyblue -r docs -o html</code>
+* Finally, generate the static output with: `pyblue -r docs -o html`
 
 To see extra help on options run: `pyblue -h`
 
-- - -
+[docs]: https://github.com/ialbert/pyblue/tree/master/docs/
 
-### Features
+## Features
 
-- - -
-
-#### Context
+### Context
 
 The pages are rendered through the [Django Template][django_templates] language.
 To make use of the templating you need to understand how this templating language works.
 
-There is extra data associated with each  page.
+By default there is extra data associated with each  page.
 For example the
 {% verbatim %}<code>{{ page }}</code>{% endverbatim %} variable is available:
 
@@ -94,9 +92,7 @@ Users may add more information even load a python module into the page.
 
 More details on the {% link "context.html" %} page.
 
-- - -
-
-#### Links
+### Links
 
 Users can also make use of pyblue specific template tags that are
 automatically available. For exmple `link` is such a tag that generates
@@ -105,48 +101,41 @@ the proper relative path to any other template or file.
 * {% verbatim %}<code>{% link "context.html" %}</code>{% endverbatim %} will
 produce the following: {% link "context.html" %}.
 
-* {% verbatim %}<code>{% link "context.html" text="Click the context now!" %}</code>{% endverbatim %} will
-produce the following: {% link "context.html" text="Click the context now!" %}.
+* {% verbatim %}<code>{% link "context.html" text="Click me now!" %}</code>{% endverbatim %} will
+produce the following: {% link "context.html" text="Click me now!" %}.
 
 Important: Note how in this case the file is located in <code>info/context.html</code> Yet we did not have
-to put that into the linking tag. `PyBlue` found the file and linked it properly
+to put the full path the linking tag. `PyBlue` found the file and linked it properly.
 
-How does that work? The {% verbatim %}<code>{% link "context.html" %}</code>{% endverbatim %}
+Why did that work? The {% verbatim %}<code>{% link "context.html" %}</code>{% endverbatim %}
 command performs a regular expression search on all files in the directory and
 once it finds a match it produces a link to it with the proper relative path.
 This keeps links correct even if the files were to be moved later.
 
-Note that the search string is a regular expression that does not need a full path to the file.
-It is sufficient to specify the shortest unambiguous part of the filename `PyBlue` will find
-it and link it.
+Note that the search string is a regular expression and it is sufficient
+to specify the shortest unambiguous part of the filename. `PyBlue` will find it and link it.
 
-As a matter of fact this is one reason PyBlue was written. I got very tired of broken links
-after a more logical reorganization of my sites. That is not a problem now.
+> As a matter of fact this is one reason PyBlue was written. I got very tired of fixing
+> broken links after a site reorganization. PlyBlue now does it automatically.
 
-- - -
+### Markdown
 
-#### Markdown
-
-To include markdown content place it between
+To include markdown content into an HTML document place it between
 {% verbatim %}`{% markdown %}` and `{% endmarkdown %}`{% endverbatim %}
 template tags.
 
-- - -
-
-#### Fenced code blocks
+### Fenced code blocks
 
 When using markdown fenced codeblocks may be used. Include code between ``` symbols that can
 also take language hints:
-
 
 ```python
 import sys
 for line in open("data.txt"):
     print line.strip()[:10]
 ```
-- - -
 
-#### Include code
+### Include code
 
 To include syntax highlighted code from a file write {% verbatim %}<code>{% code "context.py" lang="python" %}</code>{% endverbatim %}
 
@@ -158,27 +147,29 @@ this python module is available inside every page under the name of `context`.
 For example writing {% verbatim %}`{{ context.greeting }}`{% endverbatim %} produces: {{ context.greeting }}.
 
 This is where the full power of `pyblue` shows. You see, you can go wild and add any and all
-data that you might need. Call out to any program, read any file etc. It is all `Python` in there.
+data that you might need. Call out to any program, read any file etc. It is `Python` all [the way down][turtles].
 
-- - -
+[turtles]: https://en.wikipedia.org/wiki/Turtles_all_the_way_down
 
-#### Include markdown
+### Include markdown
 
 Alternatively one can instruct PyBlue to include the rendered content of markdown files.
 
-To include `example.md` in original form one would use
+To include the file `example.md` in its original content one would use
 {% verbatim %}<code>{% code "example.md" %}{% endverbatim %}</code> this would produce:
 
 {%  code "example.md" %}
 
-This same file could be included as html with {% verbatim %}<code>{% include_markdown "example.md" %}{% endverbatim %}</code>
+This same file could be included as html with {% verbatim %}<code>{% markdown_file "example.md" %}{% endverbatim %}</code>
 In that case it will produce the following:
 
-{% include_markdown "example.md" %}
+{% markdown_file "example.md" %}
 
-- - -
+Note how in both cases an automatic search takes place PyBlue will find the location
+of the file `example.md` wherever it might be on the root
+directory. That's super convenient.
 
-#### Advanced templates
+### Advanced templates
 
 The [django templating][django_templates] system allows extending or including other templates or sections.
 
@@ -187,68 +178,15 @@ The [django templating][django_templates] system allows extending or including o
 
 These features support template inheritance and composition.
 
-- - -
+Read on from more {% link "advanced.html" %}
 
-#### Overriding templates
-
-By default all templates will be loaded from the root directory of your application
-and if not found it will fall back to the `PyBlue` defaults.
-
-Hence to override any
-template just add that file with the same name. To override the `site_assets.html` that
-contains the custom `css` and `js` modules create your own `site_assets.html` file in your project.
-
-To help demonstrate how this works there is a simple example template tag called {% verbatim %}<code>{%  say_hello %}</code>{% endverbatim %}
-Normally this tag will create the output: Hello World! because it is using a template that contains:
-
-    Hello World!
-
-This template tag accesses the template file called `say_hello.html`.
-If it does not find it in the current directory it falls back to the default location that is part of `PyBlue`.
-
-In the `templates` folder of your root directory create the file `say_hello.html` that contains
-
-{%  code 'say_hello.html' %}
-
-Now running {% verbatim %}<code>{%  say_hello %}</code>{% endverbatim %} will produce: {%  say_hello %}
-- - -
-
-#### Custom template tags
-
-`PyBlue` comes with a few simple template tags such as `link` and `img` but it
-also allows you to extend your templates with so called [custom template tags][templatetags].
-There are some requirements nainly on naming.
-
-For that to work your root directory must be an `import` ready python module.
-This means a name that only has ascii characters and underscores and the root
-directory must contain a file name `__ini__.py`. This file may be empty.
-
-Once this is set up you may add your templatetags directory into the root folder as
-desribed in the [custom template tags][templatetags] documentation.
-
-[templatetags]: https://docs.djangoproject.com/en/1.9/howto/custom-template-tags/
-
-The `docs` root folder has its own `demotags` custom template tag
-
-* {% verbatim %}<code>{%  boom 'PyBlue' %}</code>{% endverbatim %} will produce: {%  boom 'PyBlue' %}
-
-- - -
-
-#### Site assets
-
-Add {% verbatim %}<code>{% site_assets %}</code>{% endverbatim %} to the head tag of the page to
-generate the CSS classes needed to syntax color embedded code.
-
-Override the template called `site_assets.html` to modify the assets.
-
-- - -
-
-#### Licensing
+### Licensing
 
 * PyBlue uses the [MIT license][license].
 * PyBlue is being developed by Istvan Albert see https://github.com/ialbert
-* PyBlue has been inspired by [PyGreen][pygreen] created by Nicolas Vanhoren see (https://github.com/nicolas-van/pygreen) but it does
-  not use any code from it.
+* PyBlue has been inspired by [PyGreen][pygreen] created by Nicolas Vanhoren
+see (https://github.com/nicolas-van/pygreen) but over the years it has diverged so much
+that it probably does not use any code from that codebase.
 
 
 [django]: https://www.djangoproject.com/
@@ -259,7 +197,7 @@ Override the template called `site_assets.html` to modify the assets.
 [django_templates]: https://docs.djangoproject.com/en/1.9/ref/templates/language/
 
 {% endmarkdown %}
-</div>
+
 </body>
 </html>
 
