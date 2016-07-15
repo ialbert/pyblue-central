@@ -25,6 +25,25 @@ def hello(name='World'):
     '''
     return dict(name=name)
 
+@register.inclusion_tag('pyblue_content.html', takes_context=True)
+def content(context, pattern):
+    """
+    Loops over all markdown files in a pattern
+    and includes the markdown files
+    """
+    def render(f):
+        text = open(f.path).read()
+        text = encoding.smart_unicode(text)
+        html = markdown(text)
+        html = mark_safe(html)
+        return html
+
+    files = context['files']
+    items = filter(lambda page: re.search(pattern, page.fname, re.IGNORECASE), files)
+    items = list(items)
+    objs = map(render, items)
+    params = dict(items=items, pattern=pattern, objs=objs)
+    return params
 
 def match_file(context, pattern):
     """
