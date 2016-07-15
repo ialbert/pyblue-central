@@ -35,6 +35,17 @@ And you can go all the way out if you really want to:
 -  Run python code, access and modify data from inside of each page.
 -  Extend the Django templates. Add your own ``templatetags``.
 
+Documentation
+~~~~~~~~~~~~~
+
+-  The `PyBlue
+   Documentation <https://ialbert.github.io/pyblue-central/>`__ was
+   generated with PyBlue itself.
+
+You can also browse the `help in source
+format <https://github.com/ialbert/pyblue-central/tree/master/docs>`__
+for examples.
+
 Install
 ~~~~~~~
 
@@ -68,16 +79,6 @@ That's all. Told you it was simple. To see extra help on options run:
 ::
 
     pyblue -h
-
-Documentation
-~~~~~~~~~~~~~
-
--  The `PyBlue Documentation <https://ialbert.github.io/pyblue/>`__ was
-   generated with PyBlue itself.
-
-You can also browse the `help in source
-format <https://github.com/ialbert/pyblue/tree/master/docs>`__ for
-examples.
 
 Licensing
 ~~~~~~~~~
