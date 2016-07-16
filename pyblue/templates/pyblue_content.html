@@ -1,9 +1,18 @@
-Content {{pattern}}:
+<a name="top"></a>
+
+## Content
+
+{% for item in items %}1. {{ item.link }}
+{% endfor %}
+
+---
 
 {% for item in items %}
-<li>{{ item.name }}</li>
+
+{{ item.body }}
+
+<p><a href="#top">&laquo; back to top</a></p>
+
 {% endfor %}
 
-{% for html in objs %}
-<li>{{ html }}</li>
-{% endfor %}
+

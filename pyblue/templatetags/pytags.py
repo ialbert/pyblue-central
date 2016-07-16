@@ -1,11 +1,12 @@
 from __future__ import print_function, unicode_literals, absolute_import, division
+from builtins import *
+from django.utils.text import slugify
 from django import template
-import logging, re
-import bleach
+import logging, re, itertools
 import CommonMark
 from django.utils.safestring import mark_safe
 from django.utils import encoding
-import textwrap
+import bleach
 
 logger = logging.getLogger('pyblue')
 
@@ -25,24 +26,36 @@ def hello(name='World'):
     '''
     return dict(name=name)
 
+class MDEntry(object):
+    '''
+    Represents a single markdown entry
+    '''
+    def __init__(self, path):
+        self.path = path
+        self.title = itertools.dropwhile(lambda x: not x.strip(), open(path, 'rU')).next()
+        self.title = self.title.lstrip('#')
+        self.slug = slugify(self.title)
+        self.body = open(path, 'rU').read()
+        self.body = "<a name='{}'></a>\n".format(self.slug) + self.body
+        self.body = mark_safe(self.body)
+
+    def link(self):
+        text = "[{}](#{})".format(self.title, self.slug)
+        text = mark_safe(text)
+        return text
+
 @register.inclusion_tag('pyblue_content.html', takes_context=True)
 def content(context, pattern):
     """
     Loops over all markdown files in a pattern
     and includes the markdown files
     """
-    def render(f):
-        text = open(f.path).read()
-        text = encoding.smart_unicode(text)
-        html = markdown(text)
-        html = mark_safe(html)
-        return html
-
     files = context['files']
+    page = context['page']
     items = filter(lambda page: re.search(pattern, page.fname, re.IGNORECASE), files)
+    items = map(lambda f: MDEntry(f.path), items)
     items = list(items)
-    objs = map(render, items)
-    params = dict(items=items, pattern=pattern, objs=objs)
+    params = dict(items=items, pattern=pattern, page=page)
     return params
 
 def match_file(context, pattern):

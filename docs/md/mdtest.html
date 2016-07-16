@@ -1,15 +1,28 @@
+{# name = Markdown test page #}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Markdown Test</title>
+    <head>
+        {% assets %}
+    </head>
 </head>
-<body>
+<body class="language-python">
 
-<p>
+{% markdown %}
+
+## Markdown test
+
+This page tests the markdown embedding techniques.
+
+A table of contents will be generated as well.
+
+Go back to {% link "index.html" "the homepage" %}
 
 {% content "md/\d\.md" %}
 
-</p>
+{% endmarkdown %}
+
 </body>
 </html>

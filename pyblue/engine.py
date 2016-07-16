@@ -1,8 +1,8 @@
 """
 Really simple static site generator. Uses Django templates
 """
-
 from __future__ import print_function, unicode_literals, absolute_import, division
+from builtins import *
 import argparse, sys, io, json, re, shutil, os, logging, time, imp, importlib
 import bottle, importlib
 from string import strip
@@ -11,6 +11,7 @@ from django.conf import settings
 from django.template import Context
 from django.template.backends.django import get_installed_libraries
 from django.template.loader import get_template
+
 
 __author__ = 'ialbert'
 
@@ -347,6 +348,8 @@ class File(object):
         """
         return "%s: %s (%s)" % (self.__class__.__name__, self.name, self.fname)
 
+    def __bool__(self):
+        return True
 
 def parse_metadata(path):
     '''
