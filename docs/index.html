@@ -12,7 +12,7 @@
 
 # Welcome to PyBlue
 
-{% img css="right" pattern="fractal1" %}
+{% img css="right thumb" pattern="fractal1" %}
 
 A simple static site generator.
 
@@ -26,11 +26,14 @@ This page was created with PyBlue from the file located in [docs/index.html][ind
 
 ### Why PyBlue?
 
+
 There is no shortage of static html generators. PyBlue is a personal project
 that aims to address my personal annoyances with other options. I have evaluated
 quite a few alternatives even used some over longer periods
 of time. None of the choices did what I needed for my work.
 Hence came the motivation to write my own.
+
+{% img css="right thumb" pattern="fractal3" %}
 
 The following are some of the reasons why PyBlue exists:
 
@@ -77,6 +80,8 @@ To see extra help on options run: `pyblue -h`
 
 ### Context
 
+{% img css="right thumb" pattern="fractal2" %}
+
 The pages are rendered through the [Django Template][django_templates] language.
 To make use of the templating you need to understand how this templating language works.
 
@@ -97,8 +102,6 @@ More details on the {% link "context.html" %} page.
 
 ### Links and Images
 
-{% img css="right" pattern="fractal2" %}
-
 Users can also make use of pyblue specific template tags that are
 automatically available. For example the `link` tag generates
 relative paths to any other file.
@@ -108,6 +111,8 @@ produce the following: {% link "context.html" %}.
 
 * {% verbatim %}<code>{% link "context.html" text="Click me now!" %}</code>{% endverbatim %} will
 produce the following: {% link "context.html" text="Click me now!" %}.
+
+{% img css="right thumb" pattern="fractal4" %}
 
 Important: Note how in this case the file is located in <code>info/context.html</code> Yet we did not have
 to put the full path the linking tag. `PyBlue` found the file and linked it properly.
