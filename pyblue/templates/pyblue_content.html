@@ -1,9 +1,12 @@
 <a name="top"></a>
 
+{% if toc %}
+
 ## Content
 
 {% for item in items %}1. {{ item.link }}
 {% endfor %}
+{% endif %}
 
 ---
 

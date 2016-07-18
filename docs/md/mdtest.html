@@ -12,15 +12,26 @@
 
 {% markdown %}
 
-## Markdown test
+# Advanced Markdown Utilities
 
 This page tests the markdown embedding techniques.
+
+## Markdown Content
 
 A table of contents will be generated as well.
 
 Go back to {% link "index.html" "the homepage" %}
 
-{% content "md/\d\.md" %}
+{% markdown_content "md/\d\.md" toc=False %}
+
+## Markdown Items
+
+It is possible to iterate directly on the markdown entries.
+This provides full control over the formatting.
+
+{% markdown_items "md/\d\.md" as items %}
+
+{% for item in items %}{{item.link}} &bull; {% endfor %}
 
 {% endmarkdown %}
 

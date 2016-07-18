@@ -2,7 +2,7 @@ from __future__ import print_function, unicode_literals, absolute_import, divisi
 from builtins import *
 from django.utils.text import slugify
 from django import template
-import logging, re, itertools
+import logging, re, itertools, os
 import CommonMark
 from django.utils.safestring import mark_safe
 from django.utils import encoding
@@ -28,7 +28,9 @@ def hello(name='World'):
 
 class MDEntry(object):
     '''
-    Represents a single markdown entry
+    Represents a single markdown entry.
+    The first non-empty line is considered the title.
+    The body will contain an anchor that is the slugified title.
     '''
     def __init__(self, path):
         self.path = path
@@ -40,22 +42,41 @@ class MDEntry(object):
         self.body = mark_safe(self.body)
 
     def link(self):
+        '''
+        Returns a Markdown link to the anchor of the body.
+        :return:
+        '''
         text = "[{}](#{})".format(self.title, self.slug)
         text = mark_safe(text)
         return text
 
+    def __repr__(self):
+        path = os.path.split(self.path)[-1]
+        return "MD(p={})".format(path)
+
+@register.simple_tag(takes_context=True)
+def markdown_items(context, pattern):
+    '''
+    Returns a list of Markdown Entries matched by a regular expression pattern.
+
+    :param pattern: The RE pattern
+    :return: a list of Markdown Entries
+    '''
+    files = context['files']
+    items = filter(lambda page: re.search(pattern, page.fname, re.IGNORECASE), files)
+    items = map(lambda f: MDEntry(f.path), items)
+    items = list(items)
+    return items
+
 @register.inclusion_tag('pyblue_content.html', takes_context=True)
-def content(context, pattern):
+def markdown_content(context, pattern, toc=True):
     """
     Loops over all markdown files in a pattern
     and includes the markdown files
     """
-    files = context['files']
     page = context['page']
-    items = filter(lambda page: re.search(pattern, page.fname, re.IGNORECASE), files)
-    items = map(lambda f: MDEntry(f.path), items)
-    items = list(items)
-    params = dict(items=items, pattern=pattern, page=page)
+    items = markdown_items(context=context, pattern=pattern)
+    params = dict(items=items, pattern=pattern, page=page, toc=toc)
     return params
 
 def match_file(context, pattern):

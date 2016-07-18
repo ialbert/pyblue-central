@@ -370,7 +370,7 @@ def parse_metadata(path):
             try:
                 obj = json.loads(value)
             except ValueError as exc:
-                obj = str(value)
+                obj = str(value).strip()
             meta[name] = obj
     #logger.debug("path: {}, metadata: {}".format(path, meta))
     return meta
