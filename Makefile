@@ -21,5 +21,5 @@ pypi: rst
 pages: rst
 	# Generate/commit/push documentation into the GitHub Page repository.
 	cd ${GITHUB_PAGES} && git pull
-	pyblue -v -r docs -o ${GITHUB_PAGES}
+	pyblue -v -r docs --no-time -o ${GITHUB_PAGES}
 	cd ${GITHUB_PAGES} && git commit -am "updated the docs" && git push

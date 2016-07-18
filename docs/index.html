@@ -12,6 +12,8 @@
 
 # Welcome to PyBlue
 
+{% img css="right" pattern="fractal1" %}
+
 A simple static site generator.
 
 PyBlue allows the reuse of visuals (header/footer) and data
@@ -93,11 +95,13 @@ Users may add more information even load a python module into the page.
 
 More details on the {% link "context.html" %} page.
 
-### Links
+### Links and Images
+
+{% img css="right" pattern="fractal2" %}
 
 Users can also make use of pyblue specific template tags that are
-automatically available. For exmple `link` is such a tag that generates
-the proper relative path to any other template or file.
+automatically available. For example the `link` tag generates
+relative paths to any other file.
 
 * {% verbatim %}<code>{% link "context.html" %}</code>{% endverbatim %} will
 produce the following: {% link "context.html" %}.
@@ -118,6 +122,10 @@ to specify the shortest unambiguous part of the filename. `PyBlue` will find it 
 
 > As a matter of fact this is one reason PyBlue was written. I got very tired of fixing
 > broken links after a site reorganization. PlyBlue now does it automatically.
+
+The {% verbatim %}<code>{% img "fractal.png" %}</code>{% endverbatim %} tag works similarly to the link tag.
+but generates image links. It also takes the `css` parameter where css classes may be passed
+to the image. The CSS itself will have to be defined in the page header or the site asssets.
 
 ### Markdown
 
