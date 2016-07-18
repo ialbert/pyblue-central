@@ -18,7 +18,6 @@
         line-height: 1.2;
         border-bottom: 1px solid #ECECEC;
         padding-top: 1ex;
-
     }
 
     blockquote {
@@ -27,17 +26,25 @@
 
     .left {
         float: left;
-        width: 200px;
-        margin: 0 0 10px 10px;
     }
 
     .right {
         float: right;
-        width: 200px;
-        margin: 0 0 10px 10px;
     }
-}
+
+    .thumb {
+        width: 30%;
+    }
+
+    @media only screen and (max-width: 500px) {
+        .thumb {
+            width: 50%;
+        }
+    }
+
+
 </style>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 <script src="https://ialbert.github.io/pyblue-central/static/prism.js"></script>
 <link rel="stylesheet" type="text/css" href="https://ialbert.github.io/pyblue-central/static/prism.css">
@@ -47,7 +54,7 @@
 <body class="language-bash">
 
 <h1>Welcome to PyBlue</h1>
-<img alt="fractal1.gif" class="right" src="./static/fractal1.gif">
+<img alt="fractal1.gif" class="right thumb" src="./static/fractal1.gif">
 <p>A simple static site generator.</p>
 <p>PyBlue allows the reuse of visuals (header/footer) and data
 across many pages and it can generate static sites
@@ -59,6 +66,7 @@ that aims to address my personal annoyances with other options. I have evaluated
 quite a few alternatives even used some over longer periods
 of time. None of the choices did what I needed for my work.
 Hence came the motivation to write my own.</p>
+<img alt="fractal3.png" class="right thumb" src="./static/fractal3.png">
 <p>The following are some of the reasons why PyBlue exists:</p>
 <ol>
 <li>All features are optional!</li>
@@ -96,6 +104,7 @@ python setup.py develop
 <p>To see extra help on options run: <code>pyblue -h</code></p>
 <h2>Features</h2>
 <h3>Context</h3>
+<img alt="fractal2.png" class="right thumb" src="./static/fractal2.png">
 <p>The pages are rendered through the <a href="https://docs.djangoproject.com/en/1.9/ref/templates/language/">Django Template</a> language.
 To make use of the templating you need to understand how this templating language works.</p>
 <p>By default there is extra data associated with each  page.
@@ -106,14 +115,13 @@ For example the
 <li>Writing:  <code>{{ page.last_modified }}</code>
 will produce: Monday, July 18, 2016</li>
 <li>Writing:  <code>{{ page.size|filesizeformat }}</code>
-will produce: 7.8 KB</li>
+will produce: 7.9 KB</li>
 </ul>
 <p>Note how in this last case we also made use of the <code>filesizeformat</code> builtin filter of Django.
 Users may add more information even load a python module into the page.</p>
 <p>More details on the <a class="" href="./info/context.html">Context</a>
 page.</p>
 <h3>Links and Images</h3>
-<img alt="fractal2.png" class="right" src="./static/fractal2.png">
 <p>Users can also make use of pyblue specific template tags that are
 automatically available. For example the <code>link</code> tag generates
 relative paths to any other file.</p>
@@ -129,6 +137,7 @@ produce the following: <a class="" href="./info/context.html">Click me now!</a>
 .</p>
 </li>
 </ul>
+<img alt="fractal4.jpg" class="right thumb" src="./static/fractal4.jpg">
 <p>Important: Note how in this case the file is located in <code>info/context.html</code> Yet we did not have
 to put the full path the linking tag. <code>PyBlue</code> found the file and linked it properly.</p>
 <p>Why did that work? The <code>{% link "context.html" %}</code>

@@ -20,7 +20,6 @@
         line-height: 1.2;
         border-bottom: 1px solid #ECECEC;
         padding-top: 1ex;
-
     }
 
     blockquote {
@@ -29,17 +28,25 @@
 
     .left {
         float: left;
-        width: 200px;
-        margin: 0 0 10px 10px;
     }
 
     .right {
         float: right;
-        width: 200px;
-        margin: 0 0 10px 10px;
     }
-}
+
+    .thumb {
+        width: 30%;
+    }
+
+    @media only screen and (max-width: 500px) {
+        .thumb {
+            width: 50%;
+        }
+    }
+
+
 </style>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 <script src="https://ialbert.github.io/pyblue-central/static/prism.js"></script>
 <link rel="stylesheet" type="text/css" href="https://ialbert.github.io/pyblue-central/static/prism.css">
