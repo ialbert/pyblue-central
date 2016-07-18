@@ -24,6 +24,19 @@
     blockquote {
         font-style: italic;
     }
+
+    .left {
+        float: left;
+        width: 200px;
+        margin: 0 0 10px 10px;
+    }
+
+    .right {
+        float: right;
+        width: 200px;
+        margin: 0 0 10px 10px;
+    }
+}
 </style>
 
 <script src="https://ialbert.github.io/pyblue-central/static/prism.js"></script>
@@ -34,6 +47,7 @@
 <body class="language-bash">
 
 <h1>Welcome to PyBlue</h1>
+<img alt="fractal1.gif" class="right" src="./static/fractal1.gif">
 <p>A simple static site generator.</p>
 <p>PyBlue allows the reuse of visuals (header/footer) and data
 across many pages and it can generate static sites
@@ -92,16 +106,17 @@ For example the
 <li>Writing:  <code>{{ page.last_modified }}</code>
 will produce: Monday, July 18, 2016</li>
 <li>Writing:  <code>{{ page.size|filesizeformat }}</code>
-will produce: 7.4 KB</li>
+will produce: 7.8 KB</li>
 </ul>
 <p>Note how in this last case we also made use of the <code>filesizeformat</code> builtin filter of Django.
 Users may add more information even load a python module into the page.</p>
 <p>More details on the <a class="" href="./info/context.html">Context</a>
 page.</p>
-<h3>Links</h3>
+<h3>Links and Images</h3>
+<img alt="fractal2.png" class="right" src="./static/fractal2.png">
 <p>Users can also make use of pyblue specific template tags that are
-automatically available. For exmple <code>link</code> is such a tag that generates
-the proper relative path to any other template or file.</p>
+automatically available. For example the <code>link</code> tag generates
+relative paths to any other file.</p>
 <ul>
 <li>
 <p><code>{% link "context.html" %}</code> will
@@ -126,6 +141,9 @@ to specify the shortest unambiguous part of the filename. <code>PyBlue</code> wi
 <p>As a matter of fact this is one reason PyBlue was written. I got very tired of fixing
 broken links after a site reorganization. PlyBlue now does it automatically.</p>
 </blockquote>
+<p>The <code>{% img "fractal.png" %}</code> tag works similarly to the link tag.
+but generates image links. It also takes the <code>css</code> parameter where css classes may be passed
+to the image. The CSS itself will have to be defined in the page header or the site asssets.</p>
 <h3>Markdown</h3>
 <p>To include markdown content into an HTML document place it between
 <code>{% markdown %}</code> and <code>{% endmarkdown %}</code>
