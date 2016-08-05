@@ -49,6 +49,7 @@ setup(
           "commonmark",
           "waitress",
           "bleach",
+          "future",
       ],
 )
 
