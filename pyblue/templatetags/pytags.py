@@ -26,6 +26,15 @@ def hello(name='World'):
     '''
     return dict(name=name)
 
+
+@register.inclusion_tag('pyblue_item.html')
+def item(item):
+    '''
+    Formats a recurring item.
+    '''
+    return dict(item=item)
+
+
 class MDEntry(object):
     '''
     Represents a single markdown entry.
