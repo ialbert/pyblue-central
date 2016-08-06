@@ -7,6 +7,7 @@ import CommonMark
 from django.utils.safestring import mark_safe
 from django.utils import encoding
 import bleach
+from django.template import loader, Context
 
 logger = logging.getLogger('pyblue')
 
@@ -181,12 +182,35 @@ def code(context, pattern, lang="bash", css=''):
 
 
 @register.simple_tag(takes_context=True)
-def markdown_file(context, pattern, safe=True):
+def markdown_file(context, pattern):
+    '''
+    Renders a markdown file as html.
+    '''
     text = read_file(context=context, pattern=pattern)
     text = encoding.smart_unicode(text)
     html = markdown(text)
     html = mark_safe(html)
     return html
+
+
+@register.simple_tag(takes_context=False)
+def external_template(template_name, **kwds):
+    '''
+    Renders an external template based by name.
+    '''
+    t = loader.get_template(template_name)
+    r = t.render(kwds)
+    print (r)
+    return r
+
+
+@register.simple_tag(takes_context=True)
+def markdown_template(context, pattern, safe=True):
+    text = read_file(context=context, pattern=pattern)
+    text = encoding.smart_unicode(text)
+    html = markdown(text)
+    html = mark_safe(html)
+    return external_template('pyblue_markdown.html', body=html)
 
 
 @register.inclusion_tag('pyblue_assets.html', takes_context=True)
