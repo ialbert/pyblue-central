@@ -7,7 +7,7 @@ import CommonMark
 from django.utils.safestring import mark_safe
 from django.utils import encoding
 import bleach
-from django.template import loader, Context
+from django.template import loader, Context, Template
 
 logger = logging.getLogger('pyblue')
 
@@ -27,13 +27,6 @@ def hello(name='World'):
     '''
     return dict(name=name)
 
-
-@register.inclusion_tag('pyblue_item.html')
-def item(item):
-    '''
-    Formats a recurring item.
-    '''
-    return dict(item=item)
 
 
 class MDEntry(object):
@@ -200,17 +193,21 @@ def external_template(template_name, **kwds):
     '''
     t = loader.get_template(template_name)
     r = t.render(kwds)
-    print (r)
     return r
 
 
 @register.simple_tag(takes_context=True)
-def markdown_template(context, pattern, safe=True):
+def markdown_template(context, pattern, **kwds):
     text = read_file(context=context, pattern=pattern)
     text = encoding.smart_unicode(text)
+    templ = Template(text)
+    params = dict(context=context)
+    params.update(kwds)
+    context = Context(params)
+    text = templ.render(context)
     html = markdown(text)
     html = mark_safe(html)
-    return external_template('pyblue_markdown.html', body=html)
+    return html
 
 
 @register.inclusion_tag('pyblue_assets.html', takes_context=True)
