@@ -197,13 +197,11 @@ def external_template(template_name, **kwds):
 
 
 @register.simple_tag(takes_context=True)
-def markdown_template(context, pattern, **kwds):
+def markdown_template(context, pattern):
     text = read_file(context=context, pattern=pattern)
     text = encoding.smart_unicode(text)
     templ = Template(text)
-    params = dict(context=context)
-    params.update(kwds)
-    context = Context(params)
+    context = Context(context)
     text = templ.render(context)
     html = markdown(text)
     html = mark_safe(html)
