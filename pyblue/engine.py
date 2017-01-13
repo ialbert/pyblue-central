@@ -12,7 +12,6 @@ from django.template import Context
 from django.template.backends.django import get_installed_libraries
 from django.template.loader import get_template
 
-
 __author__ = 'ialbert'
 
 from pyblue import VERSION
@@ -140,7 +139,10 @@ class PyBlue(object):
         return files
 
     def set_root(self, path):
-        "Sets the folder where the files to serve are located."
+        """
+        Sets the folder where the files to serve are located.
+        Finds and stores all files in the directory.
+        """
         self.root = os.path.abspath(path)
 
         if not os.path.isdir(self.root):
@@ -295,6 +297,14 @@ class File(object):
 
         name = base.title().replace("-", " ").replace("_", " ")
         return name
+
+    @property
+    def link_name(self):
+        if self.is_markdown:
+            base, ext = os.path.splitext(self.fname)
+            return "{}.html".format(base)
+        else:
+            return self.fname
 
     def write(self, output, content='', check=True):
         """

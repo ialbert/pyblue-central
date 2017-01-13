@@ -1,5 +1,4 @@
 #! /usr/bin/python
-# -*- coding: utf-8 -*-
 from setuptools import setup
 import os.path, sys
 import pyblue
@@ -44,7 +43,7 @@ setup(
       ],
 
       install_requires=[
-          "django >= 1.9, < 1.10",
+          "django == 1.10",
           "bottle",
           "commonmark",
           "waitress",
