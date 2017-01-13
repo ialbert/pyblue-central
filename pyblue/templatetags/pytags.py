@@ -82,6 +82,10 @@ def markdown_content(context, pattern, toc=True):
     params = dict(items=items, pattern=pattern, page=page, toc=toc)
     return params
 
+@register.inclusion_tag('pyblue_content.html', takes_context=True)
+def include_markdown(context, pattern, toc=True):
+    return markdown_content(context, pattern, toc=True)
+
 def match_file(context, pattern):
     """
     Returns a relative path and a name for a matched pattern.
