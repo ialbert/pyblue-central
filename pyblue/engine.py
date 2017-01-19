@@ -1,14 +1,22 @@
 """
 Really simple static site generator. Uses Django templates
 """
-from __future__ import print_function, unicode_literals, absolute_import, division
+import argparse
+import imp
+import io
+import json
+import logging
+import os
+import re
+import shutil
+import sys
+import time
 from builtins import *
-import argparse, sys, io, json, re, shutil, os, logging, time, imp, importlib
-import bottle, importlib
-from string import strip
+
+import bottle
 import django
+import importlib
 from django.conf import settings
-from django.template import Context
 from django.template.backends.django import get_installed_libraries
 from django.template.loader import get_template
 
@@ -16,9 +24,16 @@ __author__ = 'ialbert'
 
 from pyblue import VERSION
 
+# Extra template paths to be passed to PyBlue
+PYBLUE_EXTRA_DIRS = "PYBLUE_EXTRA_DIRS"
+
 DESCRIPTION = "PyBlue %s, static site generator" % VERSION
 
 logger = logging.getLogger('pyblue')
+
+
+def strip(x):
+    return x.strip()
 
 
 def join(*args):
@@ -172,14 +187,28 @@ class PyBlue(object):
             # Attempt to import the root folder. This is necessary to access
             # the local templatetag libraries.
             base = os.path.split(self.root)[-1]
-            logger.debug("importing app: %s" % base)
+            logger.debug("importing app as python module: %s" % base)
             importlib.import_module(base)
-            BASE_APP = [ base ]
+            BASE_APP = [base]
         except ImportError as exc:
             logger.debug("app '{}' cannot be imported: {}".format(base, exc))
 
-        TEMPLATE_DIR = join(os.path.dirname(__file__), "templates")
-        dirs = [self.root, join(self.root, 'templates'), TEMPLATE_DIR]
+        # Django Module Settings
+
+        # These templates come with PyBlue
+        parent_dir = join(os.path.dirname(__file__), "templates")
+
+        # These templates are in the root folder.
+        tmpl_dir = join(self.root, 'templates')
+
+        # Set up more paths via environment variables.
+        extra_dir = os.getenv(PYBLUE_EXTRA_DIRS, None)
+        extra_dir = extra_dir.split(",") if extra_dir else []
+
+        logger.debug(f"{PYBLUE_EXTRA_DIRS}: {extra_dir}")
+
+        dirs = [self.root, tmpl_dir, parent_dir] + extra_dir
+
         logger.debug("template dirs: {}".format(dirs))
         settings.configure(
             DEBUG=True, TEMPLATE_DEBUG=True,
@@ -361,6 +390,7 @@ class File(object):
     def __bool__(self):
         return True
 
+
 def parse_metadata(path):
     '''
     Attempts to parse out metadata from django comments.
@@ -382,7 +412,7 @@ def parse_metadata(path):
             except ValueError as exc:
                 obj = str(value).strip()
             meta[name] = obj
-    #logger.debug("path: {}, metadata: {}".format(path, meta))
+    # logger.debug("path: {}, metadata: {}".format(path, meta))
     return meta
 
 

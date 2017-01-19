@@ -1,5 +1,3 @@
-from __future__ import print_function, unicode_literals, absolute_import, division
-from builtins import *
 from django.utils.text import slugify
 from django import template
 import logging, re, itertools, os
@@ -37,7 +35,7 @@ class MDEntry(object):
     '''
     def __init__(self, path):
         self.path = path
-        self.title = itertools.dropwhile(lambda x: not x.strip(), open(path, 'rU')).next()
+        self.title = itertools.dropwhile(lambda x: not x.strip(), open(path, 'rU')).__next__()
         self.title = self.title.lstrip('#')
         self.slug = slugify(self.title)
         self.body = open(path, 'rU').read()
@@ -184,7 +182,7 @@ def markdown_file(context, pattern):
     Renders a markdown file as html.
     '''
     text = read_file(context=context, pattern=pattern)
-    text = encoding.smart_unicode(text)
+    text = encoding.smart_text(text)
     html = markdown(text)
     html = mark_safe(html)
     return html
@@ -203,7 +201,7 @@ def external_template(template_name, **kwds):
 @register.simple_tag(takes_context=True)
 def markdown_template(context, pattern):
     text = read_file(context=context, pattern=pattern)
-    text = encoding.smart_unicode(text)
+    text = encoding.smart_text(text)
     templ = Template(text)
     context = Context(context)
     text = templ.render(context)

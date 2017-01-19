@@ -48,7 +48,7 @@ setup(
           "commonmark",
           "waitress",
           "bleach",
-          "future",
+          "bs4"
       ],
 )
 
