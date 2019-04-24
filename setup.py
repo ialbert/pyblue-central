@@ -43,7 +43,7 @@ setup(
       ],
 
       install_requires=[
-          "django == 1.10",
+          "django",
           "bottle",
           "commonmark",
           "waitress",

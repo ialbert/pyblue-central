@@ -1,7 +1,7 @@
 from django.utils.text import slugify
 from django import template
 import logging, re, itertools, os
-import CommonMark
+import commonmark
 from django.utils.safestring import mark_safe
 from django.utils import encoding
 import bleach
@@ -12,7 +12,7 @@ logger = logging.getLogger('pyblue')
 register = template.Library()
 
 def get_markdown():
-    md = CommonMark.commonmark
+    md = commonmark.commonmark
     return md
 
 # Allows overriding the markdown parser.
@@ -240,7 +240,7 @@ class MarkDownNode(template.Node):
     def render(self, context):
         text = self.nodelist.render(context)
         text = markdown(text)
-        text = bleach.linkify(text, callbacks=self.CALLBACKS, skip_pre=True)
+        text = bleach.linkify(text, callbacks=self.CALLBACKS, skip_tags=['pre'])
         return text
 
 @register.tag('markdown')
