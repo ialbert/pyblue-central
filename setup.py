@@ -43,11 +43,11 @@ setup(
       ],
 
       install_requires=[
-          "django",
-          "bottle",
-          "commonmark",
-          "waitress",
-          "bleach",
+          "django==1.10",
+          "bottle==0.12.16",
+          "commonmark==0.8.1",
+          "waitress==1.2.1",
+          "bleach==3.1.0",
           "bs4"
       ],
 )
