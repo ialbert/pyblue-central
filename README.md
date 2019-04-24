@@ -2,10 +2,18 @@
 
 A simple static site generator.
 
-Why another one? There are [many static](https://www.staticgen.com/) site
-generators already. I found most to be way too complicated,
-too many conventions and rules: put this here or there, call it this or that.
-It was too tiring to keep up.
+W### Why another one static generator?
+
+There are so [many static](https://www.staticgen.com/) site generators already.
+
+Alas I found most options to be way too complicated. Each has many conventions and rules: put this here put that there, call it this or that. It was too tiring to keep up.
+
+Then as I was developing courses over the years I found that I could not easily reorganize the site, the links would all break when I moved files around. Very annoying.
+
+Then when I wanted to do something complicated like running a piece of code while generating the site the tools could
+not do it.
+
+At some point I though I guess I'll just have to roll my own, and I did, and here it is.
 
 PyBlue is different. Everything is optional, nothing is required,
 use only what you need. It basically stays out of the way.
