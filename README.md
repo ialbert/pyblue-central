@@ -2,7 +2,7 @@
 
 A simple static site generator.
 
-W### Why another one static generator?
+### Why another one static generator?
 
 There are so [many static](https://www.staticgen.com/) site generators already.
 
