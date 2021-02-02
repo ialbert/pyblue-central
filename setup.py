@@ -47,7 +47,7 @@ setup(
           "bottle==0.12.16",
           "commonmark==0.8.1",
           "waitress==1.4.3",
-          "bleach==3.1.4",
+          "bleach==3.3.0",
           "bs4"
       ],
 )
