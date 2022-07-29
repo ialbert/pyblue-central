@@ -46,7 +46,7 @@ setup(
           "django==1.11.23",
           "bottle",
           "commonmark==0.8.1",
-          "waitress==1.4.3",
+          "waitress==2.1.2",
           "bleach==3.3.0",
           "bs4"
       ],
