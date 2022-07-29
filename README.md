@@ -1,6 +1,6 @@
 ## Welcome to PyBlue
 
-A simple static site generator developed many eons ago when writing static site generators was still cool.
+A simple static site generator developed many eons ago (2013) when writing static site generators was still cool. (As of 2022 some features are still better than all the alternatives)
 
 ### Why another one static generator?
 
