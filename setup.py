@@ -43,7 +43,7 @@ setup(
       ],
 
       install_requires=[
-          "django==1.11.23",
+          "django==2.2.28",
           "bottle",
           "commonmark==0.8.1",
           "waitress==1.4.3",
