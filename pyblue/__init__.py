@@ -1,6 +1,6 @@
 import sys
 
-VERSION = '2019.04.02'
+VERSION = '2022.08.01'
 
 CURRENT_VERSION = sys.version_info
 REQUIRED_VERSION = (3, 6)

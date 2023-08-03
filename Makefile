@@ -16,7 +16,8 @@ docs:
 	pyblue serve -r docs -v
 
 pypi: rst
-	python setup.py sdist upload
+#	python setup.py sdist bdist_wheel
+	twine upload dist/*
 
 pages: rst
 	# Generate/commit/push documentation into the GitHub Page repository.

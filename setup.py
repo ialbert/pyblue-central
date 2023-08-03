@@ -45,7 +45,8 @@ setup(
       install_requires=[
           "django==1.11.23",
           "bottle",
-          "commonmark==0.8.1",
+          "commonmark==0.9.1",
+          "markdown-it-py[plugins]",
           "waitress==1.4.3",
           "bleach==3.3.0",
           "bs4"

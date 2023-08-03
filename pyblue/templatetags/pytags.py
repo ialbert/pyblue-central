@@ -11,12 +11,15 @@ logger = logging.getLogger('pyblue')
 
 register = template.Library()
 
+from markdown_it import MarkdownIt
+
 def get_markdown():
-    md = commonmark.commonmark
+    #md = commonmark.commonmark
+    md = MarkdownIt("commonmark").enable('table')
     return md
 
 # Allows overriding the markdown parser.
-markdown = get_markdown()
+markdown = get_markdown().render
 
 @register.inclusion_tag('pyblue_hello.html')
 def hello(name='World'):
