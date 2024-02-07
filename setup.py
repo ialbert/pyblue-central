@@ -43,7 +43,7 @@ setup(
       ],
 
       install_requires=[
-          "django==1.11.23",
+          "django==3.2.24",
           "bottle",
           "commonmark==0.9.1",
           "markdown-it-py[plugins]",
